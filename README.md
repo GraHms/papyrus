@@ -33,6 +33,31 @@ When testing a standard invoice layout directly against Google Chrome running in
 
 ---
 
+## Supported HTML Subset
+
+`pdfml` intentionally supports a strictly scoped subset of HTML. It supports almost all standard text formatting, layout, and table elements you would use in a printed document, while completely ignoring web-specific interactive elements (like `<script>`, `<input>`, `<form>`, `<video>`).
+
+If you use an unsupported HTML tag, the parser will instantly throw a strict validation error with exact line/column numbers.
+
+### Document & Pagination
+- `<html>`, `<head>`, `<body>`, `<style>`, `<meta>`, `<font>`
+- `<header>`, `<footer>`, `<first-header>`, `<first-footer>` (repeating pagination blocks)
+- `<page-break>`, `<page-number/>`, `<page-count/>` (native pagination control)
+
+### Layout & Blocks
+- `<h1>` through `<h6>`, `<p>`, `<blockquote>`, `<pre>`
+- `<main>`, `<article>`, `<section>`, `<aside>`, `<nav>`, `<div>`
+- `<hr>`, `<img>`, `<figure>`, `<figcaption>`
+- `<ul>`, `<ol>`, `<li>`, `<dl>`, `<dt>`, `<dd>`
+
+### Inline Formatting
+`<span>`, `<strong>`, `<b>`, `<em>`, `<i>`, `<u>`, `<s>`, `<code>`, `<br>`, `<a>`, `<mark>`, `<small>`, `<sub>`, `<sup>`, `<cite>`, `<q>`
+
+### Tables (Full Support)
+`<table>`, `<caption>`, `<thead>`, `<tbody>`, `<tfoot>`, `<tr>`, `<th>`, `<td>`
+
+---
+
 ## Concept & HTML Compatibility
 
 Define documents using a web-familiar vocabulary. `pdfml` natively accepts HTML aliasing (`<html>`, `<main>`, `<header>`, `<footer>`), meaning developers comfortable with standard HTML and CSS can immediately start designing layouts.
