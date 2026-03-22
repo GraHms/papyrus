@@ -1,5 +1,7 @@
 package document
 
+import "io"
+
 // Options holds configuration for document generation.
 type Options struct {
 	// DPI controls how px units are converted to points.
@@ -15,9 +17,15 @@ type Options struct {
 	// Fonts maps font family names to file paths for additional fonts.
 	Fonts map[string]string
 
+	// FontsBytes maps font family names to raw TTF byte data.
+	FontsBytes map[string][]byte
+
 	// PageSize overrides the page size from the document.
 	// Empty string means use the document's <style> page size.
 	PageSize string
+
+	// BasePath sets the base directory for resolving relative file paths.
+	BasePath string
 
 	// DataFile is a path to a JSON file for template variable interpolation.
 	DataFile string
@@ -35,6 +43,7 @@ func defaultOptions() Options {
 		Debug:             false,
 		DefaultFontFamily: "Liberation Sans",
 		Fonts:             make(map[string]string),
+		FontsBytes:        make(map[string][]byte),
 	}
 }
 
@@ -56,6 +65,22 @@ func WithDebug() Option {
 func WithFont(family, path string) Option {
 	return func(o *Options) {
 		o.Fonts[family] = path
+	}
+}
+
+// WithFontFromBytes registers an additional font family from memory.
+func WithFontFromBytes(family string, data []byte) Option {
+	return func(o *Options) {
+		o.FontsBytes[family] = data
+	}
+}
+
+// WithFontReader registers an additional font family by reading all bytes from r.
+func WithFontReader(family string, r io.Reader) Option {
+	return func(o *Options) {
+		if data, err := io.ReadAll(r); err == nil {
+			o.FontsBytes[family] = data
+		}
 	}
 }
 

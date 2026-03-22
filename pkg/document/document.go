@@ -12,10 +12,12 @@
 package document
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/grahms/pdfml/pkg/layout"
 	"github.com/grahms/pdfml/pkg/parser"
@@ -26,9 +28,10 @@ import (
 // Document represents a parsed and validated pdfml document
 // that is ready to be rendered to PDF.
 type Document struct {
-	options Options
-	parsed  *parser.Document
-	styles  map[*parser.Node]style.ComputedStyle
+	options    Options
+	parsed     *parser.Document
+	cssRules   []parser.Rule
+	styles     map[*parser.Node]style.ComputedStyle
 	pageLayout *layout.PageLayout
 	resolver   *style.ResolverContext
 }
@@ -36,89 +39,11 @@ type Document struct {
 // Generate reads an XML document from r, processes it through the full
 // pipeline (parse → style → layout → render), and writes PDF to w.
 func Generate(r io.Reader, w io.Writer, opts ...Option) error {
-	options := defaultOptions()
-	for _, opt := range opts {
-		opt(&options)
-	}
-
-	// Phase 1 — Parse XML + CSS
-	doc, err := parser.ParseXML(r)
+	doc, err := Parse(r)
 	if err != nil {
-		return fmt.Errorf("pdfml: parse error: %w", err)
+		return err
 	}
-
-	if err := parser.ValidateDocument(doc); err != nil {
-		return fmt.Errorf("pdfml: validation error: %w", err)
-	}
-
-	// Parse CSS from <style> blocks
-	var rules []parser.Rule
-	if doc.Styles != "" {
-		rules, err = parser.ParseCSS(doc.Styles)
-		if err != nil {
-			return fmt.Errorf("pdfml: CSS parse error: %w", err)
-		}
-	}
-
-	// Phase 2 — Resolve styles
-	resolver := style.NewResolver(rules, options.DPI)
-
-	// Override page size if specified in options
-	if options.PageSize != "" {
-		w2, h := render.PageSizeFromString(options.PageSize)
-		resolver.PageStyle.Width = w2
-		resolver.PageStyle.Height = h
-	}
-
-	// Set up measurement before layout
-	measure, cleanup, err := render.MeasureForLayout(options.Fonts)
-	if err != nil {
-		return fmt.Errorf("pdfml: font initialization error: %w", err)
-	}
-	defer cleanup()
-
-	// Resolve all node styles
-	nodeStyles := resolver.ResolveTree(doc.Root)
-
-	// Phase 3 — Layout
-	ctx := &layout.Context{
-		PageWidth:  resolver.PageStyle.Width - resolver.PageStyle.MarginLeft - resolver.PageStyle.MarginRight,
-		PageHeight: resolver.PageStyle.Height - resolver.PageStyle.MarginTop - resolver.PageStyle.MarginBottom,
-		DPI:        options.DPI,
-		Measure:    measure,
-	}
-
-	// Build box tree from body
-	rootBox := layout.BuildBoxTree(doc, nodeStyles)
-	if rootBox == nil {
-		return fmt.Errorf("pdfml: no body element found")
-	}
-
-	// Build header/footer boxes
-	headerBox, footerBox := layout.BuildHeaderFooter(doc, nodeStyles)
-
-	// Create page layout and paginate
-	pageLayout := layout.NewPageLayout(resolver.PageStyle, ctx)
-	if headerBox != nil {
-		pageLayout.SetHeader(headerBox)
-	}
-	if footerBox != nil {
-		pageLayout.SetFooter(footerBox)
-	}
-	pageLayout.Layout(rootBox)
-
-	if len(pageLayout.Pages) == 0 {
-		return fmt.Errorf("pdfml: layout produced no pages")
-	}
-
-	// Phase 4 — Render to PDF
-	renderOpts := render.Options{
-		Debug: options.Debug,
-		Meta:  doc.Meta,
-	}
-
-	renderer := render.NewRenderer(pageLayout.Pages, renderOpts, options.Fonts)
-	return renderer.Render(w)
+	return doc.Render(w, opts...)
 }
 
 // GenerateFromFile is a convenience function that reads from inputPath
@@ -136,7 +61,10 @@ func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 		if o.Fonts == nil {
 			o.Fonts = make(map[string]string)
 		}
-		_ = basePath // used by renderer via Options.BasePath
+		if o.FontsBytes == nil {
+			o.FontsBytes = make(map[string][]byte)
+		}
+		o.BasePath = basePath
 	})
 
 	out, err := os.Create(outputPath)
@@ -149,7 +77,7 @@ func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 }
 
 // Parse reads and validates an XML document without rendering it.
-// Useful for validation or inspection.
+// Useful for validation or inspection, or for reusing a compiled template.
 func Parse(r io.Reader) (*Document, error) {
 	doc, err := parser.ParseXML(r)
 	if err != nil {
@@ -159,13 +87,23 @@ func Parse(r io.Reader) (*Document, error) {
 		return nil, fmt.Errorf("pdfml: validation error: %w", err)
 	}
 
+	// Parse CSS from <style> blocks
+	var rules []parser.Rule
+	if doc.Styles != "" {
+		rules, err = parser.ParseCSS(doc.Styles)
+		if err != nil {
+			return nil, fmt.Errorf("pdfml: CSS parse error: %w", err)
+		}
+	}
+
 	return &Document{
-		options: defaultOptions(),
-		parsed:  doc,
+		options:  defaultOptions(),
+		parsed:   doc,
+		cssRules: rules,
 	}, nil
 }
 
-// Render generates PDF from an already-parsed document.
+// Render generates PDF from an already-parsed document using the provided options.
 func (d *Document) Render(w io.Writer, opts ...Option) error {
 	if d.parsed == nil {
 		return fmt.Errorf("pdfml: document not parsed")
@@ -176,8 +114,82 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 		opt(&options)
 	}
 
-	// Use a strings reader so we can call Generate with the parsed state
-	// For now, re-process through Generate is the simplest approach
-	// TODO: cache the parsed state
-	return fmt.Errorf("pdfml: Render() on parsed Document not yet implemented — use Generate() instead")
+	// Phase 2 — Resolve styles
+	resolver := style.NewResolver(d.cssRules, options.DPI)
+
+	// Override page size if specified in options
+	if options.PageSize != "" {
+		w2, h := render.PageSizeFromString(options.PageSize)
+		resolver.PageStyle.Width = w2
+		resolver.PageStyle.Height = h
+	}
+
+	// Set up measurement before layout
+	measure, cleanup, err := render.MeasureForLayout(options.Fonts, options.FontsBytes)
+	if err != nil {
+		return fmt.Errorf("pdfml: font initialization error: %w", err)
+	}
+	defer cleanup()
+
+	// Resolve all node styles
+	nodeStyles := resolver.ResolveTree(d.parsed.Root)
+
+	// Phase 3 — Layout
+	ctx := &layout.Context{
+		PageWidth:  resolver.PageStyle.Width - resolver.PageStyle.MarginLeft - resolver.PageStyle.MarginRight,
+		PageHeight: resolver.PageStyle.Height - resolver.PageStyle.MarginTop - resolver.PageStyle.MarginBottom,
+		DPI:        options.DPI,
+		Measure:    measure,
+	}
+
+	// Build box tree from body
+	rootBox := layout.BuildBoxTree(d.parsed, nodeStyles)
+	if rootBox == nil {
+		return fmt.Errorf("pdfml: no body element found")
+	}
+
+	// Build header/footer boxes
+	headerBox, footerBox := layout.BuildHeaderFooter(d.parsed, nodeStyles)
+
+	// Create page layout and paginate
+	pageLayout := layout.NewPageLayout(resolver.PageStyle, ctx)
+	if headerBox != nil {
+		pageLayout.SetHeader(headerBox)
+	}
+	if footerBox != nil {
+		pageLayout.SetFooter(footerBox)
+	}
+	pageLayout.Layout(rootBox)
+
+	if len(pageLayout.Pages) == 0 {
+		return fmt.Errorf("pdfml: layout produced no pages")
+	}
+
+	// Phase 4 — Render to PDF
+	renderOpts := render.Options{
+		Debug:    options.Debug,
+		BasePath: options.BasePath,
+		Meta:     d.parsed.Meta,
+	}
+
+	renderer := render.NewRenderer(pageLayout.Pages, renderOpts, options.Fonts, options.FontsBytes)
+	return renderer.Render(w)
+}
+
+// GenerateFromBytes resolves PDF generation directly from a byte slice.
+func GenerateFromBytes(data []byte, opts ...Option) ([]byte, error) {
+	var buf bytes.Buffer
+	if err := Generate(bytes.NewReader(data), &buf, opts...); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+// GenerateFromString resolves PDF generation directly from a string.
+func GenerateFromString(data string, opts ...Option) ([]byte, error) {
+	var buf bytes.Buffer
+	if err := Generate(strings.NewReader(data), &buf, opts...); err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }

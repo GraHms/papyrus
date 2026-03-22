@@ -22,9 +22,10 @@ type FontKey struct {
 
 // FontManager manages font loading and registration with gopdf.
 type FontManager struct {
-	pdf      *gopdf.GoPdf
-	loaded   map[FontKey]string // key → gopdf font family name
-	paths    map[string]string  // family name → path (user-provided)
+	pdf    *gopdf.GoPdf
+	loaded map[FontKey]string // key → gopdf font family name
+	paths  map[string]string  // family name → path (user-provided)
+	bytes  map[string][]byte  // family name → raw font bytes (user-provided)
 }
 
 // NewFontManager creates a FontManager.
@@ -33,12 +34,18 @@ func NewFontManager(pdf *gopdf.GoPdf) *FontManager {
 		pdf:    pdf,
 		loaded: make(map[FontKey]string),
 		paths:  make(map[string]string),
+		bytes:  make(map[string][]byte),
 	}
 }
 
 // RegisterFont registers a user-provided font family path.
 func (fm *FontManager) RegisterFont(family, path string) {
 	fm.paths[strings.ToLower(family)] = path
+}
+
+// RegisterFontBytes registers a user-provided font family from raw bytes.
+func (fm *FontManager) RegisterFontBytes(family string, data []byte) {
+	fm.bytes[strings.ToLower(family)] = data
 }
 
 // EnsureFont loads and registers the font for a given family/bold/italic combination.
@@ -52,6 +59,11 @@ func (fm *FontManager) EnsureFont(family string, bold, italic bool) (string, err
 
 	// Map family to internal name
 	gopdfName := fontFamilyName(family, bold, italic)
+
+	// Try user-provided bytes
+	if data, ok := fm.bytes[strings.ToLower(family)]; ok {
+		return fm.loadFromBytes(key, gopdfName, data, bold, italic)
+	}
 
 	// Try user-provided path
 	if userPath, ok := fm.paths[strings.ToLower(family)]; ok {
@@ -85,6 +97,17 @@ func (fm *FontManager) loadFromPath(key FontKey, gopdfName, path string, bold, i
 	err := fm.pdf.AddTTFFont(gopdfName, path)
 	if err != nil {
 		return "", fmt.Errorf("render: failed to load font %q from %q: %w", gopdfName, path, err)
+	}
+	_ = style
+	fm.loaded[key] = gopdfName
+	return gopdfName, nil
+}
+
+func (fm *FontManager) loadFromBytes(key FontKey, gopdfName string, data []byte, bold, italic bool) (string, error) {
+	style := fontStyle(bold, italic)
+	err := fm.pdf.AddTTFFontByReader(gopdfName, bytesReader(data))
+	if err != nil {
+		return "", fmt.Errorf("render: failed to load font %q from bytes: %w", gopdfName, err)
 	}
 	_ = style
 	fm.loaded[key] = gopdfName
