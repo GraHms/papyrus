@@ -29,12 +29,15 @@ type Renderer struct {
 }
 
 // NewRenderer creates a new PDF renderer.
-func NewRenderer(pages []*layout.Page, opts Options, extraFonts map[string]string) *Renderer {
+func NewRenderer(pages []*layout.Page, opts Options, extraFonts map[string]string, fontsBytes map[string][]byte) *Renderer {
 	pdf := &gopdf.GoPdf{}
 	fm := NewFontManager(pdf)
 
 	for family, path := range extraFonts {
 		fm.RegisterFont(family, path)
+	}
+	for family, data := range fontsBytes {
+		fm.RegisterFontBytes(family, data)
 	}
 
 	return &Renderer{
@@ -261,7 +264,7 @@ func (r *Renderer) drawListMarker(marker string, x, y float64, cs style.Computed
 }
 
 // MeasureForLayout returns a TextMeasurer for use during layout.
-func MeasureForLayout(extraFonts map[string]string) (layout.TextMeasurer, func(), error) {
+func MeasureForLayout(extraFonts map[string]string, fontsBytes map[string][]byte) (layout.TextMeasurer, func(), error) {
 	pdf := &gopdf.GoPdf{}
 	pdf.Start(gopdf.Config{
 		PageSize: gopdf.Rect{W: 595.28, H: 841.89},
@@ -272,6 +275,9 @@ func MeasureForLayout(extraFonts map[string]string) (layout.TextMeasurer, func()
 	fm := NewFontManager(pdf)
 	for family, path := range extraFonts {
 		fm.RegisterFont(family, path)
+	}
+	for family, data := range fontsBytes {
+		fm.RegisterFontBytes(family, data)
 	}
 
 	if _, err := fm.EnsureFont("Liberation Sans", false, false); err != nil {
