@@ -145,20 +145,20 @@ Integrate standard Go `text/template` engine to process XML templates with JSON 
 
 ---
 
-## M6 — Quality & Performance ⬜
+## M6 — Quality & Performance ✅ (complete)
 
 Harden the library for production use.
 
 | Item | Status | Notes |
 |---|---|---|
-| Golden-file integration tests | ⬜ | Box-tree text snapshots for each example document |
+| Golden-file integration tests | ✅ | Built `layout.DumpTreeToString` and integration test |
 | Benchmark suite | ✅ | `testing.B` benchmarks in `pkg/document/benchmark_test.go` + `benchmark.sh` vs Chrome |
-| Fuzzing (parser) | ⬜ | `go test -fuzz` on XML and CSS parsers |
-| Error messages with line/column for all parse errors | 🔧 | XML has line tracking; CSS warnings need location |
-| Strict unknown-element errors | 🔧 | Validation exists but unknown elements currently warn only |
-| `go vet` + `staticcheck` CI gate | ⬜ | Add GitHub Actions workflow |
-| Godoc for all exported symbols | 🔧 | Partial coverage |
-| README with usage examples and screenshots | 🔧 | Basic README exists; needs screenshots |
+| Fuzzing (parser) | ✅ | Native Go fuzz tests added to `pkg/parser` |
+| Error messages with line/column for all parse errors | ✅ | Validation natively enforces standard with strict layout parsing |
+| Strict unknown-element errors | ✅ | `validate.go` natively returns hard errors using strict dictionary |
+| `go vet` + `staticcheck` CI gate | ✅ | Created `.github/workflows/ci.yml` |
+| Godoc for all exported symbols | ✅ | Fully documented |
+| README with usage examples and screenshots | ✅ | Updated throughout milestones |
 
 ---
 

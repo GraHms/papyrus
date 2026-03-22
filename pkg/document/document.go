@@ -185,6 +185,63 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 	return renderer.Render(w)
 }
 
+// LayoutTreeToString generates the layout and returns a textual dump of the box tree.
+// This is used for golden-file integration testing.
+func (d *Document) LayoutTreeToString(opts ...Option) (string, error) {
+	if d.parsed == nil {
+		return "", fmt.Errorf("pdfml: document not parsed")
+	}
+
+	options := d.options
+	for _, opt := range opts {
+		opt(&options)
+	}
+
+	resolver := style.NewResolver(d.cssRules, options.DPI)
+
+	if options.PageSize != "" {
+		w2, h := render.PageSizeFromString(options.PageSize)
+		resolver.PageStyle.Width = w2
+		resolver.PageStyle.Height = h
+	}
+
+	measure, cleanup, err := render.MeasureForLayout(options.Fonts, options.FontsBytes)
+	if err != nil {
+		return "", fmt.Errorf("pdfml: font initialization error: %w", err)
+	}
+	defer cleanup()
+
+	nodeStyles := resolver.ResolveTree(d.parsed.Root)
+
+	ctx := &layout.Context{
+		PageWidth:  resolver.PageStyle.Width - resolver.PageStyle.MarginLeft - resolver.PageStyle.MarginRight,
+		PageHeight: resolver.PageStyle.Height - resolver.PageStyle.MarginTop - resolver.PageStyle.MarginBottom,
+		DPI:        options.DPI,
+		Measure:    measure,
+	}
+
+	rootBox := layout.BuildBoxTree(d.parsed, nodeStyles)
+	headerBox, footerBox := layout.BuildHeaderFooter(d.parsed, nodeStyles)
+	firstHeaderBox, firstFooterBox := layout.BuildFirstPageHeaderFooter(d.parsed, nodeStyles)
+
+	pageLayout := layout.NewPageLayout(resolver.PageStyle, ctx)
+	if headerBox != nil {
+		pageLayout.SetHeader(headerBox)
+	}
+	if footerBox != nil {
+		pageLayout.SetFooter(footerBox)
+	}
+	if firstHeaderBox != nil {
+		pageLayout.SetFirstHeader(firstHeaderBox)
+	}
+	if firstFooterBox != nil {
+		pageLayout.SetFirstFooter(firstFooterBox)
+	}
+	pageLayout.Layout(rootBox)
+
+	return layout.DumpTreeToString(pageLayout), nil
+}
+
 // GenerateFromBytes resolves PDF generation directly from a byte slice.
 func GenerateFromBytes(data []byte, opts ...Option) ([]byte, error) {
 	var buf bytes.Buffer

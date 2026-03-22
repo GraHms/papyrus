@@ -104,3 +104,10 @@ func WithDataFile(path string) Option {
 		o.DataFile = path
 	}
 }
+
+// WithBasePath sets the base path for relative resource resolution.
+func WithBasePath(path string) Option {
+	return func(o *Options) {
+		o.BasePath = path
+	}
+}
