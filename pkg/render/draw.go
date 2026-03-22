@@ -101,3 +101,50 @@ func drawHR(pdf *gopdf.GoPdf, x, y, w float64, cs style.ComputedStyle) {
 func setTextColor(pdf *gopdf.GoPdf, c style.Color) {
 	pdf.SetTextColor(uint8(c.R), uint8(c.G), uint8(c.B))
 }
+
+// drawCollapsedTableBorders draws a merged border grid for a border-collapse:collapse table.
+// tableX/tableY are the absolute content-area origin; colXs and rowYs are relative to that origin.
+// It draws the outer table border plus all internal grid lines using the table's own border style
+// (falling back to a default thin black line if none is set).
+func drawCollapsedTableBorders(pdf *gopdf.GoPdf, tableX, tableY float64, colXs, rowYs []float64, cs style.ComputedStyle) {
+	if len(colXs) < 2 || len(rowYs) < 2 {
+		return
+	}
+
+	lineColor := cs.BorderTopColor
+	if lineColor.A == 0 {
+		// No explicit table border set — derive from cell border defaults.
+		lineColor = style.Color{R: 0, G: 0, B: 0, A: 255}
+	}
+	lineWidth := cs.BorderTopWidth
+	if lineWidth <= 0 {
+		lineWidth = 0.5
+	}
+	lineStyle := cs.BorderTopStyle
+	if lineStyle == "none" || lineStyle == "" {
+		lineStyle = "solid"
+	}
+
+	setStrokeColor(pdf, lineColor)
+	pdf.SetLineWidth(lineWidth)
+	pdf.SetLineType(borderLineType(lineStyle))
+
+	tableW := colXs[len(colXs)-1]
+	tableH := rowYs[len(rowYs)-1]
+
+	// Outer border
+	pdf.Line(tableX, tableY, tableX+tableW, tableY)
+	pdf.Line(tableX, tableY+tableH, tableX+tableW, tableY+tableH)
+	pdf.Line(tableX, tableY, tableX, tableY+tableH)
+	pdf.Line(tableX+tableW, tableY, tableX+tableW, tableY+tableH)
+
+	// Internal horizontal lines (between rows)
+	for _, ry := range rowYs[1 : len(rowYs)-1] {
+		pdf.Line(tableX, tableY+ry, tableX+tableW, tableY+ry)
+	}
+
+	// Internal vertical lines (between columns)
+	for _, cx := range colXs[1 : len(colXs)-1] {
+		pdf.Line(tableX+cx, tableY, tableX+cx, tableY+tableH)
+	}
+}

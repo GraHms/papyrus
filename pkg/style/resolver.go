@@ -292,11 +292,19 @@ func applyElementDefaults(tag string, cs ComputedStyle) ComputedStyle {
 		cs.MarginBottom = 8
 	case "th":
 		cs.FontWeight = "bold"
-		cs.TextAlign = "left"
+		cs.TextAlign = "center"
 		cs.Display = "table-cell"
+		cs.PaddingTop = 4
+		cs.PaddingRight = 6
+		cs.PaddingBottom = 4
+		cs.PaddingLeft = 6
 	case "td":
 		cs.Display = "table-cell"
 		cs.VerticalAlign = "top"
+		cs.PaddingTop = 4
+		cs.PaddingRight = 6
+		cs.PaddingBottom = 4
+		cs.PaddingLeft = 6
 	case "tr":
 		cs.Display = "table-row"
 	case "thead", "tbody", "tfoot":

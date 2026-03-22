@@ -22,6 +22,15 @@ const (
 	PageBreakBox                // forced page break
 )
 
+// TableSection identifies which section of a table a row belongs to.
+type TableSection int
+
+const (
+	TableSectionBody TableSection = iota
+	TableSectionHead
+	TableSectionFoot
+)
+
 // Box represents a node in the layout tree.
 // All positions and sizes are in points.
 type Box struct {
@@ -57,6 +66,18 @@ type Box struct {
 
 	// HREF holds the URL for <a> link elements. Empty for non-link boxes.
 	HREF string
+
+	// TableSectionType marks a table row as belonging to thead, tbody, or tfoot.
+	TableSectionType TableSection
+
+	// InCollapsedTable is true for cells inside a border-collapse:collapse table.
+	// The renderer skips individual cell borders and draws the table grid instead.
+	InCollapsedTable bool
+
+	// ColXPositions and RowYPositions store column/row edge coordinates for collapsed
+	// table grid rendering (relative to the table content area origin).
+	ColXPositions []float64
+	RowYPositions []float64
 }
 
 // InlineRun is a segment of inline text with associated style.

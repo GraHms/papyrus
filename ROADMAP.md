@@ -78,21 +78,21 @@ Expand the element set to match HTML authoring habits and improve text rendering
 
 ---
 
-## M2 — Tables (Full) ⬜
+## M2 — Tables (Full) 🔧
 
 Complete the table layout algorithm.
 
 | Item | Status | Notes |
 |---|---|---|
-| `table-layout: fixed` | ⬜ | Column widths from first row; faster than auto |
-| `table-layout: auto` (column min/max widths) | ⬜ | True CSS auto table sizing |
-| `rowspan` | ⬜ | Currently only `colspan` is handled |
-| `border-collapse: collapse` | ⬜ | Merge adjacent cell borders; currently drawn separately |
-| `border-spacing` | ⬜ | Gap between cells in `separate` mode |
-| `<thead>` repetition on page breaks | ⬜ | Re-emit header rows when a table spans pages |
-| `<tfoot>` at page bottom | ⬜ | Emit footer rows before the page break |
-| `<th>` default bold + center styling | ⬜ | Apply via UA stylesheet defaults |
-| Cell padding inheritance | 🔧 | Works but not fully tested with collapsed borders |
+| `table-layout: fixed` | ✅ | Column widths from first row; remainder equally distributed |
+| `table-layout: auto` (column min/max widths) | ✅ | Natural content-width measurement; proportional scaling |
+| `rowspan` | ✅ | Grid-based placement; height distributed across spanned rows |
+| `border-collapse: collapse` | ✅ | Cells suppress individual borders; table draws unified grid |
+| `border-spacing` | ✅ | Gap between cells in `separate` mode |
+| `<thead>` repetition on page breaks | ⬜ | Re-emit header rows when a table spans pages (M3 paginator work) |
+| `<tfoot>` at page bottom | ⬜ | Emit footer rows before the page break (M3 paginator work) |
+| `<th>` default bold + center styling | ✅ | `font-weight: bold; text-align: center` + default `4pt/6pt` padding |
+| Cell padding inheritance | ✅ | UA default `4pt 6pt` applied to `th` and `td` |
 
 ---
 
