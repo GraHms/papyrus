@@ -151,6 +151,9 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 	// Build header/footer boxes
 	headerBox, footerBox := layout.BuildHeaderFooter(d.parsed, nodeStyles)
 
+	// Build first-page header/footer boxes
+	firstHeaderBox, firstFooterBox := layout.BuildFirstPageHeaderFooter(d.parsed, nodeStyles)
+
 	// Create page layout and paginate
 	pageLayout := layout.NewPageLayout(resolver.PageStyle, ctx)
 	if headerBox != nil {
@@ -158,6 +161,12 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 	}
 	if footerBox != nil {
 		pageLayout.SetFooter(footerBox)
+	}
+	if firstHeaderBox != nil {
+		pageLayout.SetFirstHeader(firstHeaderBox)
+	}
+	if firstFooterBox != nil {
+		pageLayout.SetFirstFooter(firstFooterBox)
 	}
 	pageLayout.Layout(rootBox)
 

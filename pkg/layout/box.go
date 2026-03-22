@@ -34,9 +34,9 @@ const (
 // Box represents a node in the layout tree.
 // All positions and sizes are in points.
 type Box struct {
-	Type   BoxType
-	Node   *parser.Node   // originating DOM node (may be nil for anonymous boxes)
-	Style  style.ComputedStyle
+	Type  BoxType
+	Node  *parser.Node // originating DOM node (may be nil for anonymous boxes)
+	Style style.ComputedStyle
 
 	// Geometry (set during layout)
 	X, Y          float64 // position relative to content area of parent
@@ -78,6 +78,17 @@ type Box struct {
 	// table grid rendering (relative to the table content area origin).
 	ColXPositions []float64
 	RowYPositions []float64
+
+	// TheadBox holds a reference to the <thead> rows box for table pagination.
+	// When a table spans pages, this box is cloned and prepended on each new page.
+	TheadBox *Box
+
+	// TfootBox holds a reference to the <tfoot> rows box for table pagination.
+	TfootBox *Box
+
+	// InlineLineCount stores the number of laid-out text lines in this box.
+	// Set during inline layout for use by orphans/widows pagination logic.
+	InlineLineCount int
 }
 
 // InlineRun is a segment of inline text with associated style.

@@ -143,6 +143,7 @@ func layoutInlineBlock(ctx *Context, parent *Box, innerWidth float64) {
 	}
 
 	parent.Height = totalHeight
+	parent.InlineLineCount = len(lines)
 
 	// Store lines in the box for rendering
 	// We flatten lines back into inline runs on the box

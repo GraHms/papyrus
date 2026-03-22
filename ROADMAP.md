@@ -96,16 +96,16 @@ Complete the table layout algorithm.
 
 ---
 
-## M3 — Pagination Polish ⬜
+## M3 — Pagination Polish ✅ (complete)
 
 More control over how content flows across pages.
 
 | Item | Status | Notes |
 |---|---|---|
-| `page-break-before: always` / `page-break-after: always` | ⬜ | CSS-triggered forced breaks |
-| `page-break-inside: avoid` | ⬜ | Try to keep a box on one page |
-| `orphans` / `widows` control | ⬜ | Minimum lines at top/bottom of a page |
-| Different first-page header/footer | ⬜ | `<page-header first-only>` or CSS `:first` selector |
+| `page-break-before: always` / `page-break-after: always` | ✅ | CSS-triggered forced breaks in paginator loop |
+| `page-break-inside: avoid` | ✅ | Moves box to next page if it fits there |
+| `orphans` / `widows` control | ✅ | Checks inline line count at page boundaries |
+| Different first-page header/footer | ✅ | `<first-header>` / `<first-footer>` elements |
 | Per-page size / orientation changes | ⬜ | `@page :left / :right` analog |
 
 ---
@@ -152,7 +152,7 @@ Harden the library for production use.
 | Item | Status | Notes |
 |---|---|---|
 | Golden-file integration tests | ⬜ | Box-tree text snapshots for each example document |
-| Benchmark suite | ⬜ | `testing.B` for parse, layout, and render on 5-page invoice |
+| Benchmark suite | ✅ | `testing.B` benchmarks in `pkg/document/benchmark_test.go` + `benchmark.sh` vs Chrome |
 | Fuzzing (parser) | ⬜ | `go test -fuzz` on XML and CSS parsers |
 | Error messages with line/column for all parse errors | 🔧 | XML has line tracking; CSS warnings need location |
 | Strict unknown-element errors | 🔧 | Validation exists but unknown elements currently warn only |

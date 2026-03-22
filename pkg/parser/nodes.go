@@ -122,6 +122,7 @@ var AllowedElements = map[string]bool{
 
 	// Page control
 	"page-header": true, "page-footer": true,
+	"first-header": true, "first-footer": true,
 	"page-break": true, "page-number": true, "page-count": true,
 
 	// Block content
@@ -129,7 +130,7 @@ var AllowedElements = map[string]bool{
 	"main": true, "article": true, "aside": true, "nav": true,
 	"h1": true, "h2": true, "h3": true, "h4": true, "h5": true, "h6": true,
 	"p": true, "blockquote": true, "hr": true,
-	"pre": true,
+	"pre":    true,
 	"figure": true, "figcaption": true,
 
 	// Inline content

@@ -119,7 +119,7 @@ func buildElementBox(node *parser.Node, cs style.ComputedStyle, styles map[*pars
 		return &Box{Type: PageBreakBox, Node: node, Style: cs}
 	case "head", "meta", "style", "var", "font":
 		return nil
-	case "page-header", "page-footer":
+	case "page-header", "page-footer", "first-header", "first-footer":
 		return nil
 	case "a":
 		href, _ := node.GetAttribute("href")
@@ -147,11 +147,11 @@ func buildElementBox(node *parser.Node, cs style.ComputedStyle, styles map[*pars
 		box.Children = append(box.Children, close)
 		return box
 
-	// <dl>/<dt>/<dd> are rendered as block elements with UA-stylesheet indentation
-	// applied via applyElementDefaults; no special box type needed.
-	// <figure>, <figcaption>, <caption>, <pre> and the semantic containers
-	// (<main>, <article>, <aside>, <nav>) are all plain block boxes handled
-	// by the default path below.
+		// <dl>/<dt>/<dd> are rendered as block elements with UA-stylesheet indentation
+		// applied via applyElementDefaults; no special box type needed.
+		// <figure>, <figcaption>, <caption>, <pre> and the semantic containers
+		// (<main>, <article>, <aside>, <nav>) are all plain block boxes handled
+		// by the default path below.
 	}
 
 	box := &Box{
@@ -185,6 +185,18 @@ func buildElementBox(node *parser.Node, cs style.ComputedStyle, styles map[*pars
 
 	for _, child := range node.Children {
 		buildNode(child, box, styles)
+	}
+
+	// For table boxes, identify thead/tfoot children for pagination support
+	if box.Type == TableBox {
+		for _, child := range box.Children {
+			if child.TableSectionType == TableSectionHead && box.TheadBox == nil {
+				box.TheadBox = child
+			}
+			if child.TableSectionType == TableSectionFoot && box.TfootBox == nil {
+				box.TfootBox = child
+			}
+		}
 	}
 
 	return box
