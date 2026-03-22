@@ -10,8 +10,10 @@ type ComputedStyle struct {
 	FontWeight     string  // "normal", "bold", "100"-"900"
 	FontStyle      string  // "normal", "italic"
 	Color          Color
-	LineHeight     float64 // pt (absolute, resolved from ratio/length)
-	TextAlign      string  // "left", "right", "center", "justify"
+	LineHeight      float64 // pt (absolute, resolved from ratio/length)
+	// LineHeightRatio is the unitless ratio; if > 0, LineHeight is re-resolved as FontSize*LineHeightRatio after inheritance
+	LineHeightRatio float64
+	TextAlign       string // "left", "right", "center", "justify"
 	TextDecoration string  // "none", "underline", "line-through"
 	LetterSpacing  float64 // pt
 	TextTransform  string  // "none", "uppercase", "lowercase", "capitalize"

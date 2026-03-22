@@ -215,8 +215,14 @@ func inheritFrom(child ComputedStyle, parent *ComputedStyle) ComputedStyle {
 	child.BorderSpacing = parent.BorderSpacing
 	child.Orphans = parent.Orphans
 	child.Widows = parent.Widows
-	// LineHeight is copied from parent and will be re-resolved after font-size is known
-	child.LineHeight = parent.LineHeight
+	// LineHeightRatio is inherited so children can re-resolve against their own font-size.
+	// When a ratio is set, we clear the absolute LineHeight so it gets re-resolved.
+	child.LineHeightRatio = parent.LineHeightRatio
+	if parent.LineHeightRatio > 0 {
+		child.LineHeight = 0
+	} else {
+		child.LineHeight = parent.LineHeight
+	}
 	return child
 }
 
@@ -421,13 +427,18 @@ func (r *ResolverContext) applyDeclaration(cs ComputedStyle, d parser.Declaratio
 		}
 	case "line-height":
 		if d.Value == "normal" {
-			cs.LineHeight = cs.FontSize * 1.2
+			// Store as ratio so children inherit correctly
+			cs.LineHeightRatio = 1.2
+			cs.LineHeight = 0
 		} else if v, err := strconv.ParseFloat(d.Value, 64); err == nil {
-			// Unitless number (e.g. 1.5) — CSS multiplier relative to font-size
-			cs.LineHeight = cs.FontSize * v
+			// Unitless number (e.g. 1.5) — store ratio; resolve after inheritance
+			cs.LineHeightRatio = v
+			cs.LineHeight = 0
 		} else {
+			// Absolute length — store as absolute pt, clear ratio
 			l, err := ParseLength(d.Value)
 			if err == nil {
+				cs.LineHeightRatio = 0
 				cs.LineHeight = l.ToPoints(0, cs.FontSize, r.RootFontSize, r.DPI)
 			}
 		}
@@ -631,7 +642,11 @@ func (r *ResolverContext) applyDeclaration(cs ComputedStyle, d parser.Declaratio
 }
 
 // resolveLineHeight ensures line-height is absolute (in pt).
+// If LineHeightRatio > 0, it takes precedence and is multiplied by FontSize.
 func resolveLineHeight(cs ComputedStyle, node *parser.Node) float64 {
+	if cs.LineHeightRatio > 0 {
+		return cs.FontSize * cs.LineHeightRatio
+	}
 	if cs.LineHeight <= 0 {
 		return cs.FontSize * 1.2
 	}

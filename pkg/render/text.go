@@ -2,6 +2,7 @@ package render
 
 import (
 	"strings"
+	"unicode/utf8"
 
 	"github.com/ismaelvodacom/goxml2pdf/pkg/layout"
 	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
@@ -29,6 +30,9 @@ func MeasureText(pdf *gopdf.GoPdf, fm *FontManager) layout.TextMeasurer {
 		if err != nil {
 			return float64(len([]rune(text))) * cs.FontSize * 0.5
 		}
+		if cs.LetterSpacing != 0 {
+			w += float64(utf8.RuneCountInString(text)) * cs.LetterSpacing
+		}
 		return w
 	}
 }
@@ -46,7 +50,7 @@ func drawTextRuns(pdf *gopdf.GoPdf, fm *FontManager, runs []layout.InlineRun, x,
 	lines := layout.BreakIntoLines(runs, maxWidth, measurer)
 
 	curY := y
-	for _, line := range lines {
+	for i, line := range lines {
 		if len(line.Runs) == 0 {
 			// Empty line (from br)
 			lh := cs.LineHeight
@@ -72,6 +76,22 @@ func drawTextRuns(pdf *gopdf.GoPdf, fm *FontManager, runs []layout.InlineRun, x,
 
 		curX := lineX
 
+		// Justify: compute extra space per gap for non-last lines
+		isLastLine := i == len(lines)-1
+		justify := cs.TextAlign == "justify" && !isLastLine
+		var extraSpacePerGap float64
+		if justify {
+			spaceCount := 0
+			for _, r := range line.Runs {
+				if r.Text == " " {
+					spaceCount++
+				}
+			}
+			if spaceCount > 0 {
+				extraSpacePerGap = (maxWidth - line.Width) / float64(spaceCount)
+			}
+		}
+
 		for _, run := range line.Runs {
 			if run.Text == "" || run.Text == "\n" {
 				continue
@@ -92,15 +112,35 @@ func drawTextRuns(pdf *gopdf.GoPdf, fm *FontManager, runs []layout.InlineRun, x,
 			// Render text
 			runText := applyTextTransform(run.Text, runCS.TextTransform)
 
+			// Handle justify space advancement without drawing
+			if run.Text == " " && justify {
+				spW, _ := pdf.MeasureTextWidth(" ")
+				curX += spW + extraSpacePerGap
+				continue
+			}
+
 			// Draw text at current position.
 			// ascent ≈ 0.75 * fontSize; BaselineShift moves sup/sub relative to baseline.
 			ascent := runCS.FontSize * 0.75
 			textY := curY + lineH - ascent - runCS.FontSize*0.15 - runCS.BaselineShift
-			pdf.SetXY(curX, textY)
-			_ = pdf.Text(runText)
 
-			// Measure width for cursor advance
-			w, _ := pdf.MeasureTextWidth(runText)
+			var w float64
+			if runCS.LetterSpacing != 0 {
+				// Render each rune individually with letter-spacing applied between chars.
+				runX := curX
+				for _, ch := range runText {
+					chStr := string(ch)
+					pdf.SetXY(runX, textY)
+					_ = pdf.Text(chStr)
+					chW, _ := pdf.MeasureTextWidth(chStr)
+					runX += chW + runCS.LetterSpacing
+				}
+				w = runX - curX
+			} else {
+				pdf.SetXY(curX, textY)
+				_ = pdf.Text(runText)
+				w, _ = pdf.MeasureTextWidth(runText)
+			}
 			curX += w
 
 			// Underline
@@ -137,6 +177,9 @@ func measureLine(pdf *gopdf.GoPdf, fm *FontManager, runs []layout.InlineRun) flo
 		}
 		w, err := pdf.MeasureTextWidth(run.Text)
 		if err == nil {
+			if run.Style.LetterSpacing != 0 {
+				w += float64(utf8.RuneCountInString(run.Text)) * run.Style.LetterSpacing
+			}
 			total += w
 		}
 	}

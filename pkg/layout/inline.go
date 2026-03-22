@@ -88,7 +88,8 @@ func BreakIntoLines(runs []InlineRun, maxWidth float64, measurer TextMeasurer) [
 			continue
 		}
 
-		if currentWidth+tokW <= maxWidth || currentWidth == 0 {
+		noWrap := tok.style.WhiteSpace == "nowrap"
+		if currentWidth+tokW <= maxWidth || currentWidth == 0 || noWrap {
 			currentLine.Runs = append(currentLine.Runs, InlineRun{
 				Text:  tok.text,
 				Style: tok.style,
