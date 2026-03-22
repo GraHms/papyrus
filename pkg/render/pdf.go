@@ -150,11 +150,8 @@ func (r *Renderer) renderBox(box *layout.Box, absX, absY, availWidth float64) {
 		_ = drawImage(r.pdf, cs.BackgroundImage, absX, absY, borderBoxW, borderBoxH, basePath)
 	}
 
-	// For cells inside a border-collapse:collapse table, borders are drawn
-	// by the table-level grid pass — skip individual cell borders here.
-	if !box.InCollapsedTable {
-		drawBorders(r.pdf, absX, absY, borderBoxW, borderBoxH, cs)
-	}
+	// Draw individual box borders
+	drawBorders(r.pdf, absX, absY, borderBoxW, borderBoxH, cs)
 
 	contentX := absX + cs.BorderLeftWidth + cs.PaddingLeft
 	contentY := absY + cs.BorderTopWidth + cs.PaddingTop
@@ -171,11 +168,8 @@ func (r *Renderer) renderBox(box *layout.Box, absX, absY, availWidth float64) {
 
 	switch box.Type {
 	case layout.TableBox:
-		// Render table children first, then draw collapsed-border grid on top.
+		// Render table children (borders are handled at the cell level via painter's algorithm)
 		r.renderBlockContent(box, contentX, contentY, contentWidth)
-		if box.Style.BorderCollapse == "collapse" && len(box.ColXPositions) > 0 {
-			drawCollapsedTableBorders(r.pdf, contentX, contentY, box.ColXPositions, box.RowYPositions, box.Style)
-		}
 		return
 
 	case layout.HRBox:
