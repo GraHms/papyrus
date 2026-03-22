@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <head>
+    <meta title="Certificate of Completion" author="Training Academy" />
+    <style>
+      page {
+        size: A4;
+        orientation: landscape;
+        margin: 25mm;
+      }
+      body {
+        font-family: "Liberation Serif";
+        text-align: center;
+        color: #222222;
+        border: 4pt solid #2c3e50;
+        padding: 20mm;
+        height: 100%;
+      }
+      .inner-border {
+        border: 1pt solid #e60000;
+        height: 100%;
+        padding: 10mm;
+      }
+      h1 {
+        font-size: 36pt;
+        color: #e60000;
+        margin-top: 10mm;
+        margin-bottom: 5mm;
+        text-transform: uppercase;
+        letter-spacing: 4pt;
+      }
+      .subtitle {
+        font-family: "Liberation Sans";
+        font-size: 16pt;
+        color: #7f8c8d;
+        margin-bottom: 25mm;
+        text-transform: uppercase;
+        letter-spacing: 2pt;
+      }
+      .presented-to {
+        font-style: italic;
+        font-size: 14pt;
+        margin-bottom: 10mm;
+      }
+      .name {
+        font-family: "Liberation Sans";
+        font-size: 28pt;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 15mm;
+        border-bottom: 1pt solid #bdc3c7;
+        padding-bottom: 5mm;
+        width: 80%;
+        margin-left: 10%;
+      }
+      .reason {
+        font-size: 14pt;
+        margin-bottom: 10mm;
+        line-height: 1.5;
+        width: 80%;
+        margin-left: 10%;
+      }
+      .course-name {
+        font-weight: bold;
+        font-size: 18pt;
+        color: #e60000;
+      }
+      table.signatures {
+        width: 80%;
+        margin-left: 10%;
+        margin-top: 30mm;
+        table-layout: fixed;
+      }
+      table.signatures td {
+        padding: 5mm;
+        vertical-align: bottom;
+      }
+      .signature-line {
+        border-top: 1pt solid #222222;
+        padding-top: 2mm;
+        font-family: "Liberation Sans";
+        font-size: 10pt;
+      }
+      .date {
+        font-family: "Liberation Sans";
+        font-size: 12pt;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="inner-border">
+      <h1>Certificate</h1>
+      <p class="subtitle">of Completion</p>
+      
+      <p class="presented-to">This is proudly presented to</p>
+      
+      <p class="name">Jane Doe</p>
+      
+      <p class="reason">
+        For successfully completing the comprehensive training program and demonstrating mastery in
+        <br/><br/>
+        <span class="course-name">GoXML2PDF Advanced Document Engineering</span>
+      </p>
+      
+      <table class="signatures">
+        <tr>
+          <td>
+            <p class="date">May 15, 2026</p>
+            <p class="signature-line">Date</p>
+          </td>
+          <td>
+            <!-- Placeholder for actual signature image -->
+            <p style="font-family: 'Liberation Sans'; font-size: 18pt; color: #34495e;"><em>Director</em></p>
+            <p class="signature-line">Program Director</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</document>
