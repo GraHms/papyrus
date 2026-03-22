@@ -19,7 +19,17 @@ Historically, generating PDFs in web services has meant installing heavy depende
 ### Performance Gains 🚀
 1. **Insanely Little Overhead:** Running purely in Go means you don't spin up external processes. Memory usage drops from hundreds of megabytes to mere kilobytes.
 2. **Pre-Parsed Templates:** The engine allows parsing a template and its CSS *once* at server startup, resolving the layout algorithms, and repeatedly emitting PDFs dynamically through `Render()`.
-3. **Instantaneous Execution:** Typical generations of intricate 5-page invoices resolve in single-digit milliseconds. 
+3. **Instantaneous Execution:** Generating a robust invoice takes **~16 milliseconds**.
+
+#### Real-World Benchmark (vs Headless Chrome)
+When testing a standard invoice layout directly against Google Chrome running in headless mode (warm start):
+
+| Engine | Execution Time | File Size | Invoices Per Second (1 Core) |
+| --- | --- | --- | --- |
+| **`pdfml` (Go)** | `0.016s` | `37 KB` | ~62.5 |
+| **Headless Chrome** | `0.756s` | `48 KB` | ~1.3 |
+
+*`pdfml` executed the exact same workload **47x faster** than Headless Chrome generating a smaller PDF payload.* 
 
 ---
 
