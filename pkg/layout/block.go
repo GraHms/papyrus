@@ -1,7 +1,7 @@
 package layout
 
 import (
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/style"
 )
 
 // Context holds layout state.

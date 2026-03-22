@@ -1,14 +1,14 @@
-// Package document provides the top-level API for goxml2pdf.
+// Package document provides the top-level API for pdfml.
 //
 // Usage:
 //
-//	err := goxml2pdf.GenerateFromFile("invoice.xml", "invoice.pdf")
+//	err := pdfml.GenerateFromFile("invoice.xml", "invoice.pdf")
 //
 // Or with options:
 //
 //	f, _ := os.Open("invoice.xml")
 //	out, _ := os.Create("invoice.pdf")
-//	err := goxml2pdf.Generate(f, out, goxml2pdf.WithDebug(), goxml2pdf.WithDPI(150))
+//	err := pdfml.Generate(f, out, pdfml.WithDebug(), pdfml.WithDPI(150))
 package document
 
 import (
@@ -17,13 +17,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ismaelvodacom/goxml2pdf/pkg/layout"
-	"github.com/ismaelvodacom/goxml2pdf/pkg/parser"
-	"github.com/ismaelvodacom/goxml2pdf/pkg/render"
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/layout"
+	"github.com/grahms/pdfml/pkg/parser"
+	"github.com/grahms/pdfml/pkg/render"
+	"github.com/grahms/pdfml/pkg/style"
 )
 
-// Document represents a parsed and validated goxml2pdf document
+// Document represents a parsed and validated pdfml document
 // that is ready to be rendered to PDF.
 type Document struct {
 	options Options
@@ -44,11 +44,11 @@ func Generate(r io.Reader, w io.Writer, opts ...Option) error {
 	// Phase 1 — Parse XML + CSS
 	doc, err := parser.ParseXML(r)
 	if err != nil {
-		return fmt.Errorf("goxml2pdf: parse error: %w", err)
+		return fmt.Errorf("pdfml: parse error: %w", err)
 	}
 
 	if err := parser.ValidateDocument(doc); err != nil {
-		return fmt.Errorf("goxml2pdf: validation error: %w", err)
+		return fmt.Errorf("pdfml: validation error: %w", err)
 	}
 
 	// Parse CSS from <style> blocks
@@ -56,7 +56,7 @@ func Generate(r io.Reader, w io.Writer, opts ...Option) error {
 	if doc.Styles != "" {
 		rules, err = parser.ParseCSS(doc.Styles)
 		if err != nil {
-			return fmt.Errorf("goxml2pdf: CSS parse error: %w", err)
+			return fmt.Errorf("pdfml: CSS parse error: %w", err)
 		}
 	}
 
@@ -73,7 +73,7 @@ func Generate(r io.Reader, w io.Writer, opts ...Option) error {
 	// Set up measurement before layout
 	measure, cleanup, err := render.MeasureForLayout(options.Fonts)
 	if err != nil {
-		return fmt.Errorf("goxml2pdf: font initialization error: %w", err)
+		return fmt.Errorf("pdfml: font initialization error: %w", err)
 	}
 	defer cleanup()
 
@@ -91,7 +91,7 @@ func Generate(r io.Reader, w io.Writer, opts ...Option) error {
 	// Build box tree from body
 	rootBox := layout.BuildBoxTree(doc, nodeStyles)
 	if rootBox == nil {
-		return fmt.Errorf("goxml2pdf: no body element found")
+		return fmt.Errorf("pdfml: no body element found")
 	}
 
 	// Build header/footer boxes
@@ -108,7 +108,7 @@ func Generate(r io.Reader, w io.Writer, opts ...Option) error {
 	pageLayout.Layout(rootBox)
 
 	if len(pageLayout.Pages) == 0 {
-		return fmt.Errorf("goxml2pdf: layout produced no pages")
+		return fmt.Errorf("pdfml: layout produced no pages")
 	}
 
 	// Phase 4 — Render to PDF
@@ -126,7 +126,7 @@ func Generate(r io.Reader, w io.Writer, opts ...Option) error {
 func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 	f, err := os.Open(inputPath)
 	if err != nil {
-		return fmt.Errorf("goxml2pdf: cannot open %q: %w", inputPath, err)
+		return fmt.Errorf("pdfml: cannot open %q: %w", inputPath, err)
 	}
 	defer f.Close()
 
@@ -141,7 +141,7 @@ func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 
 	out, err := os.Create(outputPath)
 	if err != nil {
-		return fmt.Errorf("goxml2pdf: cannot create %q: %w", outputPath, err)
+		return fmt.Errorf("pdfml: cannot create %q: %w", outputPath, err)
 	}
 	defer out.Close()
 
@@ -153,10 +153,10 @@ func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 func Parse(r io.Reader) (*Document, error) {
 	doc, err := parser.ParseXML(r)
 	if err != nil {
-		return nil, fmt.Errorf("goxml2pdf: parse error: %w", err)
+		return nil, fmt.Errorf("pdfml: parse error: %w", err)
 	}
 	if err := parser.ValidateDocument(doc); err != nil {
-		return nil, fmt.Errorf("goxml2pdf: validation error: %w", err)
+		return nil, fmt.Errorf("pdfml: validation error: %w", err)
 	}
 
 	return &Document{
@@ -168,7 +168,7 @@ func Parse(r io.Reader) (*Document, error) {
 // Render generates PDF from an already-parsed document.
 func (d *Document) Render(w io.Writer, opts ...Option) error {
 	if d.parsed == nil {
-		return fmt.Errorf("goxml2pdf: document not parsed")
+		return fmt.Errorf("pdfml: document not parsed")
 	}
 
 	options := d.options
@@ -179,5 +179,5 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 	// Use a strings reader so we can call Generate with the parsed state
 	// For now, re-process through Generate is the simplest approach
 	// TODO: cache the parsed state
-	return fmt.Errorf("goxml2pdf: Render() on parsed Document not yet implemented — use Generate() instead")
+	return fmt.Errorf("pdfml: Render() on parsed Document not yet implemented — use Generate() instead")
 }

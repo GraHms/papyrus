@@ -4,8 +4,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/ismaelvodacom/goxml2pdf/pkg/layout"
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/layout"
+	"github.com/grahms/pdfml/pkg/style"
 	"github.com/signintech/gopdf"
 )
 

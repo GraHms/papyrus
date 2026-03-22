@@ -1,4 +1,4 @@
-# goxml2pdf — Roadmap
+# pdfml — Roadmap
 
 > A pure Go library that converts XML+CSS documents into PDFs. No Chromium, no external binaries, no CGO.
 
@@ -30,7 +30,7 @@ The core pipeline is wired end-to-end. A document can be parsed, styled, laid ou
 | Tables (basic) | ✅ | Auto equal-width columns, `colspan`, thead/tbody/tfoot grouping |
 | Ordered / unordered lists | ✅ | Bullet `•` and `1.` markers with indented content |
 | Page breaks | ✅ | `<page-break/>` forced breaks |
-| CLI tool | ✅ | `goxml2pdf -o out.pdf input.xml` with `-debug`, `-font`, `-data`, `-page-size`, `-dpi` flags |
+| CLI tool | ✅ | `pdfml -o out.pdf input.xml` with `-debug`, `-font`, `-data`, `-page-size`, `-dpi` flags |
 | Example documents | ✅ | `invoice.xml`, `report.xml`, `certificate.xml` |
 | Unit tests (parser, style, document) | ✅ | Table-driven tests in `*_test.go` |
 

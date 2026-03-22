@@ -1,4 +1,4 @@
-// Package style handles CSS style resolution for goxml2pdf.
+// Package style handles CSS style resolution for pdfml.
 package style
 
 import (

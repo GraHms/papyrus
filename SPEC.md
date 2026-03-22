@@ -1,4 +1,4 @@
-# GoXML2PDF — Project Specification
+# PDFML — Project Specification
 
 ## Vision
 
@@ -10,12 +10,12 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 
 ## Name Candidates
 
-- `goxml2pdf`
+- `pdfml`
 - `pagego`
 - `docxml` 
 - `pdfml`
 
-(Decision deferred — use `goxml2pdf` as working name)
+(Decision deferred — use `pdfml` as working name)
 
 ## Design Principles
 
@@ -97,11 +97,25 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 
 ## XML Element Vocabulary (v0.1)
 
+### HTML Compatibility
+
+The vocabulary is designed to be a strict superset of common HTML authoring patterns.
+Documents that look like HTML will parse and render correctly without learning a new tag set.
+
+**Alias rules (both forms are always accepted):**
+| Canonical | HTML alias | Notes |
+|---|---|---|
+| `<document>` | `<html>` | Root element — either form is valid |
+| `<page-header>` | `<header>` | Only when a direct child of `<body>` |
+| `<page-footer>` | `<footer>` | Only when a direct child of `<body>` |
+
+All other elements already match their HTML counterparts exactly.
+
 ### Document Structure
 | Element | Description |
 |---|---|
-| `<document>` | Root element |
-| `<head>` | Contains `<meta>`, `<style>`, `<var>` |
+| `<document>` / `<html>` | Root element (both accepted) |
+| `<head>` | Contains `<meta>`, `<style>`, `<var>`, `<font>` |
 | `<body>` | Contains all visible content |
 | `<style>` | Embedded CSS |
 | `<meta>` | Document metadata (title, author, subject, keywords) |
@@ -110,8 +124,8 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 ### Page Control
 | Element | Description |
 |---|---|
-| `<page-header>` | Repeated at top of each page |
-| `<page-footer>` | Repeated at bottom of each page |
+| `<page-header>` / `<header>` | Repeated at top of each page (direct child of `<body>`) |
+| `<page-footer>` / `<footer>` | Repeated at bottom of each page (direct child of `<body>`) |
 | `<page-break/>` | Force a new page |
 | `<page-number/>` | Insert current page number |
 | `<page-count/>` | Insert total page count |
@@ -119,11 +133,18 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 ### Block Content
 | Element | Description |
 |---|---|
-| `<section>` | Generic block container |
-| `<div>` | Generic block container (alias) |
+| `<div>` | Generic block container |
+| `<section>` | Thematic block section |
+| `<article>` | Self-contained block content |
+| `<main>` | Primary content area |
+| `<nav>` | Navigation block |
+| `<aside>` | Sidebar / supplementary block |
 | `<h1>` ... `<h6>` | Headings |
 | `<p>` | Paragraph |
-| `<blockquote>` | Indented block |
+| `<blockquote>` | Indented block quote |
+| `<pre>` | Preformatted text block (preserves whitespace) |
+| `<figure>` | Block container for images / diagrams |
+| `<figcaption>` | Caption for a `<figure>` |
 | `<hr/>` | Horizontal rule |
 
 ### Inline Content
@@ -133,7 +154,14 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 | `<strong>` / `<b>` | Bold text |
 | `<em>` / `<i>` | Italic text |
 | `<u>` | Underlined text |
-| `<code>` | Monospace text |
+| `<s>` | Strikethrough text |
+| `<code>` | Monospace inline code |
+| `<mark>` | Highlighted text |
+| `<small>` | Smaller text (0.85em) |
+| `<sub>` | Subscript |
+| `<sup>` | Superscript |
+| `<cite>` | Citation / title of work (italic by default) |
+| `<q>` | Short inline quotation |
 | `<br/>` | Line break |
 | `<a>` | Hyperlink (href becomes PDF link annotation) |
 
@@ -141,6 +169,7 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 | Element | Description |
 |---|---|
 | `<table>` | Table container |
+| `<caption>` | Table caption (rendered above the table) |
 | `<thead>` | Header group (repeats on page breaks) |
 | `<tbody>` | Body group |
 | `<tfoot>` | Footer group |
@@ -160,6 +189,9 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 | `<ul>` | Unordered list |
 | `<ol>` | Ordered list |
 | `<li>` | List item |
+| `<dl>` | Definition list |
+| `<dt>` | Definition term (bold by default) |
+| `<dd>` | Definition description (indented by default) |
 
 ### Template / Data Binding (v0.2+)
 | Element | Description |
@@ -252,9 +284,9 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 ## Go Package Structure
 
 ```
-goxml2pdf/
+pdfml/
 ├── cmd/
-│   └── goxml2pdf/
+│   └── pdfml/
 │       └── main.go                 # CLI entry point
 ├── pkg/
 │   ├── parser/
@@ -379,11 +411,32 @@ No CGO. No external binaries. Pure Go.
 
 ## Example Document
 
+Documents can be written using either the canonical vocabulary or HTML-familiar tags.
+Both of the following root forms are valid:
+
 ```xml
+<!-- HTML-style (recommended for developer familiarity) -->
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+  <head>...</head>
+  <body>...</body>
+</html>
+
+<!-- Canonical form (also valid) -->
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
+  <head>...</head>
+  <body>...</body>
+</document>
+```
+
+### Full example (HTML-style)
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
   <head>
-    <meta title="Invoice #1042" author="Vodacom Mozambique" />
+    <meta title="Invoice #1042" author="Acme Corp" />
     <style>
       page {
         size: A4;
@@ -432,7 +485,7 @@ No CGO. No external binaries. Pure Go.
       .right {
         text-align: right;
       }
-      page-footer {
+      footer {
         font-size: 8pt;
         color: #999999;
         text-align: center;
@@ -440,59 +493,63 @@ No CGO. No external binaries. Pure Go.
     </style>
   </head>
   <body>
-    <page-header>
+    <!-- <header> is the HTML alias for <page-header> -->
+    <header>
       <div class="header-bar">
-        <img src="vodacom-logo.png" width="120pt" />
+        <img src="logo.png" width="120pt" />
         <span class="right">Invoice</span>
       </div>
-    </page-header>
+    </header>
 
-    <h1>Invoice #1042</h1>
-    <div class="invoice-meta">
-      <p><strong>Date:</strong> 2026-03-21</p>
-      <p><strong>Customer:</strong> Empresa XYZ, Lda.</p>
-      <p><strong>NIF:</strong> 400123456</p>
-    </div>
+    <main>
+      <h1>Invoice #1042</h1>
+      <div class="invoice-meta">
+        <p><strong>Date:</strong> 2026-03-21</p>
+        <p><strong>Customer:</strong> Empresa XYZ, Lda.</p>
+        <p><strong>NIF:</strong> 400123456</p>
+      </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th class="right">Qty</th>
-          <th class="right">Unit Price</th>
-          <th class="right">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>API Calls (March 2026)</td>
-          <td class="right">15,000</td>
-          <td class="right">2.50 MZN</td>
-          <td class="right">37,500.00 MZN</td>
-        </tr>
-        <tr>
-          <td>SMS Notifications</td>
-          <td class="right">3,200</td>
-          <td class="right">1.00 MZN</td>
-          <td class="right">3,200.00 MZN</td>
-        </tr>
-        <tr>
-          <td>Storage (50GB)</td>
-          <td class="right">1</td>
-          <td class="right">5,000.00 MZN</td>
-          <td class="right">5,000.00 MZN</td>
-        </tr>
-        <tr class="total-row">
-          <td colspan="3" class="right">Total</td>
-          <td class="right">45,700.00 MZN</td>
-        </tr>
-      </tbody>
-    </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th class="right">Qty</th>
+            <th class="right">Unit Price</th>
+            <th class="right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>API Calls (March 2026)</td>
+            <td class="right">15,000</td>
+            <td class="right">2.50 MZN</td>
+            <td class="right">37,500.00 MZN</td>
+          </tr>
+          <tr>
+            <td>SMS Notifications</td>
+            <td class="right">3,200</td>
+            <td class="right">1.00 MZN</td>
+            <td class="right">3,200.00 MZN</td>
+          </tr>
+          <tr>
+            <td>Storage (50GB)</td>
+            <td class="right">1</td>
+            <td class="right">5,000.00 MZN</td>
+            <td class="right">5,000.00 MZN</td>
+          </tr>
+          <tr class="total-row">
+            <td colspan="3" class="right">Total</td>
+            <td class="right">45,700.00 MZN</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
 
-    <page-footer>
+    <!-- <footer> is the HTML alias for <page-footer> -->
+    <footer>
       <p>Page <page-number/> of <page-count/></p>
-      <p>Vodacom Moçambique, S.A. — NIF 400000001</p>
-    </page-footer>
+      <p>Acme Corp — NIF 400000001</p>
+    </footer>
   </body>
-</document>
+</html>
 ```

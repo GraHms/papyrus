@@ -1,4 +1,4 @@
-// Package render handles PDF generation for goxml2pdf.
+// Package render handles PDF generation for pdfml.
 package render
 
 import (

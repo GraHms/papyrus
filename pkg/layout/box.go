@@ -1,9 +1,9 @@
-// Package layout handles box model computation and page layout for goxml2pdf.
+// Package layout handles box model computation and page layout for pdfml.
 package layout
 
 import (
-	"github.com/ismaelvodacom/goxml2pdf/pkg/parser"
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/parser"
+	"github.com/grahms/pdfml/pkg/style"
 )
 
 // BoxType categorises a box in the layout tree.

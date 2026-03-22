@@ -1,4 +1,4 @@
-module github.com/ismaelvodacom/goxml2pdf
+module github.com/grahms/pdfml
 
 go 1.22
 

@@ -1,4 +1,4 @@
-# goxml2pdf
+# pdfml
 
 A pure Go library for converting XML+CSS documents to PDF. No Chromium. No external binaries. No CGO.
 
@@ -40,7 +40,7 @@ Define documents using a purpose-built XML vocabulary styled with a CSS subset, 
 ## Installation
 
 ```bash
-go install github.com/ismaelvodacom/goxml2pdf/cmd/goxml2pdf@latest
+go install github.com/grahms/pdfml/cmd/pdfml@latest
 ```
 
 ## Usage
@@ -48,15 +48,15 @@ go install github.com/ismaelvodacom/goxml2pdf/cmd/goxml2pdf@latest
 ### CLI
 
 ```bash
-goxml2pdf invoice.xml                     # → invoice.pdf
-goxml2pdf -data data.json template.xml    # with data binding
-goxml2pdf -debug -o output.pdf input.xml  # debug mode
+pdfml invoice.xml                     # → invoice.pdf
+pdfml -data data.json template.xml    # with data binding
+pdfml -debug -o output.pdf input.xml  # debug mode
 ```
 
 ### Library
 
 ```go
-import "github.com/ismaelvodacom/goxml2pdf/pkg/document"
+import "github.com/grahms/pdfml/pkg/document"
 
 err := document.GenerateFromFile("invoice.xml", "invoice.pdf")
 

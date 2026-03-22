@@ -1,8 +1,8 @@
 package layout
 
 import (
-	"github.com/ismaelvodacom/goxml2pdf/pkg/parser"
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/parser"
+	"github.com/grahms/pdfml/pkg/style"
 )
 
 // Page represents a single output page with its laid-out boxes.

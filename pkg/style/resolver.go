@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ismaelvodacom/goxml2pdf/pkg/parser"
+	"github.com/grahms/pdfml/pkg/parser"
 )
 
 // PageStyle holds resolved page-level CSS from @page rules.

@@ -3,7 +3,7 @@ package layout
 import (
 	"testing"
 
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/style"
 )
 
 // simpleMeasurer approximates character width as fontSize * 0.6 per character.

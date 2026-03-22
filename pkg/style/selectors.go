@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ismaelvodacom/goxml2pdf/pkg/parser"
+	"github.com/grahms/pdfml/pkg/parser"
 )
 
 // MatchSelector returns true if the given node matches the selector.

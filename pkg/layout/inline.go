@@ -3,8 +3,8 @@ package layout
 import (
 	"strings"
 
-	"github.com/ismaelvodacom/goxml2pdf/pkg/parser"
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/parser"
+	"github.com/grahms/pdfml/pkg/style"
 )
 
 // Line represents a single rendered line of text.

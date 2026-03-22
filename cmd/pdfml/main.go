@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ismaelvodacom/goxml2pdf/pkg/document"
+	"github.com/grahms/pdfml/pkg/document"
 )
 
 var (
@@ -22,8 +22,8 @@ var (
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: goxml2pdf [flags] <input.xml> [output.pdf]\n\n")
-		fmt.Fprintf(os.Stderr, "Convert goxml2pdf XML documents to PDF.\n\n")
+		fmt.Fprintf(os.Stderr, "Usage: pdfml [flags] <input.xml> [output.pdf]\n\n")
+		fmt.Fprintf(os.Stderr, "Convert pdfml XML documents to PDF.\n\n")
 		fmt.Fprintf(os.Stderr, "Flags:\n")
 		flag.PrintDefaults()
 	}
@@ -48,10 +48,10 @@ func main() {
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "goxml2pdf: %s → %s\n", inputPath, outputPath)
+	fmt.Fprintf(os.Stderr, "pdfml: %s → %s\n", inputPath, outputPath)
 
 	if *watch {
-		fmt.Fprintf(os.Stderr, "goxml2pdf: watch mode is not yet implemented\n")
+		fmt.Fprintf(os.Stderr, "pdfml: watch mode is not yet implemented\n")
 		os.Exit(1)
 	}
 
@@ -77,7 +77,7 @@ func main() {
 			entry = strings.TrimSpace(entry)
 			idx := strings.Index(entry, "=")
 			if idx < 0 {
-				fmt.Fprintf(os.Stderr, "goxml2pdf: invalid font flag %q (expected name=path)\n", entry)
+				fmt.Fprintf(os.Stderr, "pdfml: invalid font flag %q (expected name=path)\n", entry)
 				continue
 			}
 			family := strings.TrimSpace(entry[:idx])
@@ -88,9 +88,9 @@ func main() {
 
 	// Generate PDF
 	if err := document.GenerateFromFile(inputPath, outputPath, opts...); err != nil {
-		fmt.Fprintf(os.Stderr, "goxml2pdf: error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "pdfml: error: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Fprintf(os.Stderr, "goxml2pdf: wrote %s\n", outputPath)
+	fmt.Fprintf(os.Stderr, "pdfml: wrote %s\n", outputPath)
 }

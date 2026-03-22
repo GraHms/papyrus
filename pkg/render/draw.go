@@ -1,7 +1,7 @@
 package render
 
 import (
-	"github.com/ismaelvodacom/goxml2pdf/pkg/style"
+	"github.com/grahms/pdfml/pkg/style"
 	"github.com/signintech/gopdf"
 )
 
