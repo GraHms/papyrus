@@ -9,9 +9,10 @@ import (
 
 // Line represents a single rendered line of text.
 type Line struct {
-	Runs   []InlineRun
-	Width  float64
-	Height float64 // line height (ascent + descent of tallest run)
+	Runs        []InlineRun
+	Width       float64
+	Height      float64 // line height in pt
+	MaxFontSize float64 // largest FontSize across all Runs (for baseline alignment)
 }
 
 // TextMeasurer is a function that measures the width of a string in a given style.
@@ -67,7 +68,7 @@ func BreakIntoLines(runs []InlineRun, maxWidth float64, measurer TextMeasurer) [
 	lastStyle := runs[0].Style
 
 	flushLine := func(s style.ComputedStyle) {
-		currentLine.Height = lineHeight(currentLine, s)
+		currentLine.Height = lineHeight(&currentLine, s)
 		lines = append(lines, currentLine)
 		currentLine = Line{}
 		currentWidth = 0
@@ -123,7 +124,7 @@ func BreakIntoLines(runs []InlineRun, maxWidth float64, measurer TextMeasurer) [
 
 	// Flush final line.
 	if len(currentLine.Runs) > 0 {
-		currentLine.Height = lineHeight(currentLine, lastStyle)
+		currentLine.Height = lineHeight(&currentLine, lastStyle)
 		lines = append(lines, currentLine)
 	}
 
@@ -131,29 +132,68 @@ func BreakIntoLines(runs []InlineRun, maxWidth float64, measurer TextMeasurer) [
 }
 
 // lineHeight computes the line height for a line based on the tallest run.
-func lineHeight(line Line, defaultStyle style.ComputedStyle) float64 {
-	maxH := defaultStyle.LineHeight
+// It also writes MaxFontSize back into the line for baseline alignment in rendering.
+func lineHeight(line *Line, defaultStyle style.ComputedStyle) float64 {
+	maxFs := 0.0
+	maxPosBs := 0.0 // max positive BaselineShift (sup shifts text up)
 	for _, run := range line.Runs {
-		if run.Style.LineHeight > maxH {
-			maxH = run.Style.LineHeight
+		if run.Text == "" || run.Text == "\n" {
+			continue
+		}
+		if run.Style.FontSize > maxFs {
+			maxFs = run.Style.FontSize
+		}
+		if run.Style.BaselineShift > maxPosBs {
+			maxPosBs = run.Style.BaselineShift
 		}
 	}
-	if maxH <= 0 {
-		maxH = defaultStyle.FontSize * 1.2
+	if maxFs == 0 {
+		maxFs = defaultStyle.FontSize
 	}
-	return maxH
+	line.MaxFontSize = maxFs
+
+	// Base line height: max of the explicit LineHeight values across runs.
+	baseLH := defaultStyle.LineHeight
+	for _, run := range line.Runs {
+		if run.Style.LineHeight > baseLH {
+			baseLH = run.Style.LineHeight
+		}
+	}
+	if baseLH <= 0 {
+		baseLH = maxFs * 1.2
+	}
+
+	// If there are superscripts, the line must be tall enough so that
+	// the shifted text doesn't clip above curY:
+	//   textY_sup = curY + lineH - 0.9*maxFs - supBs  must be >= curY
+	//   → lineH >= 0.9*maxFs + maxPosBs
+	// Add a small descent buffer (0.3*maxFs) so the line doesn't look cramped.
+	if maxPosBs > 0 {
+		needed := maxFs*0.9 + maxPosBs + maxFs*0.3
+		if baseLH < needed {
+			baseLH = needed
+		}
+	}
+
+	return baseLH
 }
 
 // CollectInlineRuns gathers all inline content from a block box into a flat list of runs.
 func CollectInlineRuns(box *Box, baseStyle style.ComputedStyle) []InlineRun {
 	var runs []InlineRun
-	collectRuns(box, baseStyle, &runs)
+	collectRuns(box, baseStyle, "", &runs)
 	return runs
 }
 
-func collectRuns(box *Box, parentStyle style.ComputedStyle, runs *[]InlineRun) {
+func collectRuns(box *Box, parentStyle style.ComputedStyle, inheritedHREF string, runs *[]InlineRun) {
 	if box == nil {
 		return
+	}
+
+	// Propagate HREF from <a> boxes down to all child runs.
+	href := inheritedHREF
+	if box.HREF != "" {
+		href = box.HREF
 	}
 
 	switch box.Type {
@@ -163,21 +203,22 @@ func collectRuns(box *Box, parentStyle style.ComputedStyle, runs *[]InlineRun) {
 				Text:  box.Text,
 				Style: box.Style,
 				Node:  box.Node,
+				HREF:  href,
 			})
 		}
 	case InlineBox:
 		// Boxes with direct text (br, page-number, page-count, etc.)
 		if box.Text != "" {
-			*runs = append(*runs, InlineRun{Text: box.Text, Style: box.Style, Node: box.Node})
+			*runs = append(*runs, InlineRun{Text: box.Text, Style: box.Style, Node: box.Node, HREF: href})
 			return
 		}
 		for _, child := range box.Children {
-			collectRuns(child, box.Style, runs)
+			collectRuns(child, box.Style, href, runs)
 		}
 	default:
 		for _, child := range box.Children {
 			if child.Type == TextBox || child.Type == InlineBox {
-				collectRuns(child, box.Style, runs)
+				collectRuns(child, box.Style, href, runs)
 			}
 		}
 	}

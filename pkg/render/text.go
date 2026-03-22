@@ -120,9 +120,9 @@ func drawTextRuns(pdf *gopdf.GoPdf, fm *FontManager, runs []layout.InlineRun, x,
 			}
 
 			// Draw text at current position.
-			// ascent ≈ 0.75 * fontSize; BaselineShift moves sup/sub relative to baseline.
-			ascent := runCS.FontSize * 0.75
-			textY := curY + lineH - ascent - runCS.FontSize*0.15 - runCS.BaselineShift
+			// line.MaxFontSize*0.9 establishes a single reference baseline for the entire
+			// line regardless of per-run font sizes; BaselineShift offsets sup/sub from it.
+			textY := curY + lineH - line.MaxFontSize*0.9 - runCS.BaselineShift
 
 			var w float64
 			if runCS.LetterSpacing != 0 {
@@ -157,6 +157,12 @@ func drawTextRuns(pdf *gopdf.GoPdf, fm *FontManager, runs []layout.InlineRun, x,
 				setStrokeColor(pdf, runCS.Color)
 				pdf.SetLineWidth(runCS.FontSize * 0.05)
 				pdf.Line(curX-w, strikeY, curX, strikeY)
+			}
+
+			// Link annotation for <a href="..."> runs.
+			// AddExternalLink(url, x, y, w, h) uses top-left coordinates in pt.
+			if run.HREF != "" {
+				pdf.AddExternalLink(run.HREF, curX-w, textY, w, runCS.FontSize)
 			}
 		}
 

@@ -54,6 +54,9 @@ type Box struct {
 
 	// ListMarker is the bullet/number text drawn before a list item (e.g., "•", "1.").
 	ListMarker string
+
+	// HREF holds the URL for <a> link elements. Empty for non-link boxes.
+	HREF string
 }
 
 // InlineRun is a segment of inline text with associated style.
@@ -61,6 +64,7 @@ type InlineRun struct {
 	Text  string
 	Style style.ComputedStyle
 	Node  *parser.Node
+	HREF  string // non-empty when the run is inside an <a> element
 }
 
 // MarginBox returns the full outer extent including margin.

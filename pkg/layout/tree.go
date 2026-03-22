@@ -121,6 +121,13 @@ func buildElementBox(node *parser.Node, cs style.ComputedStyle, styles map[*pars
 		return nil
 	case "page-header", "page-footer":
 		return nil
+	case "a":
+		href, _ := node.GetAttribute("href")
+		box := &Box{Type: InlineBox, Node: node, Style: cs, HREF: href}
+		for _, child := range node.Children {
+			buildNode(child, box, styles)
+		}
+		return box
 	case "br":
 		return &Box{Type: InlineBox, Node: node, Style: cs, Text: "\n"}
 	case "page-number":

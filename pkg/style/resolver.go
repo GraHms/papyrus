@@ -277,8 +277,12 @@ func applyElementDefaults(tag string, cs ComputedStyle) ComputedStyle {
 	case "code":
 		cs.FontFamily = "Courier"
 		cs.Display = "inline"
-	case "span", "a":
+	case "span":
 		cs.Display = "inline"
+	case "a":
+		cs.Display = "inline"
+		cs.Color = Color{R: 0, G: 0, B: 238, A: 255}
+		cs.TextDecoration = "underline"
 	case "br":
 		cs.Display = "inline"
 	case "blockquote":
