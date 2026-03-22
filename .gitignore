@@ -3,3 +3,5 @@
 *.pdf
 CLAUDE*
 .claude/
+!examples/*.xml
+!testdata/basic/input.xml

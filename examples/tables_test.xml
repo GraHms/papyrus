@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+  <head>
+    <meta title="M2 Tables Test" />
+    <style>
+      page { size: A4; margin: 20mm; }
+      body { font-family: "Liberation Sans"; font-size: 10pt; color: #222222; }
+
+      h2 { font-size: 14pt; font-weight: bold; margin-top: 16pt; margin-bottom: 6pt;
+           color: #1a4a8a; border-bottom: 1pt solid #1a4a8a; padding-bottom: 3pt; }
+
+      /* ── Section 1: equal columns (auto layout, no explicit widths) ── */
+      table.equal { border-collapse: collapse; margin-bottom: 12pt; }
+      table.equal th { background-color: #1a4a8a; color: #ffffff; padding: 5pt; }
+      table.equal td { padding: 4pt; }
+      table.equal tr:nth-child(even) { background-color: #f0f4ff; }
+
+      /* ── Section 2: fixed layout with explicit widths ── */
+      table.fixed-cols { table-layout: fixed; border-collapse: collapse; margin-bottom: 12pt; }
+      table.fixed-cols th { background-color: #2e7d32; color: #ffffff; padding: 5pt; }
+      table.fixed-cols td { padding: 4pt; }
+      table.fixed-cols th:first-child { width: 40pt; }
+      table.fixed-cols th:nth-child(2) { width: 120pt; }
+
+      /* ── Section 3: colspan and rowspan ── */
+      table.spans { border-collapse: collapse; margin-bottom: 12pt; }
+      table.spans th { background-color: #6a1b9a; color: #ffffff; padding: 5pt; }
+      table.spans td { padding: 4pt; border: 1pt solid #cccccc; }
+
+      /* ── Section 4: border-spacing (separate borders) ── */
+      table.spaced { border-spacing: 4pt; margin-bottom: 12pt; }
+      table.spaced th { background-color: #e65100; color: #ffffff; padding: 5pt;
+                        border: 1pt solid #e65100; }
+      table.spaced td { padding: 4pt; border: 1pt solid #cccccc; }
+
+      /* ── Section 5: thead / tbody / tfoot grouping ── */
+      table.groups { border-collapse: collapse; margin-bottom: 12pt; }
+      table.groups thead th { background-color: #37474f; color: #ffffff; padding: 5pt; }
+      table.groups tbody td { padding: 4pt; }
+      table.groups tfoot td { background-color: #eceff1; font-weight: bold; padding: 5pt; }
+
+      /* ── Section 6: auto layout with varied content widths ── */
+      table.auto-width { margin-bottom: 12pt; border-collapse: collapse; }
+      table.auto-width th { background-color: #00695c; color: #ffffff; padding: 5pt; }
+      table.auto-width td { padding: 4pt; }
+
+      /* ── Section 7: caption ── */
+      table.captioned { border-collapse: collapse; margin-bottom: 12pt; }
+      table.captioned caption { font-style: italic; margin-bottom: 4pt; }
+      table.captioned th { background-color: #4527a0; color: #ffffff; padding: 5pt; }
+      table.captioned td { padding: 4pt; }
+    </style>
+  </head>
+  <body>
+    <page-header>
+      <p style="font-size:8pt; color:#888888; text-align:right;">
+        M2 Tables Test — Page <page-number/> of <page-count/>
+      </p>
+    </page-header>
+
+    <!-- ═══ 1. Equal-column auto layout ═══ -->
+    <h2>1. Auto Column Layout (equal distribution)</h2>
+    <table class="equal">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Category</th>
+          <th>Units</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Widget A</td><td>Hardware</td><td>100</td><td>$12.50</td></tr>
+        <tr><td>Widget B</td><td>Software</td><td>50</td><td>$49.99</td></tr>
+        <tr><td>Gadget X</td><td>Hardware</td><td>200</td><td>$5.00</td></tr>
+        <tr><td>Service Pro</td><td>Services</td><td>1</td><td>$999.00</td></tr>
+        <tr><td>Widget C</td><td>Hardware</td><td>75</td><td>$22.00</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ═══ 2. Fixed layout with explicit column widths ═══ -->
+    <h2>2. Fixed Table Layout (explicit column widths)</h2>
+    <table class="fixed-cols">
+      <thead>
+        <tr>
+          <th style="width:40pt;">#</th>
+          <th style="width:120pt;">Description</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Annual subscription</td><td>2</td><td>$500.00</td><td>$1,000.00</td></tr>
+        <tr><td>2</td><td>Setup fee</td><td>1</td><td>$250.00</td><td>$250.00</td></tr>
+        <tr><td>3</td><td>Training (per day)</td><td>3</td><td>$800.00</td><td>$2,400.00</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">Total</td>
+          <td>$3,650.00</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- ═══ 3. colspan and rowspan ═══ -->
+    <h2>3. Colspan and Rowspan</h2>
+    <table class="spans">
+      <thead>
+        <tr>
+          <th colspan="2">Q1 Sales</th>
+          <th colspan="2">Q2 Sales</th>
+          <th>YTD</th>
+        </tr>
+        <tr>
+          <th>Jan</th>
+          <th>Feb</th>
+          <th>Apr</th>
+          <th>May</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">$120</td>
+          <td>$130</td>
+          <td>$140</td>
+          <td rowspan="2">$160</td>
+          <td>$550</td>
+        </tr>
+        <tr>
+          <td>$90</td>
+          <td>$110</td>
+          <td>$470</td>
+        </tr>
+        <tr>
+          <td colspan="2">Subtotal Q1</td>
+          <td colspan="2">Subtotal Q2</td>
+          <td>$1,020</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <page-break/>
+
+    <!-- ═══ 4. border-spacing (separate borders) ═══ -->
+    <h2>4. Border-Spacing (Separate Borders)</h2>
+    <table class="spaced">
+      <thead>
+        <tr>
+          <th>Region</th>
+          <th>Q1</th>
+          <th>Q2</th>
+          <th>Q3</th>
+          <th>Q4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>North</td><td>$42k</td><td>$38k</td><td>$51k</td><td>$60k</td></tr>
+        <tr><td>South</td><td>$31k</td><td>$29k</td><td>$35k</td><td>$40k</td></tr>
+        <tr><td>East</td><td>$55k</td><td>$62k</td><td>$58k</td><td>$70k</td></tr>
+        <tr><td>West</td><td>$48k</td><td>$44k</td><td>$52k</td><td>$67k</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ═══ 5. thead / tbody / tfoot grouping ═══ -->
+    <h2>5. Thead / Tbody / Tfoot Grouping</h2>
+    <table class="groups">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Amount</th>
+          <th>Tax (10%)</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Consulting</td><td>$2,000.00</td><td>$200.00</td><td>$2,200.00</td></tr>
+        <tr><td>Hardware</td><td>$1,500.00</td><td>$150.00</td><td>$1,650.00</td></tr>
+        <tr><td>Licensing</td><td>$800.00</td><td>$80.00</td><td>$880.00</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td>Grand Total</td>
+          <td>$4,300.00</td>
+          <td>$430.00</td>
+          <td>$4,730.00</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- ═══ 6. Auto layout with varied content widths ═══ -->
+    <h2>6. Auto Layout — Varied Content Widths</h2>
+    <table class="auto-width">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Full Description</th>
+          <th>Status</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A1</td>
+          <td>Short</td>
+          <td>Active</td>
+          <td>$10</td>
+        </tr>
+        <tr>
+          <td>B2-XTRA</td>
+          <td>This is a much longer description that needs more space</td>
+          <td>Pending review</td>
+          <td>$9,999.99</td>
+        </tr>
+        <tr>
+          <td>C3</td>
+          <td>Medium length description here</td>
+          <td>Closed</td>
+          <td>$250</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ═══ 7. Table with caption ═══ -->
+    <h2>7. Table with Caption</h2>
+    <table class="captioned">
+      <caption>Table 1: Annual Performance Summary (all figures in USD thousands)</caption>
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>Budget</th>
+          <th>Actual</th>
+          <th>Variance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Engineering</td><td>500</td><td>480</td><td>+20</td></tr>
+        <tr><td>Marketing</td><td>200</td><td>220</td><td>-20</td></tr>
+        <tr><td>Operations</td><td>350</td><td>340</td><td>+10</td></tr>
+        <tr><td>HR</td><td>150</td><td>145</td><td>+5</td></tr>
+      </tbody>
+    </table>
+
+    <page-footer>
+      <p style="font-size:8pt; color:#888888; text-align:center;">
+        papyrus — M2 Tables Feature Test
+      </p>
+    </page-footer>
+  </body>
+</html>

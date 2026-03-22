@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head>
+  <meta title="Invoice {{.InvoiceNumber}}" author="papyrus" />
+  <style>
+    @page { size: A4; margin: 20mm; }
+    body { font-family: "Liberation Sans"; font-size: 10pt; color: #333; line-height: 1.4; }
+    
+    .header { width: 100%; border-bottom: 2pt solid #2c3e50; padding-bottom: 10pt; margin-bottom: 20pt; }
+    .company-name { font-size: 24pt; color: #2c3e50; font-weight: bold; }
+    .invoice-title { font-size: 20pt; color: #7f8c8d; text-align: right; }
+    
+    .meta-box { width: 100%; margin-bottom: 20pt; }
+    .meta-col { width: 50%; display: inline-block; vertical-align: top; }
+    .meta-label { font-weight: bold; color: #7f8c8d; font-size: 9pt; }
+    
+    table.line-items { width: 100%; border-collapse: collapse; margin-bottom: 20pt; }
+    table.line-items th { background-color: #ecf0f1; color: #2c3e50; font-weight: bold; padding: 8pt; text-align: left; border-bottom: 1pt solid #bdc3c7; }
+    table.line-items th.right { text-align: right; }
+    table.line-items td { padding: 8pt; border-bottom: 1pt solid #ecf0f1; }
+    table.line-items td.right { text-align: right; }
+    
+    .totals-box { width: 40%; margin-left: auto; border: 1pt solid #bdc3c7; padding: 10pt; }
+    .totals-row { width: 100%; margin-bottom: 5pt; }
+    .totals-label { width: 60%; display: inline-block; text-align: right; padding-right: 10pt; color: #7f8c8d; }
+    .totals-val { width: 40%; display: inline-block; text-align: right; font-weight: bold; }
+    .totals-grand { font-size: 14pt; color: #2c3e50; margin-top: 5pt; border-top: 1pt solid #bdc3c7; padding-top: 5pt; }
+    
+    .status-badge { 
+      padding: 5pt 10pt; 
+      color: white; 
+      font-weight: bold; 
+      text-align: center;
+      margin-top: 10pt;
+    }
+    .status-paid { background-color: #27ae60; }
+    .status-unpaid { background-color: #e74c3c; }
+  </style>
+</head>
+<body>
+  
+  <div class="header">
+    <table style="width: 100%;">
+      <tr>
+        <td style="width: 50%;"><div class="company-name">{{.Company.Name}}</div></td>
+        <td style="width: 50%; text-align: right;"><div class="invoice-title">INVOICE</div></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="meta-box">
+    <table style="width: 100%;">
+      <tr>
+        <td style="width: 50%; vertical-align: top;">
+          <div class="meta-label">BILL TO:</div>
+          <div><strong>{{.Customer.Name}}</strong></div>
+          <div>Attn: {{.Customer.Contact}}</div>
+          <div>{{.Customer.Email}}</div>
+        </td>
+        <td style="width: 50%; vertical-align: top; text-align: right;">
+          <table style="width: 100%;">
+            <tr>
+              <td class="meta-label" style="text-align: right; width: 60%;">Invoice Number:</td>
+              <td style="text-align: right; width: 40%;">{{.InvoiceNumber}}</td>
+            </tr>
+            <tr>
+              <td class="meta-label" style="text-align: right;">Date of Issue:</td>
+              <td style="text-align: right;">{{date "Jan 02, 2006" .Date}}</td>
+            </tr>
+            <tr>
+              <td class="meta-label" style="text-align: right;">Due Date:</td>
+              <td style="text-align: right;">{{date "Jan 02, 2006" .DueDate}}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <table class="line-items">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th class="right">Qty</th>
+        <th class="right">Unit Price</th>
+        <th class="right">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{range .Items}}
+      <tr>
+        <td>{{.Description}}</td>
+        <td class="right">{{.Quantity}}</td>
+        <td class="right">{{currency .UnitPrice}}</td>
+        <td class="right">{{currency .Total}}</td>
+      </tr>
+      {{end}}
+    </tbody>
+  </table>
+
+  <div class="totals-box">
+    <div class="totals-row">
+      <div class="totals-label">Subtotal:</div>
+      <div class="totals-val">{{currency .Subtotal}}</div>
+    </div>
+    <div class="totals-row">
+      <div class="totals-label">Tax (8%):</div>
+      <div class="totals-val">{{currency .Tax}}</div>
+    </div>
+    <div class="totals-row totals-grand">
+      <div class="totals-label" style="color: #2c3e50;">Total Due:</div>
+      <div class="totals-val">{{currency .Total}}</div>
+    </div>
+
+    {{if .IsPaid}}
+      <div class="status-badge status-paid">PAID IN FULL</div>
+    {{else}}
+      <div class="status-badge status-unpaid">AMOUNT DUE</div>
+    {{end}}
+  </div>
+
+</body>
+</html>

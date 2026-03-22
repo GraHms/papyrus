@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <head>
+    <meta title="Basic Test" author="papyrus" />
+    <style>
+      page {
+        size: A4;
+        margin: 20mm;
+      }
+      body {
+        font-family: "Liberation Sans";
+        font-size: 11pt;
+        color: #333333;
+      }
+      h1 {
+        font-size: 24pt;
+        font-weight: bold;
+        color: #000000;
+        margin-bottom: 12pt;
+      }
+      h2 {
+        font-size: 16pt;
+        font-weight: bold;
+        color: #444444;
+        margin-top: 16pt;
+        margin-bottom: 8pt;
+      }
+      p {
+        margin-bottom: 8pt;
+        line-height: 1.4;
+      }
+      .highlight {
+        background-color: #ffffcc;
+        padding: 4pt 8pt;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>PDFML Basic Test</h1>
+
+    <p>This is a basic test document for the papyrus library. It contains headings, paragraphs, and basic styling.</p>
+
+    <h2>Section One</h2>
+    <p>This paragraph tests basic text rendering with <strong>bold text</strong>, <em>italic text</em>, and <u>underlined text</u>.</p>
+
+    <h2>Section Two</h2>
+    <p class="highlight">This paragraph has a highlight background applied via a CSS class.</p>
+
+    <p>And this is a regular paragraph that follows the highlighted one.</p>
+  </body>
+</document>
