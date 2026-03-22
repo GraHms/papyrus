@@ -4,6 +4,8 @@ site_url: https://grahms.github.io/papyrus/
 
 theme:
   name: material
+  logo: assets/papyrus-mark.svg
+  favicon: assets/papyrus-mark.svg
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default

@@ -1,0 +1,39 @@
+name: Bug report
+description: Report a reproducible problem in Papyrus
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please provide enough detail for a maintainer to reproduce it.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected instead.
+      placeholder: A concise summary of the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How do we reproduce it?
+      description: Include XML, Go code, or step-by-step instructions.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include Go version, OS, and any relevant runtime details.
+      placeholder: go version, OS, architecture
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, suspected cause, or related issues.

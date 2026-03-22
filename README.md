@@ -203,5 +203,12 @@ papyrus -data invoice_data.json invoice.xml invoice.pdf
 - [SPEC.md](SPEC.md) — Full language specification (supported tags, supported CSS, box models, etc)
 - [examples/](examples/) — Example `.xml` layout documents showcasing tables, typography, and certificates
 
+## Open Source
+
+- [LICENSE](LICENSE) - MIT
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) - community standards
+- [CONTRIBUTING.md](CONTRIBUTING.md) - how to propose changes
+- [SECURITY.md](SECURITY.md) - how to report vulnerabilities
+
 ## License
-MIT
+[MIT](LICENSE)
