@@ -1,4 +1,4 @@
-// Package parser handles XML and CSS parsing for pdfml documents.
+// Package parser handles XML and CSS parsing for Papyrus documents.
 package parser
 
 import (
@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Document is the root of a parsed pdfml document.
+// Document is the root of a parsed Papyrus document.
 type Document struct {
 	Root    *Node
 	Meta    map[string]string

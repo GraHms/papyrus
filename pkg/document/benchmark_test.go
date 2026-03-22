@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/grahms/pdfml/pkg/document"
+	"github.com/grahms/papyrus/pkg/document"
 )
 
 const benchXML = `<?xml version="1.0" encoding="UTF-8"?>

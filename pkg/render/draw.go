@@ -1,7 +1,7 @@
 package render
 
 import (
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/style"
 	"github.com/signintech/gopdf"
 )
 

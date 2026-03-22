@@ -1,8 +1,8 @@
 package layout
 
 import (
-	"github.com/grahms/pdfml/pkg/parser"
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/parser"
+	"github.com/grahms/papyrus/pkg/style"
 )
 
 // Page represents a single output page with its laid-out boxes.

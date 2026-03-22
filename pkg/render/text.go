@@ -4,8 +4,8 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/grahms/pdfml/pkg/layout"
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/layout"
+	"github.com/grahms/papyrus/pkg/style"
 	"github.com/signintech/gopdf"
 )
 

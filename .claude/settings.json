@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(go vet:*)",
-      "Bash(pdftotext /tmp/typography_test.pdf -)",
-      "Bash(pdfinfo /tmp/typography_test.pdf)"
-    ]
-  }
-}

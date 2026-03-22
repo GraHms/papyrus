@@ -1,9 +1,9 @@
-// Package layout handles box model computation and page layout for pdfml.
+// Package layout handles box model computation and page layout for Papyrus.
 package layout
 
 import (
-	"github.com/grahms/pdfml/pkg/parser"
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/parser"
+	"github.com/grahms/papyrus/pkg/style"
 )
 
 // BoxType categorises a box in the layout tree.

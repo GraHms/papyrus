@@ -3,7 +3,7 @@ package style
 import (
 	"testing"
 
-	"github.com/grahms/pdfml/pkg/parser"
+	"github.com/grahms/papyrus/pkg/parser"
 )
 
 func makeNode(tag, id, class string, parent *parser.Node) *parser.Node {

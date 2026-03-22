@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/grahms/pdfml/pkg/document"
+	"github.com/grahms/papyrus/pkg/document"
 )
 
 func TestIntegrationGoldenFiles(t *testing.T) {

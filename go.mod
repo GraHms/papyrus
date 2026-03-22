@@ -1,4 +1,4 @@
-module github.com/grahms/pdfml
+module github.com/grahms/papyrus
 
 go 1.22
 

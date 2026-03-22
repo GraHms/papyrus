@@ -1,14 +1,14 @@
-// Package document provides the top-level API for pdfml.
+// Package document provides the top-level API for Papyrus.
 //
 // Usage:
 //
-//	err := pdfml.GenerateFromFile("invoice.xml", "invoice.pdf")
+//	err := document.GenerateFromFile("invoice.xml", "invoice.pdf")
 //
 // Or with options:
 //
 //	f, _ := os.Open("invoice.xml")
 //	out, _ := os.Create("invoice.pdf")
-//	err := pdfml.Generate(f, out, pdfml.WithDebug(), pdfml.WithDPI(150))
+//	err := document.Generate(f, out, document.WithDebug(), document.WithDPI(150))
 package document
 
 import (
@@ -19,13 +19,13 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/grahms/pdfml/pkg/layout"
-	"github.com/grahms/pdfml/pkg/parser"
-	"github.com/grahms/pdfml/pkg/render"
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/layout"
+	"github.com/grahms/papyrus/pkg/parser"
+	"github.com/grahms/papyrus/pkg/render"
+	"github.com/grahms/papyrus/pkg/style"
 )
 
-// Document represents a parsed and validated pdfml document
+// Document represents a parsed and validated Papyrus document
 // that is ready to be rendered to PDF.
 type Document struct {
 	options    Options
@@ -51,7 +51,7 @@ func Generate(r io.Reader, w io.Writer, opts ...Option) error {
 func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 	f, err := os.Open(inputPath)
 	if err != nil {
-		return fmt.Errorf("pdfml: cannot open %q: %w", inputPath, err)
+		return fmt.Errorf("papyrus: cannot open %q: %w", inputPath, err)
 	}
 	defer f.Close()
 
@@ -69,7 +69,7 @@ func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 
 	out, err := os.Create(outputPath)
 	if err != nil {
-		return fmt.Errorf("pdfml: cannot create %q: %w", outputPath, err)
+		return fmt.Errorf("papyrus: cannot create %q: %w", outputPath, err)
 	}
 	defer out.Close()
 
@@ -81,10 +81,10 @@ func GenerateFromFile(inputPath, outputPath string, opts ...Option) error {
 func Parse(r io.Reader) (*Document, error) {
 	doc, err := parser.ParseXML(r)
 	if err != nil {
-		return nil, fmt.Errorf("pdfml: parse error: %w", err)
+		return nil, fmt.Errorf("papyrus: parse error: %w", err)
 	}
 	if err := parser.ValidateDocument(doc); err != nil {
-		return nil, fmt.Errorf("pdfml: validation error: %w", err)
+		return nil, fmt.Errorf("papyrus: validation error: %w", err)
 	}
 
 	// Parse CSS from <style> blocks
@@ -92,7 +92,7 @@ func Parse(r io.Reader) (*Document, error) {
 	if doc.Styles != "" {
 		rules, err = parser.ParseCSS(doc.Styles)
 		if err != nil {
-			return nil, fmt.Errorf("pdfml: CSS parse error: %w", err)
+			return nil, fmt.Errorf("papyrus: CSS parse error: %w", err)
 		}
 	}
 
@@ -106,7 +106,7 @@ func Parse(r io.Reader) (*Document, error) {
 // Render generates PDF from an already-parsed document using the provided options.
 func (d *Document) Render(w io.Writer, opts ...Option) error {
 	if d.parsed == nil {
-		return fmt.Errorf("pdfml: document not parsed")
+		return fmt.Errorf("papyrus: document not parsed")
 	}
 
 	options := d.options
@@ -127,7 +127,7 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 	// Set up measurement before layout
 	measure, cleanup, err := render.MeasureForLayout(options.Fonts, options.FontsBytes)
 	if err != nil {
-		return fmt.Errorf("pdfml: font initialization error: %w", err)
+		return fmt.Errorf("papyrus: font initialization error: %w", err)
 	}
 	defer cleanup()
 
@@ -145,7 +145,7 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 	// Build box tree from body
 	rootBox := layout.BuildBoxTree(d.parsed, nodeStyles)
 	if rootBox == nil {
-		return fmt.Errorf("pdfml: no body element found")
+		return fmt.Errorf("papyrus: no body element found")
 	}
 
 	// Build header/footer boxes
@@ -171,7 +171,7 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 	pageLayout.Layout(rootBox)
 
 	if len(pageLayout.Pages) == 0 {
-		return fmt.Errorf("pdfml: layout produced no pages")
+		return fmt.Errorf("papyrus: layout produced no pages")
 	}
 
 	// Phase 4 — Render to PDF
@@ -189,7 +189,7 @@ func (d *Document) Render(w io.Writer, opts ...Option) error {
 // This is used for golden-file integration testing.
 func (d *Document) LayoutTreeToString(opts ...Option) (string, error) {
 	if d.parsed == nil {
-		return "", fmt.Errorf("pdfml: document not parsed")
+		return "", fmt.Errorf("papyrus: document not parsed")
 	}
 
 	options := d.options
@@ -207,7 +207,7 @@ func (d *Document) LayoutTreeToString(opts ...Option) (string, error) {
 
 	measure, cleanup, err := render.MeasureForLayout(options.Fonts, options.FontsBytes)
 	if err != nil {
-		return "", fmt.Errorf("pdfml: font initialization error: %w", err)
+		return "", fmt.Errorf("papyrus: font initialization error: %w", err)
 	}
 	defer cleanup()
 

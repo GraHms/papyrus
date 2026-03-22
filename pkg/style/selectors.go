@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/grahms/pdfml/pkg/parser"
+	"github.com/grahms/papyrus/pkg/parser"
 )
 
 // MatchSelector returns true if the given node matches the selector.

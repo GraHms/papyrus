@@ -3,8 +3,8 @@ package layout
 import (
 	"strings"
 
-	"github.com/grahms/pdfml/pkg/parser"
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/parser"
+	"github.com/grahms/papyrus/pkg/style"
 )
 
 // BuildBoxTree converts the styled DOM tree into a layout box tree.

@@ -1,7 +1,7 @@
 package layout
 
 import (
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/style"
 )
 
 // Context holds layout state.

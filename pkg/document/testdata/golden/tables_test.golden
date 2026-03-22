@@ -26,7 +26,7 @@
 [FOOTER] AbsY:0.00
   BLOCK [page-footer] X:0.00 Y:0.00 W:481.89 H:28.00 M[0.0 0.0 0.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0]
     BLOCK [p] X:0.00 Y:0.00 W:481.89 H:12.00 M[0.0 0.0 8.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0]
-      [RUN 0] "pdfml"
+      [RUN 0] "papyrus"
       [RUN 1] " "
       [RUN 2] "—"
       [RUN 3] " "
@@ -39,7 +39,7 @@
       [RUN 10] "Test"
       [RUN 11] " "
       [RUN 12] "\\n"
-      TEXT [text-node] X:0.00 Y:0.00 W:0.00 H:0.00 M[0.0 0.0 8.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0] "pdfml — M2 Tables Feature Test "
+      TEXT [text-node] X:0.00 Y:0.00 W:0.00 H:0.00 M[0.0 0.0 8.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0] "papyrus — M2 Tables Feature Test "
 [BODY]
   BLOCK [h2] X:56.69 Y:100.69 W:481.89 H:21.60 M[16.0 0.0 6.0 0.0] P[0.0 0.0 3.0 0.0] B[0.0 0.0 0.0 0.0]
     [RUN 0] "1."
@@ -423,7 +423,7 @@
 [FOOTER] AbsY:0.00
   BLOCK [page-footer] X:0.00 Y:0.00 W:481.89 H:28.00 M[0.0 0.0 0.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0]
     BLOCK [p] X:0.00 Y:0.00 W:481.89 H:12.00 M[0.0 0.0 8.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0]
-      [RUN 0] "pdfml"
+      [RUN 0] "papyrus"
       [RUN 1] " "
       [RUN 2] "—"
       [RUN 3] " "
@@ -436,7 +436,7 @@
       [RUN 10] "Test"
       [RUN 11] " "
       [RUN 12] "\\n"
-      TEXT [text-node] X:0.00 Y:0.00 W:0.00 H:0.00 M[0.0 0.0 8.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0] "pdfml — M2 Tables Feature Test "
+      TEXT [text-node] X:0.00 Y:0.00 W:0.00 H:0.00 M[0.0 0.0 8.0 0.0] P[0.0 0.0 0.0 0.0] B[0.0 0.0 0.0 0.0] "papyrus — M2 Tables Feature Test "
 [BODY]
   BLOCK [h2] X:56.69 Y:100.69 W:481.89 H:21.60 M[16.0 0.0 6.0 0.0] P[0.0 0.0 3.0 0.0] B[0.0 0.0 0.0 0.0]
     [RUN 0] "4."

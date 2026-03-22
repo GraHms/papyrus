@@ -1,6 +1,6 @@
-site_name: pdfml
+site_name: papyrus
 site_description: A pure Go, lightning-fast PDF generation library powered by a custom HTML/CSS subset designed specifically for paged media.
-site_url: https://grahms.github.io/pdfml/
+site_url: https://grahms.github.io/papyrus/
 
 theme:
   name: material
@@ -26,8 +26,8 @@ theme:
     - search.highlight
     - content.code.copy
 
-repo_name: grahms/pdfml
-repo_url: https://github.com/grahms/pdfml
+repo_name: grahms/papyrus
+repo_url: https://github.com/grahms/papyrus
 
 markdown_extensions:
   - pymdownx.highlight:

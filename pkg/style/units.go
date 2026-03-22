@@ -1,4 +1,4 @@
-// Package style handles CSS style resolution for pdfml.
+// Package style handles CSS style resolution for Papyrus.
 package style
 
 import (
@@ -11,15 +11,15 @@ import (
 type Unit int
 
 const (
-	UnitPt  Unit = iota // points (1/72 inch) — canonical internal unit
-	UnitPx              // pixels (converted via DPI)
-	UnitMm              // millimetres
-	UnitCm              // centimetres
-	UnitIn              // inches
-	UnitEm              // relative to current font-size
-	UnitRem             // relative to root font-size
-	UnitPct             // percentage
-	UnitAuto            // auto
+	UnitPt   Unit = iota // points (1/72 inch) — canonical internal unit
+	UnitPx               // pixels (converted via DPI)
+	UnitMm               // millimetres
+	UnitCm               // centimetres
+	UnitIn               // inches
+	UnitEm               // relative to current font-size
+	UnitRem              // relative to root font-size
+	UnitPct              // percentage
+	UnitAuto             // auto
 )
 
 // Length is a CSS length value with magnitude and unit.
@@ -260,31 +260,31 @@ func parseRGBColor(s string) (Color, error) {
 
 // namedColors maps CSS named colors to Color values (common subset).
 var namedColors = map[string]Color{
-	"black":   {0, 0, 0, 255},
-	"white":   {255, 255, 255, 255},
-	"red":     {255, 0, 0, 255},
-	"green":   {0, 128, 0, 255},
-	"blue":    {0, 0, 255, 255},
-	"yellow":  {255, 255, 0, 255},
-	"orange":  {255, 165, 0, 255},
-	"gray":    {128, 128, 128, 255},
-	"grey":    {128, 128, 128, 255},
-	"silver":  {192, 192, 192, 255},
-	"navy":    {0, 0, 128, 255},
-	"teal":    {0, 128, 128, 255},
-	"purple":  {128, 0, 128, 255},
-	"maroon":  {128, 0, 0, 255},
-	"lime":    {0, 255, 0, 255},
-	"aqua":    {0, 255, 255, 255},
-	"cyan":    {0, 255, 255, 255},
-	"fuchsia": {255, 0, 255, 255},
-	"magenta": {255, 0, 255, 255},
-	"pink":    {255, 192, 203, 255},
-	"brown":   {165, 42, 42, 255},
-	"coral":   {255, 127, 80, 255},
-	"salmon":  {250, 128, 114, 255},
-	"gold":    {255, 215, 0, 255},
-	"tan":     {210, 180, 140, 255},
-	"khaki":   {240, 230, 140, 255},
+	"black":       {0, 0, 0, 255},
+	"white":       {255, 255, 255, 255},
+	"red":         {255, 0, 0, 255},
+	"green":       {0, 128, 0, 255},
+	"blue":        {0, 0, 255, 255},
+	"yellow":      {255, 255, 0, 255},
+	"orange":      {255, 165, 0, 255},
+	"gray":        {128, 128, 128, 255},
+	"grey":        {128, 128, 128, 255},
+	"silver":      {192, 192, 192, 255},
+	"navy":        {0, 0, 128, 255},
+	"teal":        {0, 128, 128, 255},
+	"purple":      {128, 0, 128, 255},
+	"maroon":      {128, 0, 0, 255},
+	"lime":        {0, 255, 0, 255},
+	"aqua":        {0, 255, 255, 255},
+	"cyan":        {0, 255, 255, 255},
+	"fuchsia":     {255, 0, 255, 255},
+	"magenta":     {255, 0, 255, 255},
+	"pink":        {255, 192, 203, 255},
+	"brown":       {165, 42, 42, 255},
+	"coral":       {255, 127, 80, 255},
+	"salmon":      {250, 128, 114, 255},
+	"gold":        {255, 215, 0, 255},
+	"tan":         {210, 180, 140, 255},
+	"khaki":       {240, 230, 140, 255},
 	"transparent": {0, 0, 0, 0},
 }

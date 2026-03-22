@@ -3,8 +3,8 @@ package layout
 import (
 	"strings"
 
-	"github.com/grahms/pdfml/pkg/parser"
-	"github.com/grahms/pdfml/pkg/style"
+	"github.com/grahms/papyrus/pkg/parser"
+	"github.com/grahms/papyrus/pkg/style"
 )
 
 // Line represents a single rendered line of text.

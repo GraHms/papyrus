@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Build pdfml
-go build -o pdfml cmd/pdfml/main.go
+# Build papyrus
+go build -o papyrus cmd/papyrus/main.go
 
 # Create a clean HTML version of the invoice for Chrome
 sed -e 's/<page.*//' -e 's/<\/\?header>//g' -e 's/<\/\?footer>//g' -e 's/<page-number\/>//g' -e 's/<page-count\/>//g' examples/invoice.xml > invoice.html
@@ -25,12 +25,12 @@ echo "        Real-world Benchmark         "
 echo "====================================="
 echo ""
 
-echo "1. pdfml (Pure Go engine)"
+echo "1. papyrus (Pure Go engine)"
 echo "-------------------------------------"
 # We run it once to warm up the OS font/disk cache just to be perfectly fair to Chrome
-./pdfml examples/invoice.xml test1.pdf > /dev/null 2>&1
+./papyrus examples/invoice.xml test1.pdf > /dev/null 2>&1
 # Measure
-time ./pdfml examples/invoice.xml invoice_pdfml.pdf
+time ./papyrus examples/invoice.xml invoice_papyrus.pdf
 echo ""
 
 echo "2. Headless Chrome"
@@ -44,4 +44,4 @@ echo ""
 echo "====================================="
 echo "          File Size Output           "
 echo "====================================="
-ls -lh invoice_pdfml.pdf invoice_chrome.pdf
+ls -lh invoice_papyrus.pdf invoice_chrome.pdf

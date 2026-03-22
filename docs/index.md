@@ -1,4 +1,4 @@
-# pdfml 📄⚡
+# papyrus ⚡
 
 A pure Go, lightning-fast PDF generation library powered by a custom HTML/CSS subset designed specifically for paged media. 
 
@@ -6,7 +6,7 @@ A pure Go, lightning-fast PDF generation library powered by a custom HTML/CSS su
 
 ---
 
-## Why `pdfml`?
+## Why `papyrus`?
 
 Historically, generating PDFs in web services has meant installing heavy dependencies like Puppeteer, Headless Chrome, or `wkhtmltopdf`. These tools:
 - Consume massive amounts of RAM and CPU.
@@ -14,7 +14,7 @@ Historically, generating PDFs in web services has meant installing heavy depende
 - Add significant latency to every request by spinning up headless browser contexts.
 - Treat pagination (headers, footers, page breaks) as an afterthought since they were built for infinite-scroll web pages.
 
-**`pdfml` solves this.** It parses a strictly scoped subset of HTML/XML and CSS that makes sense for printable, paged interfaces (invoices, certificates, reports) and directly emits raw PDF bytes using an embedded layout engine. 
+**`papyrus` solves this.** It parses a strictly scoped subset of HTML/XML and CSS that makes sense for printable, paged interfaces (invoices, certificates, reports) and directly emits raw PDF bytes using an embedded layout engine. 
 
 ### Performance Gains 🚀
 1. **Insanely Little Overhead:** Running purely in Go means you don't spin up external processes. Memory usage drops from hundreds of megabytes to mere kilobytes.
@@ -26,16 +26,16 @@ When testing a standard invoice layout directly against Google Chrome running in
 
 | Engine | Execution Time | File Size | Invoices Per Second (1 Core) |
 | --- | --- | --- | --- |
-| **`pdfml` (Go)** | `0.016s` | `37 KB` | ~62.5 |
+| **`papyrus` (Go)** | `0.016s` | `37 KB` | ~62.5 |
 | **Headless Chrome** | `0.756s` | `48 KB` | ~1.3 |
 
-*`pdfml` executed the exact same workload **47x faster** than Headless Chrome generating a smaller PDF payload.* 
+*`papyrus` executed the exact same workload **47x faster** than Headless Chrome generating a smaller PDF payload.* 
 
 ---
 
 ## Supported HTML Subset
 
-`pdfml` intentionally supports a strictly scoped subset of HTML. It supports almost all standard text formatting, layout, and table elements you would use in a printed document, while completely ignoring web-specific interactive elements (like `<script>`, `<input>`, `<form>`, `<video>`).
+`papyrus` intentionally supports a strictly scoped subset of HTML. It supports almost all standard text formatting, layout, and table elements you would use in a printed document, while completely ignoring web-specific interactive elements (like `<script>`, `<input>`, `<form>`, `<video>`).
 
 If you use an unsupported HTML tag, the parser will instantly throw a strict validation error with exact line/column numbers.
 
@@ -60,7 +60,7 @@ If you use an unsupported HTML tag, the parser will instantly throw a strict val
 
 ## Concept & HTML Compatibility
 
-Define documents using a web-familiar vocabulary. `pdfml` natively accepts HTML aliasing (`<html>`, `<main>`, `<header>`, `<footer>`), meaning developers comfortable with standard HTML and CSS can immediately start designing layouts.
+Define documents using a web-familiar vocabulary. `papyrus` natively accepts HTML aliasing (`<html>`, `<main>`, `<header>`, `<footer>`), meaning developers comfortable with standard HTML and CSS can immediately start designing layouts.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -106,10 +106,10 @@ Define documents using a web-familiar vocabulary. `pdfml` natively accepts HTML 
 
 ```bash
 # Add the library to your Go project
-go get github.com/grahms/pdfml/pkg/document
+go get github.com/grahms/papyrus/pkg/document
 
 # Install the CLI tool
-go install github.com/grahms/pdfml/cmd/pdfml@latest
+go install github.com/grahms/papyrus/cmd/papyrus@latest
 ```
 
 ## Examples
@@ -118,7 +118,7 @@ The library's API relies heavily on standard Go `io` interfaces and highly exten
 
 ### Quick Generation
 ```go
-import "github.com/grahms/pdfml/pkg/document"
+import "github.com/grahms/papyrus/pkg/document"
 
 // Simplest method (generates straight from a file to a file)
 err := document.GenerateFromFile("invoice.xml", "invoice.pdf")
@@ -157,7 +157,7 @@ err := document.Generate(in, out,
 ```
 
 ### Templates & Data Binding (JSON/Go Structs)
-`pdfml` natively integrates Go's powerful `text/template` engine. You can use standard `{{ }}` interpolation, loops, and conditions directly in your XML files, avoiding the need to write XML strings manually.
+`papyrus` natively integrates Go's powerful `text/template` engine. You can use standard `{{ }}` interpolation, loops, and conditions directly in your XML files, avoiding the need to write XML strings manually.
 
 **XML Template (`invoice.xml`)**
 ```xml
@@ -174,7 +174,7 @@ err := document.Generate(in, out,
 
 **Go Implementation**
 ```go
-import "github.com/grahms/pdfml/pkg/document"
+import "github.com/grahms/papyrus/pkg/document"
 
 f, _ := os.Open("invoice.xml")
 tmpl, _ := document.ParseTemplate(f)
@@ -195,7 +195,7 @@ doc.Render(out)
 **CLI Implementation**
 Pass data instantly without writing a custom Go wrapper using the `-data` flag:
 ```bash
-pdfml -data invoice_data.json invoice.xml invoice.pdf
+papyrus -data invoice_data.json invoice.xml invoice.pdf
 ```
 
 ## Documentation

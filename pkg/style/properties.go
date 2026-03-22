@@ -8,7 +8,7 @@ type PropertyDef struct {
 	Initial string
 }
 
-// KnownProperties is the set of CSS properties supported by pdfml.
+// KnownProperties is the set of CSS properties supported by Papyrus.
 var KnownProperties = map[string]PropertyDef{
 	// Typography (inherited)
 	"font-family":     {Inherited: true, Initial: "Liberation Sans"},

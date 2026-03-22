@@ -1,4 +1,4 @@
-// Package render handles PDF generation for pdfml.
+// Package render handles PDF generation for Papyrus.
 package render
 
 import (

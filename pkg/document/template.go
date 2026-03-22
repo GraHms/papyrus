@@ -61,7 +61,7 @@ var DefaultFuncMap = template.FuncMap{
 	},
 }
 
-// Template is a wrapper around text/template that outputs pdfml Documents.
+// Template is a wrapper around text/template that outputs Papyrus documents.
 type Template struct {
 	tmpl *template.Template
 }
@@ -77,7 +77,7 @@ func NewTemplate(name string) *Template {
 func (t *Template) Parse(text string) (*Template, error) {
 	_, err := t.tmpl.Parse(text)
 	if err != nil {
-		return nil, fmt.Errorf("pdfml template parse error: %w", err)
+		return nil, fmt.Errorf("papyrus template parse error: %w", err)
 	}
 	return t, nil
 }
@@ -86,7 +86,7 @@ func (t *Template) Parse(text string) (*Template, error) {
 func (t *Template) ParseFiles(filenames ...string) (*Template, error) {
 	_, err := t.tmpl.ParseFiles(filenames...)
 	if err != nil {
-		return nil, fmt.Errorf("pdfml template parse files error: %w", err)
+		return nil, fmt.Errorf("papyrus template parse files error: %w", err)
 	}
 	return t, nil
 }
@@ -104,7 +104,7 @@ func (t *Template) Execute(name string, data interface{}) (*Document, error) {
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("pdfml template execution error: %w", err)
+		return nil, fmt.Errorf("papyrus template execution error: %w", err)
 	}
 
 	return Parse(&buf)

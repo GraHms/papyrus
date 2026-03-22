@@ -1,4 +1,4 @@
-// Package parser handles XML and CSS parsing for pdfml documents.
+// Package parser handles XML and CSS parsing for Papyrus documents.
 package parser
 
 // NodeType represents the type of a DOM node.
@@ -104,7 +104,7 @@ func splitClasses(value string) []string {
 	return classes
 }
 
-// HTMLAliases maps HTML tag names to their canonical pdfml equivalents.
+// HTMLAliases maps HTML tag names to their canonical Papyrus equivalents.
 // Alias normalisation happens at parse time in xml.go; all other packages
 // only ever see canonical tag names.
 var HTMLAliases = map[string]string{
@@ -113,7 +113,7 @@ var HTMLAliases = map[string]string{
 	"footer": "page-footer",
 }
 
-// AllowedElements defines the valid element names in the pdfml vocabulary.
+// AllowedElements defines the valid element names in the Papyrus vocabulary.
 // This set uses canonical tag names only (after alias normalisation).
 var AllowedElements = map[string]bool{
 	// Document structure

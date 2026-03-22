@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/grahms/pdfml/pkg/document"
+	"github.com/grahms/papyrus/pkg/document"
 )
 
 var (
@@ -23,8 +23,8 @@ var (
 
 func main() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: pdfml [flags] <input.xml> [output.pdf]\n\n")
-		fmt.Fprintf(os.Stderr, "Convert pdfml XML documents to PDF.\n\n")
+		fmt.Fprintf(os.Stderr, "Usage: papyrus [flags] <input.xml> [output.pdf]\n\n")
+		fmt.Fprintf(os.Stderr, "Convert Papyrus XML documents to PDF.\n\n")
 		fmt.Fprintf(os.Stderr, "Flags:\n")
 		flag.PrintDefaults()
 	}
@@ -49,10 +49,10 @@ func main() {
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "pdfml: %s → %s\n", inputPath, outputPath)
+	fmt.Fprintf(os.Stderr, "papyrus: %s → %s\n", inputPath, outputPath)
 
 	if *watch {
-		fmt.Fprintf(os.Stderr, "pdfml: watch mode is not yet implemented\n")
+		fmt.Fprintf(os.Stderr, "papyrus: watch mode is not yet implemented\n")
 		os.Exit(1)
 	}
 
@@ -78,7 +78,7 @@ func main() {
 			entry = strings.TrimSpace(entry)
 			idx := strings.Index(entry, "=")
 			if idx < 0 {
-				fmt.Fprintf(os.Stderr, "pdfml: invalid font flag %q (expected name=path)\n", entry)
+				fmt.Fprintf(os.Stderr, "papyrus: invalid font flag %q (expected name=path)\n", entry)
 				continue
 			}
 			family := strings.TrimSpace(entry[:idx])
@@ -92,19 +92,19 @@ func main() {
 		// 1. Read JSON data
 		dataBytes, err := os.ReadFile(*dataFile)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: error reading data file: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: error reading data file: %v\n", err)
 			os.Exit(1)
 		}
 		var data map[string]interface{}
 		if err := json.Unmarshal(dataBytes, &data); err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: error parsing JSON: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: error parsing JSON: %v\n", err)
 			os.Exit(1)
 		}
 
 		// 2. Open template
 		f, err := os.Open(inputPath)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: error opening template: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: error opening template: %v\n", err)
 			os.Exit(1)
 		}
 		defer f.Close()
@@ -112,21 +112,21 @@ func main() {
 		// 3. Compile template
 		tmpl, err := document.ParseTemplate(f)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: template error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: template error: %v\n", err)
 			os.Exit(1)
 		}
 
 		// 4. Render template to document
 		doc, err := tmpl.Execute("", data)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: template execute error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: template execute error: %v\n", err)
 			os.Exit(1)
 		}
 
 		// 5. Render document to PDF
 		out, err := os.Create(outputPath)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: error creating output file: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: error creating output file: %v\n", err)
 			os.Exit(1)
 		}
 		defer out.Close()
@@ -137,16 +137,16 @@ func main() {
 		})
 
 		if err := doc.Render(out, opts...); err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: error rendering PDF: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: error rendering PDF: %v\n", err)
 			os.Exit(1)
 		}
 	} else {
 		// Standard static XML to PDF path
 		if err := document.GenerateFromFile(inputPath, outputPath, opts...); err != nil {
-			fmt.Fprintf(os.Stderr, "pdfml: error: %v\n", err)
+			fmt.Fprintf(os.Stderr, "papyrus: error: %v\n", err)
 			os.Exit(1)
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "pdfml: wrote %s\n", outputPath)
+	fmt.Fprintf(os.Stderr, "papyrus: wrote %s\n", outputPath)
 }

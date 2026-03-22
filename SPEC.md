@@ -1,4 +1,4 @@
-# PDFML — Project Specification
+# Papyrus — Project Specification
 
 ## Vision
 
@@ -10,12 +10,11 @@ CSS is a strict subset scoped to properties that make sense for fixed-page layou
 
 ## Name Candidates
 
-- `pdfml`
+- `papyrus`
 - `pagego`
 - `docxml` 
-- `pdfml`
 
-(Decision deferred — use `pdfml` as working name)
+(Use `papyrus` as the project name)
 
 ## Design Principles
 
@@ -284,9 +283,9 @@ All other elements already match their HTML counterparts exactly.
 ## Go Package Structure
 
 ```
-pdfml/
+papyrus/
 ├── cmd/
-│   └── pdfml/
+│   └── papyrus/
 │       └── main.go                 # CLI entry point
 ├── pkg/
 │   ├── parser/
