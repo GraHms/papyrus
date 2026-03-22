@@ -1,0 +1,1172 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A pure Go, lightning-fast PDF generation library powered by a custom HTML/CSS subset designed specifically for paged media.">
+      
+      
+      
+        <link rel="canonical" href="https://grahms.github.io/papyrus/architecture/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../publishing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/papyrus-mark.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Library Architecture - papyrus</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#library-architecture" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="papyrus" class="md-header__button md-logo" aria-label="papyrus" data-md-component="logo">
+      
+  <img src="../assets/papyrus-mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            papyrus
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Library Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/grahms/papyrus" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grahms/papyrus
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="papyrus" class="md-nav__button md-logo" aria-label="papyrus" data-md-component="logo">
+      
+  <img src="../assets/papyrus-mark.svg" alt="logo">
+
+    </a>
+    papyrus
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/grahms/papyrus" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grahms/papyrus
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-architecture-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Architecture Exists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Goals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#top-level-package-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top-Level Package Roles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Top-Level Package Roles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pkgdocument" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/document
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkgparser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/parser
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkgstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/style
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkglayout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkgrender" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/render
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Walkthrough
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-the-boundaries-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why The Boundaries Matter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-is-better-than-browser-automation-for-the-target-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Is Better Than Browser Automation For The Target Problem
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why This Is Better Than Browser Automation For The Target Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lower-operational-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lower operational cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stronger-determinism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stronger determinism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-composability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better composability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-debuggability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better debuggability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tradeoffs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tradeoffs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distinguished-engineer-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distinguished Engineer View
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap & Milestones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-architecture-exists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Architecture Exists
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Goals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#top-level-package-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Top-Level Package Roles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Top-Level Package Roles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pkgdocument" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/document
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkgparser" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/parser
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkgstyle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/style
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkglayout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pkgrender" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pkg/render
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-walkthrough" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Walkthrough
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-the-boundaries-matter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why The Boundaries Matter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-is-better-than-browser-automation-for-the-target-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why This Is Better Than Browser Automation For The Target Problem
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why This Is Better Than Browser Automation For The Target Problem">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lower-operational-cost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lower operational cost
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stronger-determinism" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stronger determinism
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-composability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better composability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#better-debuggability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Better debuggability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tradeoffs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tradeoffs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#distinguished-engineer-view" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distinguished Engineer View
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="library-architecture">Library Architecture</h1>
+<p>Papyrus is a document-processing library, not a browser wrapper.</p>
+<p>That distinction is the core architectural decision in the project.</p>
+<p>Instead of delegating rendering to Chromium, WebKit, or a system PDF tool,
+Papyrus owns the entire document pipeline in-process:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>template/data
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  -&gt; XML + CSS parse
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  -&gt; style resolution
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>  -&gt; page-aware layout
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>  -&gt; PDF rendering
+</code></pre></div>
+<p>This has a direct consequence: Papyrus can optimize for fixed-page document
+generation instead of inheriting the complexity of a general-purpose browser
+engine.</p>
+<h2 id="why-this-architecture-exists">Why This Architecture Exists</h2>
+<p>Browser engines solve a much larger problem than PDF generation:</p>
+<ul>
+<li>dynamic DOM mutation</li>
+<li>JavaScript execution</li>
+<li>event handling</li>
+<li>accessibility trees</li>
+<li>compositing</li>
+<li>scrolling and viewport behavior</li>
+<li>media queries and interactive layout</li>
+</ul>
+<p>Papyrus does not need those capabilities to generate invoices, reports,
+certificates, statements, or contracts. Carrying them into the system would
+increase runtime cost, deployment cost, and failure surface without improving
+the core product.</p>
+<p>Papyrus therefore takes the opposite approach:</p>
+<ul>
+<li>narrow the document model</li>
+<li>make layout page-first</li>
+<li>keep the runtime deterministic</li>
+<li>expose the system as a composable Go library</li>
+</ul>
+<p>That is why the architecture is split into explicit phases instead of hidden
+behind a single monolithic renderer.</p>
+<h2 id="design-goals">Design Goals</h2>
+<p>The package structure is shaped by a few hard goals:</p>
+<ol>
+<li>Deterministic output for the same inputs</li>
+<li>No external binary dependencies</li>
+<li>Clear failure boundaries between parse, style, layout, and render</li>
+<li>Reusable intermediate representations</li>
+<li>A public API that is simple even though the engine is layered internally</li>
+</ol>
+<p>These are library goals first, not just implementation preferences.</p>
+<h2 id="top-level-package-roles">Top-Level Package Roles</h2>
+<h3 id="pkgdocument"><code>pkg/document</code></h3>
+<p>This is the public façade.</p>
+<p>It exposes the main entry points:</p>
+<ul>
+<li>parse a document</li>
+<li>render a document</li>
+<li>generate from file, bytes, or strings</li>
+<li>work with templates and options</li>
+</ul>
+<p>From a user perspective, <code>pkg/document</code> is "the library." Internally, it is an
+orchestrator that wires together the deeper engine packages.</p>
+<p>The important architectural choice here is that the public API does not leak
+the internals of parsing, styling, layout, or rendering. That keeps the API
+stable while allowing the engine to evolve behind it.</p>
+<h3 id="pkgparser"><code>pkg/parser</code></h3>
+<p>The parser layer converts external author input into internal, validated
+structures.</p>
+<p>Responsibilities:</p>
+<ul>
+<li>parse XML into the document tree</li>
+<li>parse CSS into structured rules</li>
+<li>normalize HTML aliases into canonical internal tags</li>
+<li>validate supported elements and attributes</li>
+</ul>
+<p>This layer exists to establish a clean contract for everything downstream. By
+the time layout begins, the system should not still be debating what a tag
+means or whether a property is valid.</p>
+<p>That early normalization is important. A robust engine wants semantic cleanup
+as close to the input boundary as possible.</p>
+<h3 id="pkgstyle"><code>pkg/style</code></h3>
+<p>The style layer resolves author intent into computed values.</p>
+<p>Responsibilities:</p>
+<ul>
+<li>selector matching</li>
+<li>cascade resolution</li>
+<li>inheritance</li>
+<li>property defaults</li>
+<li>unit conversion</li>
+<li>computed style generation</li>
+</ul>
+<p>This layer is separate from parsing because syntax is not the same thing as
+meaning. CSS text can be parsed without yet knowing what a node's final margin,
+font size, or display behavior should be.</p>
+<p>Keeping style resolution separate makes three things easier:</p>
+<ol>
+<li>testing cascade behavior independently of layout</li>
+<li>changing selector/property behavior without destabilizing parsing</li>
+<li>caching or reusing resolved structures when documents are rendered many
+   times</li>
+</ol>
+<h3 id="pkglayout"><code>pkg/layout</code></h3>
+<p>The layout layer is the center of the engine.</p>
+<p>Responsibilities:</p>
+<ul>
+<li>convert styled nodes into boxes</li>
+<li>compute block and inline dimensions</li>
+<li>break text into lines</li>
+<li>handle tables</li>
+<li>paginate across fixed-size pages</li>
+<li>repeat headers and footers where required</li>
+</ul>
+<p>This phase is where Papyrus diverges most strongly from browser mental models.</p>
+<p>A browser is fundamentally viewport-first. Papyrus is page-first.</p>
+<p>That difference matters:</p>
+<ul>
+<li>every page has known dimensions before layout starts</li>
+<li>pagination is a primary concern, not a post-process</li>
+<li>headers, footers, page breaks, and page counters are first-class layout
+  concepts</li>
+<li>layout can optimize for static output rather than incremental repaint</li>
+</ul>
+<p>In architectural terms, <code>pkg/layout</code> is where a styled document becomes a
+physical document.</p>
+<h3 id="pkgrender"><code>pkg/render</code></h3>
+<p>The render layer turns the laid-out page model into PDF bytes.</p>
+<p>Responsibilities:</p>
+<ul>
+<li>text drawing</li>
+<li>font registration and measurement support</li>
+<li>images</li>
+<li>borders, fills, lines, and backgrounds</li>
+<li>metadata propagation</li>
+<li>PDF emission through the backend</li>
+</ul>
+<p>This package is intentionally downstream of layout. Rendering should not decide
+where things go; it should draw what layout already decided.</p>
+<p>That separation prevents a common class of architectural drift where rendering
+logic starts smuggling in layout rules. Once that happens, correctness becomes
+harder to test and regressions become harder to localize.</p>
+<h2 id="pipeline-walkthrough">Pipeline Walkthrough</h2>
+<p>The flow through the library looks like this:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>author XML / template
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  -&gt; parser.Document
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  -&gt; []CSS rules
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  -&gt; computed styles per node
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  -&gt; box tree
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  -&gt; page layout
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  -&gt; renderer
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  -&gt; PDF bytes
+</code></pre></div>
+<p>Each transition narrows ambiguity:</p>
+<ul>
+<li>parse removes syntactic ambiguity</li>
+<li>style removes cascade ambiguity</li>
+<li>layout removes geometric ambiguity</li>
+<li>render removes output ambiguity</li>
+</ul>
+<p>That staged reduction is one of the main reasons the library remains tractable.</p>
+<h2 id="why-the-boundaries-matter">Why The Boundaries Matter</h2>
+<p>Good architecture is not just about splitting code into packages. It is about
+controlling where decisions are allowed to happen.</p>
+<p>Papyrus uses package boundaries to keep decisions local:</p>
+<ul>
+<li>parsing decides structure</li>
+<li>style decides computed visual values</li>
+<li>layout decides geometry and pagination</li>
+<li>render decides drawing commands only</li>
+</ul>
+<p>This matters because PDF generation is otherwise prone to boundary collapse.
+Without discipline, property parsing leaks into rendering, rendering leaks into
+layout, and public APIs start depending on accidental engine details.</p>
+<p>The current design prevents that collapse.</p>
+<h2 id="why-this-is-better-than-browser-automation-for-the-target-problem">Why This Is Better Than Browser Automation For The Target Problem</h2>
+<p>For the Papyrus problem domain, the library architecture has real advantages.</p>
+<h3 id="lower-operational-cost">Lower operational cost</h3>
+<ul>
+<li>no headless browser lifecycle</li>
+<li>no IPC with an external renderer</li>
+<li>no heavy container images</li>
+<li>no system package dependency chain</li>
+</ul>
+<h3 id="stronger-determinism">Stronger determinism</h3>
+<ul>
+<li>fixed-page layout model</li>
+<li>no JavaScript or asynchronous document mutation</li>
+<li>fewer environment-specific rendering variables</li>
+</ul>
+<h3 id="better-composability">Better composability</h3>
+<ul>
+<li>usable directly from Go services</li>
+<li>fits naturally into in-memory pipelines</li>
+<li>can parse once and render many times</li>
+</ul>
+<h3 id="better-debuggability">Better debuggability</h3>
+<ul>
+<li>failures can be localized by phase</li>
+<li>layout tree snapshots provide stable regression signals</li>
+<li>internal representations can be inspected without reverse-engineering browser
+  behavior</li>
+</ul>
+<h2 id="tradeoffs">Tradeoffs</h2>
+<p>This architecture is intentionally narrow, and that has consequences.</p>
+<ul>
+<li>Papyrus does not aim to support arbitrary web content.</li>
+<li>The supported HTML/CSS surface is intentionally constrained.</li>
+<li>Features that browsers get "for free" must be designed explicitly here.</li>
+<li>The layout engine is specialized work; correctness is owned by the library,
+  not outsourced to a browser team.</li>
+</ul>
+<p>Those are acceptable tradeoffs because the project is optimizing for
+high-throughput, server-side generation of paged documents, not universal web
+compatibility.</p>
+<h2 id="distinguished-engineer-view">Distinguished Engineer View</h2>
+<p>At a systems level, Papyrus is designed around a simple principle:</p>
+<blockquote>
+<p>Specialize the engine around the real problem instead of carrying a general
+platform into a narrow use case.</p>
+</blockquote>
+<p>That principle shows up everywhere:</p>
+<ul>
+<li>XML + CSS subset instead of full browser HTML</li>
+<li>computed styles instead of ad hoc per-node rendering logic</li>
+<li>page-first layout instead of viewport-first layout</li>
+<li>render-after-layout instead of intertwined placement and drawing</li>
+<li>a façade package for stability, with internal packages for rigor</li>
+</ul>
+<p>The result is not "smaller than a browser." It is structurally different from a
+browser. That difference is the reason Papyrus can be fast, deterministic, and
+operationally lightweight while still remaining understandable as a library.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

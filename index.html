@@ -1,0 +1,1156 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A pure Go, lightning-fast PDF generation library powered by a custom HTML/CSS subset designed specifically for paged media.">
+      
+      
+      
+        <link rel="canonical" href="https://grahms.github.io/papyrus/">
+      
+      
+      
+        <link rel="next" href="architecture/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/papyrus-mark.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>papyrus</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#papyrus" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="papyrus" class="md-header__button md-logo" aria-label="papyrus" data-md-component="logo">
+      
+  <img src="assets/papyrus-mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            papyrus
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/grahms/papyrus" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grahms/papyrus
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="papyrus" class="md-nav__button md-logo" aria-label="papyrus" data-md-component="logo">
+      
+  <img src="assets/papyrus-mark.svg" alt="logo">
+
+    </a>
+    papyrus
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/grahms/papyrus" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grahms/papyrus
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-papyrus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why papyrus?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why papyrus?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-gains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Gains 🚀
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Gains 🚀">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#real-world-benchmark-vs-headless-chrome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Benchmark (vs Headless Chrome)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-html-subset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported HTML Subset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported HTML Subset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#document-pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document &amp; Pagination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layout-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout &amp; Blocks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline-formatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline Formatting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables-full-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables (Full Support)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concept-html-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concept &amp; HTML Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-parsed-templates-high-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Parsed Templates (High-Performance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-memory-font-registry-goembed-friendly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In-Memory Font Registry (go:embed friendly)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates-data-binding-jsongo-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates &amp; Data Binding (JSON/Go Structs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap & Milestones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-papyrus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why papyrus?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why papyrus?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-gains" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance Gains 🚀
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Gains 🚀">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#real-world-benchmark-vs-headless-chrome" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Real-World Benchmark (vs Headless Chrome)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#supported-html-subset" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Supported HTML Subset
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Supported HTML Subset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#document-pagination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document &amp; Pagination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layout-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Layout &amp; Blocks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline-formatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline Formatting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables-full-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables (Full Support)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concept-html-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Concept &amp; HTML Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#quick-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Generation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-parsed-templates-high-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Parsed Templates (High-Performance)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-memory-font-registry-goembed-friendly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        In-Memory Font Registry (go:embed friendly)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates-data-binding-jsongo-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Templates &amp; Data Binding (JSON/Go Structs)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="papyrus">papyrus ⚡</h1>
+<p>A pure Go, lightning-fast PDF generation library powered by a custom HTML/CSS subset designed specifically for paged media. </p>
+<p><strong>No Chromium. No wkhtmltopdf. No external binaries. Zero CGO dependencies.</strong></p>
+<hr />
+<h2 id="why-papyrus">Why <code>papyrus</code>?</h2>
+<p>Historically, generating PDFs in web services has meant installing heavy dependencies like Puppeteer, Headless Chrome, or <code>wkhtmltopdf</code>. These tools:
+- Consume massive amounts of RAM and CPU.
+- Make Docker images enormous.
+- Add significant latency to every request by spinning up headless browser contexts.
+- Treat pagination (headers, footers, page breaks) as an afterthought since they were built for infinite-scroll web pages.</p>
+<p><strong><code>papyrus</code> solves this.</strong> It parses a strictly scoped subset of HTML/XML and CSS that makes sense for printable, paged interfaces (invoices, certificates, reports) and directly emits raw PDF bytes using an embedded layout engine. </p>
+<h3 id="performance-gains">Performance Gains 🚀</h3>
+<ol>
+<li><strong>Insanely Little Overhead:</strong> Running purely in Go means you don't spin up external processes. Memory usage drops from hundreds of megabytes to mere kilobytes.</li>
+<li><strong>Pre-Parsed Templates:</strong> The engine allows parsing a template and its CSS <em>once</em> at server startup, resolving the layout algorithms, and repeatedly emitting PDFs dynamically through <code>Render()</code>.</li>
+<li><strong>Instantaneous Execution:</strong> Generating a robust invoice takes <strong>~16 milliseconds</strong>.</li>
+</ol>
+<h4 id="real-world-benchmark-vs-headless-chrome">Real-World Benchmark (vs Headless Chrome)</h4>
+<p>When testing a standard invoice layout directly against Google Chrome running in headless mode (warm start):</p>
+<table>
+<thead>
+<tr>
+<th>Engine</th>
+<th>Execution Time</th>
+<th>File Size</th>
+<th>Invoices Per Second (1 Core)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>papyrus</code> (Go)</strong></td>
+<td><code>0.016s</code></td>
+<td><code>37 KB</code></td>
+<td>~62.5</td>
+</tr>
+<tr>
+<td><strong>Headless Chrome</strong></td>
+<td><code>0.756s</code></td>
+<td><code>48 KB</code></td>
+<td>~1.3</td>
+</tr>
+</tbody>
+</table>
+<p><em><code>papyrus</code> executed the exact same workload </em><em>47x faster</em><em> than Headless Chrome generating a smaller PDF payload.</em> </p>
+<hr />
+<h2 id="supported-html-subset">Supported HTML Subset</h2>
+<p><code>papyrus</code> intentionally supports a strictly scoped subset of HTML. It supports almost all standard text formatting, layout, and table elements you would use in a printed document, while completely ignoring web-specific interactive elements (like <code>&lt;script&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;form&gt;</code>, <code>&lt;video&gt;</code>).</p>
+<p>If you use an unsupported HTML tag, the parser will instantly throw a strict validation error with exact line/column numbers.</p>
+<h3 id="document-pagination">Document &amp; Pagination</h3>
+<ul>
+<li><code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;style&gt;</code>, <code>&lt;meta&gt;</code>, <code>&lt;font&gt;</code></li>
+<li><code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;first-header&gt;</code>, <code>&lt;first-footer&gt;</code> (repeating pagination blocks)</li>
+<li><code>&lt;page-break&gt;</code>, <code>&lt;page-number/&gt;</code>, <code>&lt;page-count/&gt;</code> (native pagination control)</li>
+</ul>
+<h3 id="layout-blocks">Layout &amp; Blocks</h3>
+<ul>
+<li><code>&lt;h1&gt;</code> through <code>&lt;h6&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;blockquote&gt;</code>, <code>&lt;pre&gt;</code></li>
+<li><code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;div&gt;</code></li>
+<li><code>&lt;hr&gt;</code>, <code>&lt;img&gt;</code>, <code>&lt;figure&gt;</code>, <code>&lt;figcaption&gt;</code></li>
+<li><code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code>, <code>&lt;li&gt;</code>, <code>&lt;dl&gt;</code>, <code>&lt;dt&gt;</code>, <code>&lt;dd&gt;</code></li>
+</ul>
+<h3 id="inline-formatting">Inline Formatting</h3>
+<p><code>&lt;span&gt;</code>, <code>&lt;strong&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;em&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;u&gt;</code>, <code>&lt;s&gt;</code>, <code>&lt;code&gt;</code>, <code>&lt;br&gt;</code>, <code>&lt;a&gt;</code>, <code>&lt;mark&gt;</code>, <code>&lt;small&gt;</code>, <code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code>, <code>&lt;cite&gt;</code>, <code>&lt;q&gt;</code></p>
+<h3 id="tables-full-support">Tables (Full Support)</h3>
+<p><code>&lt;table&gt;</code>, <code>&lt;caption&gt;</code>, <code>&lt;thead&gt;</code>, <code>&lt;tbody&gt;</code>, <code>&lt;tfoot&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>, <code>&lt;td&gt;</code></p>
+<hr />
+<h2 id="concept-html-compatibility">Concept &amp; HTML Compatibility</h2>
+<p>Define documents using a web-familiar vocabulary. <code>papyrus</code> natively accepts HTML aliasing (<code>&lt;html&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>), meaning developers comfortable with standard HTML and CSS can immediately start designing layouts.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">&lt;html&gt;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&lt;head&gt;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="nt">&lt;meta</span><span class="w"> </span><span class="na">title=</span><span class="s">&quot;Invoice #1042&quot;</span><span class="w"> </span><span class="na">author=</span><span class="s">&quot;Acme Corp&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="nt">&lt;style&gt;</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">      </span>page<span class="w"> </span>{<span class="w"> </span>size:<span class="w"> </span>A4;<span class="w"> </span>margin:<span class="w"> </span>15mm;<span class="w"> </span>}
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">      </span>body<span class="w"> </span>{<span class="w"> </span>font-family:<span class="w"> </span>&quot;Liberation<span class="w"> </span>Sans&quot;;<span class="w"> </span>font-size:<span class="w"> </span>10pt;<span class="w"> </span>color:<span class="w"> </span>#333;<span class="w"> </span>}
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">      </span>h1<span class="w"> </span>{<span class="w"> </span>font-size:<span class="w"> </span>22pt;<span class="w"> </span>color:<span class="w"> </span>#e60000;<span class="w"> </span>}
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">      </span>header<span class="w"> </span>{<span class="w"> </span>text-align:<span class="w"> </span>right;<span class="w"> </span>border-bottom:<span class="w"> </span>2pt<span class="w"> </span>solid<span class="w"> </span>#e60000;<span class="w"> </span>}
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">      </span>table<span class="w"> </span>{<span class="w"> </span>width:<span class="w"> </span>100%;<span class="w"> </span>border-collapse:<span class="w"> </span>collapse;<span class="w"> </span>margin-top:<span class="w"> </span>16pt;<span class="w"> </span>}
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">      </span>th<span class="w"> </span>{<span class="w"> </span>background-color:<span class="w"> </span>#333;<span class="w"> </span>color:<span class="w"> </span>white;<span class="w"> </span>padding:<span class="w"> </span>6pt;<span class="w"> </span>}
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">      </span>td<span class="w"> </span>{<span class="w"> </span>border-bottom:<span class="w"> </span>0.5pt<span class="w"> </span>solid<span class="w"> </span>#ccc;<span class="w"> </span>padding:<span class="w"> </span>6pt;<span class="w"> </span>}
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">      </span>footer<span class="w"> </span>{<span class="w"> </span>text-align:<span class="w"> </span>center;<span class="w"> </span>font-size:<span class="w"> </span>8pt;<span class="w"> </span>color:<span class="w"> </span>#999;<span class="w"> </span>}
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="nt">&lt;/style&gt;</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">  </span><span class="nt">&lt;/head&gt;</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">  </span><span class="nt">&lt;body&gt;</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="cm">&lt;!-- &lt;header&gt; automatically repeats on every page --&gt;</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="nt">&lt;header&gt;</span>Acme<span class="w"> </span>Corp<span class="w"> </span>Invoices<span class="nt">&lt;/header&gt;</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="nt">&lt;main&gt;</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">      </span><span class="nt">&lt;h1&gt;</span>Invoice<span class="w"> </span>#1042<span class="nt">&lt;/h1&gt;</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">      </span><span class="nt">&lt;table&gt;</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">        </span><span class="nt">&lt;thead&gt;</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">          </span><span class="nt">&lt;tr&gt;&lt;th&gt;</span>Description<span class="nt">&lt;/th&gt;&lt;th&gt;</span>Total<span class="nt">&lt;/th&gt;&lt;/tr&gt;</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">        </span><span class="nt">&lt;/thead&gt;</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">        </span><span class="nt">&lt;tbody&gt;</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">          </span><span class="nt">&lt;tr&gt;&lt;td&gt;</span>API<span class="w"> </span>Calls<span class="w"> </span>(March)<span class="nt">&lt;/td&gt;&lt;td&gt;</span>$375.00<span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">        </span><span class="nt">&lt;/tbody&gt;</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">      </span><span class="nt">&lt;/table&gt;</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="nt">&lt;/main&gt;</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">    </span><span class="cm">&lt;!-- &lt;footer&gt; automatically repeats on every page --&gt;</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">    </span><span class="nt">&lt;footer&gt;</span>Page<span class="w"> </span><span class="nt">&lt;page-number/&gt;</span><span class="w"> </span>of<span class="w"> </span><span class="nt">&lt;page-count/&gt;&lt;/footer&gt;</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">  </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
+<hr />
+<h2 id="installation">Installation</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Add the library to your Go project</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>go<span class="w"> </span>get<span class="w"> </span>github.com/grahms/papyrus/pkg/document
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Install the CLI tool</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>go<span class="w"> </span>install<span class="w"> </span>github.com/grahms/papyrus/cmd/papyrus@latest
+</code></pre></div>
+<h2 id="examples">Examples</h2>
+<p>The library's API relies heavily on standard Go <code>io</code> interfaces and highly extensible Functional Options. </p>
+<h3 id="quick-generation">Quick Generation</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/grahms/papyrus/pkg/document&quot;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">// Simplest method (generates straight from a file to a file)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">document</span><span class="p">.</span><span class="nx">GenerateFromFile</span><span class="p">(</span><span class="s">&quot;invoice.xml&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invoice.pdf&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// Generate entirely in-memory using byte slices</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="nx">pdfBytes</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">document</span><span class="p">.</span><span class="nx">GenerateFromBytes</span><span class="p">(</span><span class="nx">xmlBytes</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="pre-parsed-templates-high-performance">Pre-Parsed Templates (High-Performance)</h3>
+<p>If you generate the same invoice style frequently, you can parse the XML and resolve the CSS rules <em>once</em> at startup, saving significant CPU cycles.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// 1. On server startup: parse the document once</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nx">templateFile</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="s">&quot;invoice_template.xml&quot;</span><span class="p">)</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nx">doc</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">document</span><span class="p">.</span><span class="nx">Parse</span><span class="p">(</span><span class="nx">templateFile</span><span class="p">)</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1">// 2. In your HTTP Handlers: render repeatedly using the cached parsed state </span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">doc</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">document</span><span class="p">.</span><span class="nx">WithData</span><span class="p">(</span><span class="nx">myDataMap</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="in-memory-font-registry-goembed-friendly">In-Memory Font Registry (<code>go:embed</code> friendly)</h3>
+<p>Instead of shipping <code>.ttf</code> files on your disk alongside your binary, you can use <code>go:embed</code> and register fonts dynamically:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="s">&quot;embed&quot;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="c1">//go:embed my-custom-font.ttf</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kd">var</span><span class="w"> </span><span class="nx">myFont</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">document</span><span class="p">.</span><span class="nx">Generate</span><span class="p">(</span><span class="nx">in</span><span class="p">,</span><span class="w"> </span><span class="nx">out</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nx">document</span><span class="p">.</span><span class="nx">WithFontFromBytes</span><span class="p">(</span><span class="s">&quot;My Custom Font&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">myFont</span><span class="p">),</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nx">document</span><span class="p">.</span><span class="nx">WithPageSize</span><span class="p">(</span><span class="s">&quot;LETTER&quot;</span><span class="p">),</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="nx">document</span><span class="p">.</span><span class="nx">WithDPI</span><span class="p">(</span><span class="mi">300</span><span class="p">),</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="nx">document</span><span class="p">.</span><span class="nx">WithDebug</span><span class="p">(),</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="p">)</span>
+</code></pre></div>
+<h3 id="templates-data-binding-jsongo-structs">Templates &amp; Data Binding (JSON/Go Structs)</h3>
+<p><code>papyrus</code> natively integrates Go's powerful <code>text/template</code> engine. You can use standard <code>{{ }}</code> interpolation, loops, and conditions directly in your XML files, avoiding the need to write XML strings manually.</p>
+<p><strong>XML Template (<code>invoice.xml</code>)</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">&lt;h1&gt;</span>Invoice<span class="w"> </span>#{{.InvoiceID}}<span class="nt">&lt;/h1&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">&lt;table&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span>{{range<span class="w"> </span>.Items}}
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&lt;tr&gt;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">&lt;td&gt;</span>{{.Description}}<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nt">&lt;td&gt;</span>{{currency<span class="w"> </span>.Price}}<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">&lt;/tr&gt;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span>{{end}}
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="nt">&lt;/table&gt;</span>
+</code></pre></div></p>
+<p><strong>Go Implementation</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/grahms/papyrus/pkg/document&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="s">&quot;invoice.xml&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="nx">tmpl</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">document</span><span class="p">.</span><span class="nx">ParseTemplate</span><span class="p">(</span><span class="nx">f</span><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">any</span><span class="p">{</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="s">&quot;InvoiceID&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1042&quot;</span><span class="p">,</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="s">&quot;Items&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">any</span><span class="p">{</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="p">{</span><span class="s">&quot;Description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;API Calls&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Price&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">375.00</span><span class="p">},</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="p">},</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="p">}</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="nx">doc</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">tmpl</span><span class="p">.</span><span class="nx">Execute</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span><span class="w"> </span><span class="c1">// Generates XML and passes it through DOM parser</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="nx">out</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Create</span><span class="p">(</span><span class="s">&quot;invoice.pdf&quot;</span><span class="p">)</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="nx">doc</span><span class="p">.</span><span class="nx">Render</span><span class="p">(</span><span class="nx">out</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>CLI Implementation</strong>
+Pass data instantly without writing a custom Go wrapper using the <code>-data</code> flag:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>papyrus<span class="w"> </span>-data<span class="w"> </span>invoice_data.json<span class="w"> </span>invoice.xml<span class="w"> </span>invoice.pdf
+</code></pre></div></p>
+<h2 id="documentation">Documentation</h2>
+<ul>
+<li><a href="SPEC.md">SPEC.md</a> — Full language specification (supported tags, supported CSS, box models, etc)</li>
+<li><a href="examples/">examples/</a> — Example <code>.xml</code> layout documents showcasing tables, typography, and certificates</li>
+<li><a href="architecture/">architecture.md</a> — Library architecture, package boundaries, and engine design rationale</li>
+<li><a href="publishing/">publishing.md</a> — Why the docs deployment works the way it does, and what tradeoffs it makes</li>
+</ul>
+<h2 id="license">License</h2>
+<p>MIT</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,2192 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A pure Go, lightning-fast PDF generation library powered by a custom HTML/CSS subset designed specifically for paged media.">
+      
+      
+      
+        <link rel="canonical" href="https://grahms.github.io/papyrus/spec/">
+      
+      
+        <link rel="prev" href="../publishing/">
+      
+      
+        <link rel="next" href="../roadmap/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/papyrus-mark.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Specification - papyrus</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#papyrus-project-specification" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="papyrus" class="md-header__button md-logo" aria-label="papyrus" data-md-component="logo">
+      
+  <img src="../assets/papyrus-mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            papyrus
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Specification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/grahms/papyrus" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grahms/papyrus
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="papyrus" class="md-nav__button md-logo" aria-label="papyrus" data-md-component="logo">
+      
+  <img src="../assets/papyrus-mark.svg" alt="logo">
+
+    </a>
+    papyrus
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/grahms/papyrus" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    grahms/papyrus
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Library Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../publishing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Publishing Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Specification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#name-candidates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Name Candidates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Principles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Phases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pipeline Phases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: Parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-style-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: Style Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-4-render" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4: Render
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xml-element-vocabulary-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XML Element Vocabulary (v0.1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="XML Element Vocabulary (v0.1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#html-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTML Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#document-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Page Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-data-binding-v02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template / Data Binding (v0.2+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#css-subset-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CSS Subset (v0.1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CSS Subset (v0.1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selectors-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selectors Supported
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties Supported
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Units
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#go-package-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Go Package Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone Plan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone Plan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#m0-foundation-week-1-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M0: Foundation (Week 1-2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m1-text-inline-week-3-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M1: Text &amp; Inline (Week 3-4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m2-tables-week-5-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M2: Tables (Week 5-6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m3-pagination-week-7-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M3: Pagination (Week 7-8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m4-media-links-week-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M4: Media &amp; Links (Week 9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m5-lists-polish-week-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M5: Lists &amp; Polish (Week 10)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m6-templates-data-binding-week-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M6: Templates &amp; Data Binding (Week 11-12)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-Goals (v0.1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-go-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies (Go modules)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-document" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Document
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example Document">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-example-html-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full example (HTML-style)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap & Milestones
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#name-candidates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Name Candidates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design Principles
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-phases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pipeline Phases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pipeline Phases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-parse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: Parse
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-style-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 2: Style Resolution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 3: Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-4-render" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 4: Render
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#xml-element-vocabulary-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        XML Element Vocabulary (v0.1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="XML Element Vocabulary (v0.1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#html-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTML Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#document-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#page-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Page Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#block-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Block Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inline-content" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inline Content
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Media
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lists" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lists
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-data-binding-v02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Template / Data Binding (v0.2+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#css-subset-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CSS Subset (v0.1)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CSS Subset (v0.1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#selectors-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Selectors Supported
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties Supported
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#units" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Units
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#go-package-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Go Package Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#milestone-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Milestone Plan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Milestone Plan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#m0-foundation-week-1-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M0: Foundation (Week 1-2)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m1-text-inline-week-3-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M1: Text &amp; Inline (Week 3-4)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m2-tables-week-5-6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M2: Tables (Week 5-6)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m3-pagination-week-7-8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M3: Pagination (Week 7-8)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m4-media-links-week-9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M4: Media &amp; Links (Week 9)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m5-lists-polish-week-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M5: Lists &amp; Polish (Week 10)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#m6-templates-data-binding-week-11-12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        M6: Templates &amp; Data Binding (Week 11-12)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#non-goals-v01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Non-Goals (v0.1)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependencies-go-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dependencies (Go modules)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-document" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example Document
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example Document">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#full-example-html-style" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full example (HTML-style)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="papyrus-project-specification">Papyrus — Project Specification</h1>
+<h2 id="vision">Vision</h2>
+<p>A pure Go library and CLI tool that converts a custom XML+CSS document language into PDF.
+No Chromium. No wkhtmltopdf. No external binaries. Zero CGO dependencies.</p>
+<p>The XML vocabulary is purpose-built for paged documents (invoices, reports, contracts, certificates, statements).
+CSS is a strict subset scoped to properties that make sense for fixed-page layout.</p>
+<h2 id="name-candidates">Name Candidates</h2>
+<ul>
+<li><code>papyrus</code></li>
+<li><code>pagego</code></li>
+<li><code>docxml</code> </li>
+</ul>
+<p>(Use <code>papyrus</code> as the project name)</p>
+<h2 id="design-principles">Design Principles</h2>
+<ol>
+<li><strong>Paged-first</strong>: Every element exists in the context of a physical page with known dimensions.</li>
+<li><strong>Strict subset</strong>: We define exactly which XML elements and CSS properties are supported. Anything outside the subset is a parse error, not a silent degradation.</li>
+<li><strong>Declarative only</strong>: No scripting, no JavaScript, no dynamic behavior. The document is a static description of content and style.</li>
+<li><strong>Composable</strong>: Templates, partials, and variables are first-class so documents can be generated from data.</li>
+<li><strong>Fast</strong>: Must be suitable for server-side PDF generation at scale (target: &lt;100ms for a 5-page invoice on commodity hardware).</li>
+</ol>
+<h2 id="architecture">Architecture</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│                    INPUT LAYER                       │
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│                                                      │
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│  XML Document String/File ──► XML Parser             │
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│  CSS String/Embedded     ──► CSS Parser              │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│  Data (JSON/Go struct)   ──► Template Engine          │
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>└──────────────────┬──────────────────────────────────┘
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                   │
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>                   ▼
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                  RESOLUTION LAYER                     │
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│                                                      │
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│  Style Resolver: Match CSS selectors to XML nodes    │
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>│  Cascade + Specificity + Inheritance                 │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│  Computed Styles per node                            │
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>└──────────────────┬──────────────────────────────────┘
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                   │
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>                   ▼
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│                  LAYOUT ENGINE                        │
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>│                                                      │
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>│  Box Model Calculator                                │
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>│  Block Layout (vertical stacking)                    │
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>│  Inline Layout (text lines, wrapping)                │
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>│  Table Layout                                        │
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>│  Page Breaking / Pagination                          │
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>│  Running Headers &amp; Footers                           │
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>└──────────────────┬──────────────────────────────────┘
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>                   │
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>                   ▼
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>┌─────────────────────────────────────────────────────┐
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>│                  RENDER LAYER                         │
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>│                                                      │
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>│  PDF Emitter (via gopdf or gofpdf fork)              │
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>│  Text rendering + font metrics                       │
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>│  Image embedding                                     │
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>│  Vector drawing (lines, borders, backgrounds)        │
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>│  Metadata (title, author, keywords)                  │
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>└─────────────────────────────────────────────────────┘
+</code></pre></div>
+<h2 id="pipeline-phases">Pipeline Phases</h2>
+<h3 id="phase-1-parse">Phase 1: Parse</h3>
+<ul>
+<li>Parse XML using <code>encoding/xml</code> into a DOM-like tree (<code>Node</code> structs)</li>
+<li>Parse CSS into a list of <code>Rule</code> structs (selector + declarations)</li>
+<li>Validate both against the supported subset schema</li>
+</ul>
+<h3 id="phase-2-style-resolution">Phase 2: Style Resolution</h3>
+<ul>
+<li>Walk the DOM tree</li>
+<li>For each node, collect all matching CSS rules</li>
+<li>Apply cascade: specificity, source order, inheritance</li>
+<li>Produce a <code>ComputedStyle</code> struct per node with all resolved values</li>
+</ul>
+<h3 id="phase-3-layout">Phase 3: Layout</h3>
+<ul>
+<li>Convert styled DOM into a Box Tree (block boxes, inline boxes, table boxes)</li>
+<li>Run block layout: compute widths, then heights, stack vertically</li>
+<li>Run inline layout: break text into lines (greedy or Knuth-Plass)</li>
+<li>Run table layout: auto or fixed column widths</li>
+<li>Run pagination: split box tree across pages, handle orphans/widows, repeat table headers</li>
+<li>Inject running headers/footers per page</li>
+</ul>
+<h3 id="phase-4-render">Phase 4: Render</h3>
+<ul>
+<li>Walk the laid-out page tree</li>
+<li>For each box: draw background, borders, text, images</li>
+<li>Emit PDF primitives via the chosen PDF backend</li>
+</ul>
+<h2 id="xml-element-vocabulary-v01">XML Element Vocabulary (v0.1)</h2>
+<h3 id="html-compatibility">HTML Compatibility</h3>
+<p>The vocabulary is designed to be a strict superset of common HTML authoring patterns.
+Documents that look like HTML will parse and render correctly without learning a new tag set.</p>
+<p><strong>Alias rules (both forms are always accepted):</strong>
+| Canonical | HTML alias | Notes |
+|---|---|---|
+| <code>&lt;document&gt;</code> | <code>&lt;html&gt;</code> | Root element — either form is valid |
+| <code>&lt;page-header&gt;</code> | <code>&lt;header&gt;</code> | Only when a direct child of <code>&lt;body&gt;</code> |
+| <code>&lt;page-footer&gt;</code> | <code>&lt;footer&gt;</code> | Only when a direct child of <code>&lt;body&gt;</code> |</p>
+<p>All other elements already match their HTML counterparts exactly.</p>
+<h3 id="document-structure">Document Structure</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;document&gt;</code> / <code>&lt;html&gt;</code></td>
+<td>Root element (both accepted)</td>
+</tr>
+<tr>
+<td><code>&lt;head&gt;</code></td>
+<td>Contains <code>&lt;meta&gt;</code>, <code>&lt;style&gt;</code>, <code>&lt;var&gt;</code>, <code>&lt;font&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;body&gt;</code></td>
+<td>Contains all visible content</td>
+</tr>
+<tr>
+<td><code>&lt;style&gt;</code></td>
+<td>Embedded CSS</td>
+</tr>
+<tr>
+<td><code>&lt;meta&gt;</code></td>
+<td>Document metadata (title, author, subject, keywords)</td>
+</tr>
+<tr>
+<td><code>&lt;var&gt;</code></td>
+<td>Template variable definition</td>
+</tr>
+</tbody>
+</table>
+<h3 id="page-control">Page Control</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;page-header&gt;</code> / <code>&lt;header&gt;</code></td>
+<td>Repeated at top of each page (direct child of <code>&lt;body&gt;</code>)</td>
+</tr>
+<tr>
+<td><code>&lt;page-footer&gt;</code> / <code>&lt;footer&gt;</code></td>
+<td>Repeated at bottom of each page (direct child of <code>&lt;body&gt;</code>)</td>
+</tr>
+<tr>
+<td><code>&lt;page-break/&gt;</code></td>
+<td>Force a new page</td>
+</tr>
+<tr>
+<td><code>&lt;page-number/&gt;</code></td>
+<td>Insert current page number</td>
+</tr>
+<tr>
+<td><code>&lt;page-count/&gt;</code></td>
+<td>Insert total page count</td>
+</tr>
+</tbody>
+</table>
+<h3 id="block-content">Block Content</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;div&gt;</code></td>
+<td>Generic block container</td>
+</tr>
+<tr>
+<td><code>&lt;section&gt;</code></td>
+<td>Thematic block section</td>
+</tr>
+<tr>
+<td><code>&lt;article&gt;</code></td>
+<td>Self-contained block content</td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code></td>
+<td>Primary content area</td>
+</tr>
+<tr>
+<td><code>&lt;nav&gt;</code></td>
+<td>Navigation block</td>
+</tr>
+<tr>
+<td><code>&lt;aside&gt;</code></td>
+<td>Sidebar / supplementary block</td>
+</tr>
+<tr>
+<td><code>&lt;h1&gt;</code> ... <code>&lt;h6&gt;</code></td>
+<td>Headings</td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;</code></td>
+<td>Paragraph</td>
+</tr>
+<tr>
+<td><code>&lt;blockquote&gt;</code></td>
+<td>Indented block quote</td>
+</tr>
+<tr>
+<td><code>&lt;pre&gt;</code></td>
+<td>Preformatted text block (preserves whitespace)</td>
+</tr>
+<tr>
+<td><code>&lt;figure&gt;</code></td>
+<td>Block container for images / diagrams</td>
+</tr>
+<tr>
+<td><code>&lt;figcaption&gt;</code></td>
+<td>Caption for a <code>&lt;figure&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;hr/&gt;</code></td>
+<td>Horizontal rule</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inline-content">Inline Content</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;span&gt;</code></td>
+<td>Generic inline container</td>
+</tr>
+<tr>
+<td><code>&lt;strong&gt;</code> / <code>&lt;b&gt;</code></td>
+<td>Bold text</td>
+</tr>
+<tr>
+<td><code>&lt;em&gt;</code> / <code>&lt;i&gt;</code></td>
+<td>Italic text</td>
+</tr>
+<tr>
+<td><code>&lt;u&gt;</code></td>
+<td>Underlined text</td>
+</tr>
+<tr>
+<td><code>&lt;s&gt;</code></td>
+<td>Strikethrough text</td>
+</tr>
+<tr>
+<td><code>&lt;code&gt;</code></td>
+<td>Monospace inline code</td>
+</tr>
+<tr>
+<td><code>&lt;mark&gt;</code></td>
+<td>Highlighted text</td>
+</tr>
+<tr>
+<td><code>&lt;small&gt;</code></td>
+<td>Smaller text (0.85em)</td>
+</tr>
+<tr>
+<td><code>&lt;sub&gt;</code></td>
+<td>Subscript</td>
+</tr>
+<tr>
+<td><code>&lt;sup&gt;</code></td>
+<td>Superscript</td>
+</tr>
+<tr>
+<td><code>&lt;cite&gt;</code></td>
+<td>Citation / title of work (italic by default)</td>
+</tr>
+<tr>
+<td><code>&lt;q&gt;</code></td>
+<td>Short inline quotation</td>
+</tr>
+<tr>
+<td><code>&lt;br/&gt;</code></td>
+<td>Line break</td>
+</tr>
+<tr>
+<td><code>&lt;a&gt;</code></td>
+<td>Hyperlink (href becomes PDF link annotation)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tables">Tables</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;table&gt;</code></td>
+<td>Table container</td>
+</tr>
+<tr>
+<td><code>&lt;caption&gt;</code></td>
+<td>Table caption (rendered above the table)</td>
+</tr>
+<tr>
+<td><code>&lt;thead&gt;</code></td>
+<td>Header group (repeats on page breaks)</td>
+</tr>
+<tr>
+<td><code>&lt;tbody&gt;</code></td>
+<td>Body group</td>
+</tr>
+<tr>
+<td><code>&lt;tfoot&gt;</code></td>
+<td>Footer group</td>
+</tr>
+<tr>
+<td><code>&lt;tr&gt;</code></td>
+<td>Table row</td>
+</tr>
+<tr>
+<td><code>&lt;td&gt;</code></td>
+<td>Table cell</td>
+</tr>
+<tr>
+<td><code>&lt;th&gt;</code></td>
+<td>Header cell (bold, centered by default)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="media">Media</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;img&gt;</code></td>
+<td>Image (src: file path or base64 data URI)</td>
+</tr>
+<tr>
+<td><code>&lt;svg&gt;</code></td>
+<td>Inline SVG (future: v0.2+)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="lists">Lists</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;ul&gt;</code></td>
+<td>Unordered list</td>
+</tr>
+<tr>
+<td><code>&lt;ol&gt;</code></td>
+<td>Ordered list</td>
+</tr>
+<tr>
+<td><code>&lt;li&gt;</code></td>
+<td>List item</td>
+</tr>
+<tr>
+<td><code>&lt;dl&gt;</code></td>
+<td>Definition list</td>
+</tr>
+<tr>
+<td><code>&lt;dt&gt;</code></td>
+<td>Definition term (bold by default)</td>
+</tr>
+<tr>
+<td><code>&lt;dd&gt;</code></td>
+<td>Definition description (indented by default)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="template-data-binding-v02">Template / Data Binding (v0.2+)</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;for-each&gt;</code></td>
+<td>Loop over data array</td>
+</tr>
+<tr>
+<td><code>&lt;if&gt;</code></td>
+<td>Conditional rendering</td>
+</tr>
+<tr>
+<td><code>&lt;slot&gt;</code></td>
+<td>Named insertion point</td>
+</tr>
+<tr>
+<td><code>&lt;include&gt;</code></td>
+<td>Include external XML partial</td>
+</tr>
+<tr>
+<td><code>{{var}}</code></td>
+<td>Interpolate variable value</td>
+</tr>
+</tbody>
+</table>
+<h2 id="css-subset-v01">CSS Subset (v0.1)</h2>
+<h3 id="selectors-supported">Selectors Supported</h3>
+<ul>
+<li>Element: <code>p</code>, <code>h1</code>, <code>table</code></li>
+<li>Class: <code>.invoice-header</code></li>
+<li>ID: <code>#total</code></li>
+<li>Descendant: <code>table td</code></li>
+<li>Child: <code>table &gt; tr</code></li>
+<li>Pseudo-class: <code>:first-child</code>, <code>:last-child</code>, <code>:nth-child(n)</code></li>
+<li>NOT supported: pseudo-elements, attribute selectors, sibling combinators</li>
+</ul>
+<h3 id="properties-supported">Properties Supported</h3>
+<p><strong>Page</strong>
+- <code>size</code> (A4, letter, legal, or explicit WxH)
+- <code>margin</code> (page margins)
+- <code>orientation</code> (portrait, landscape)</p>
+<p><strong>Box Model</strong>
+- <code>margin</code>, <code>margin-top/right/bottom/left</code>
+- <code>padding</code>, <code>padding-top/right/bottom/left</code>
+- <code>border</code>, <code>border-width</code>, <code>border-style</code>, <code>border-color</code>, <code>border-top/right/bottom/left</code>
+- <code>width</code>, <code>min-width</code>, <code>max-width</code>
+- <code>height</code>, <code>min-height</code>, <code>max-height</code></p>
+<p><strong>Typography</strong>
+- <code>font-family</code> (mapped to embedded TTF/OTF fonts)
+- <code>font-size</code> (pt, px, mm, cm, em, rem)
+- <code>font-weight</code> (normal, bold, 100-900)
+- <code>font-style</code> (normal, italic)
+- <code>text-align</code> (left, right, center, justify)
+- <code>text-decoration</code> (none, underline, line-through)
+- <code>line-height</code>
+- <code>letter-spacing</code>
+- <code>text-transform</code> (uppercase, lowercase, capitalize)
+- <code>white-space</code> (normal, nowrap, pre)
+- <code>text-indent</code></p>
+<p><strong>Colors &amp; Backgrounds</strong>
+- <code>color</code>
+- <code>background-color</code>
+- <code>opacity</code></p>
+<p><strong>Layout</strong>
+- <code>display</code> (block, inline, table, table-row, table-cell, none)
+- <code>vertical-align</code> (for table cells: top, middle, bottom)
+- <code>overflow</code> (hidden, visible — for clipping)</p>
+<p><strong>Table</strong>
+- <code>border-collapse</code> (collapse, separate)
+- <code>border-spacing</code>
+- <code>table-layout</code> (auto, fixed)</p>
+<p><strong>Page Break</strong>
+- <code>page-break-before</code> (auto, always, avoid)
+- <code>page-break-after</code> (auto, always, avoid)
+- <code>page-break-inside</code> (auto, avoid)
+- <code>orphans</code>
+- <code>widows</code></p>
+<p><strong>NOT Supported (explicit exclusion)</strong>
+- <code>float</code>, <code>position</code>, <code>flexbox</code>, <code>grid</code>
+- <code>transform</code>, <code>transition</code>, <code>animation</code>
+- <code>z-index</code>, <code>overflow-x/y</code>
+- Any pseudo-element styling (<code>::before</code>, <code>::after</code>)</p>
+<h2 id="units">Units</h2>
+<table>
+<thead>
+<tr>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pt</code></td>
+<td>Points (1/72 inch) — default for fonts</td>
+</tr>
+<tr>
+<td><code>px</code></td>
+<td>Pixels (mapped to 1pt for simplicity, or configurable DPI)</td>
+</tr>
+<tr>
+<td><code>mm</code></td>
+<td>Millimeters</td>
+</tr>
+<tr>
+<td><code>cm</code></td>
+<td>Centimeters</td>
+</tr>
+<tr>
+<td><code>in</code></td>
+<td>Inches</td>
+</tr>
+<tr>
+<td><code>em</code></td>
+<td>Relative to current font-size</td>
+</tr>
+<tr>
+<td><code>rem</code></td>
+<td>Relative to root font-size</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>Percentage of parent dimension</td>
+</tr>
+</tbody>
+</table>
+<h2 id="go-package-structure">Go Package Structure</h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>papyrus/
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── cmd/
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   └── papyrus/
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│       └── main.go                 # CLI entry point
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>├── pkg/
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   ├── parser/
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   │   ├── xml.go                  # XML DOM parser
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│   │   ├── css.go                  # CSS tokenizer + parser
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>│   │   ├── nodes.go                # DOM node types
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>│   │   └── validation.go           # Schema validation
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>│   ├── style/
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>│   │   ├── resolver.go             # CSS cascade + specificity
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>│   │   ├── computed.go             # ComputedStyle struct
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>│   │   ├── properties.go           # Property definitions + defaults
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>│   │   ├── selectors.go            # Selector matching engine
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>│   │   ├── inheritance.go          # Property inheritance rules
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>│   │   └── units.go                # Unit parsing + conversion
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>│   ├── layout/
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>│   │   ├── box.go                  # Box model (margin, border, padding, content)
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>│   │   ├── block.go                # Block layout algorithm
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>│   │   ├── inline.go               # Inline/text layout + line breaking
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>│   │   ├── table.go                # Table layout algorithm
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>│   │   ├── page.go                 # Pagination + page management
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>│   │   └── tree.go                 # Box tree construction from styled DOM
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>│   ├── render/
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>│   │   ├── pdf.go                  # PDF rendering backend
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>│   │   ├── text.go                 # Text drawing + font metrics
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>│   │   ├── image.go                # Image embedding
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>│   │   ├── draw.go                 # Lines, rects, backgrounds
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>│   │   └── fonts.go                # Font loading + management
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>│   ├── template/
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>│   │   ├── engine.go               # Variable interpolation
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>│   │   ├── loops.go                # for-each processing
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>│   │   └── conditionals.go         # if/else processing
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>│   └── document/
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>│       ├── document.go             # Top-level Document type + Generate()
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>│       └── options.go              # Configuration options
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>├── fonts/                          # Bundled default fonts (embedded via go:embed)
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>│   ├── liberation-sans/
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>│   └── liberation-serif/
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>├── testdata/                       # Test XML documents + expected outputs
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>├── examples/                       # Example documents
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>│   ├── invoice.xml
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>│   ├── report.xml
+<a id="__codelineno-1-45" name="__codelineno-1-45" href="#__codelineno-1-45"></a>│   └── certificate.xml
+<a id="__codelineno-1-46" name="__codelineno-1-46" href="#__codelineno-1-46"></a>├── go.mod
+<a id="__codelineno-1-47" name="__codelineno-1-47" href="#__codelineno-1-47"></a>├── go.sum
+<a id="__codelineno-1-48" name="__codelineno-1-48" href="#__codelineno-1-48"></a>├── CLAUDE.md                       # AI development prompt
+<a id="__codelineno-1-49" name="__codelineno-1-49" href="#__codelineno-1-49"></a>├── SPEC.md                         # This file
+<a id="__codelineno-1-50" name="__codelineno-1-50" href="#__codelineno-1-50"></a>└── README.md
+</code></pre></div>
+<h2 id="milestone-plan">Milestone Plan</h2>
+<h3 id="m0-foundation-week-1-2">M0: Foundation (Week 1-2)</h3>
+<ul>
+<li>[ ] XML parser: <code>&lt;document&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, <code>&lt;style&gt;</code>, block elements (<code>&lt;h1&gt;</code>..<code>&lt;h6&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;div&gt;</code>, <code>&lt;section&gt;</code>)</li>
+<li>[ ] CSS parser: element/class/ID selectors, core properties (font-size, color, margin, padding, text-align)</li>
+<li>[ ] Style resolver: basic cascade (no specificity tiebreaking yet)</li>
+<li>[ ] Block layout: vertical stacking, width/height, margin/padding</li>
+<li>[ ] PDF render: single page, text + backgrounds</li>
+<li>[ ] <strong>Deliverable</strong>: Render a simple one-page document with headings, paragraphs, and basic styling</li>
+</ul>
+<h3 id="m1-text-inline-week-3-4">M1: Text &amp; Inline (Week 3-4)</h3>
+<ul>
+<li>[ ] Inline layout: text wrapping, line breaking, mixed bold/italic spans</li>
+<li>[ ] Font management: TTF loading, metrics, embedded fonts</li>
+<li>[ ] Units: full unit support (pt, mm, em, %, etc.)</li>
+<li>[ ] CSS specificity: proper cascade ordering</li>
+<li>[ ] <strong>Deliverable</strong>: Render a document with mixed inline formatting and proper text reflow</li>
+</ul>
+<h3 id="m2-tables-week-5-6">M2: Tables (Week 5-6)</h3>
+<ul>
+<li>[ ] Table layout: auto column widths, fixed layout, border-collapse</li>
+<li>[ ] <code>&lt;thead&gt;</code> repeat on page breaks</li>
+<li>[ ] Cell spanning (colspan, rowspan)</li>
+<li>[ ] <strong>Deliverable</strong>: Render an invoice with header, line items table, and totals</li>
+</ul>
+<h3 id="m3-pagination-week-7-8">M3: Pagination (Week 7-8)</h3>
+<ul>
+<li>[ ] Multi-page documents</li>
+<li>[ ] Page breaks (auto + forced)</li>
+<li>[ ] Running headers/footers</li>
+<li>[ ] Page numbers / page count</li>
+<li>[ ] Orphans/widows control</li>
+<li>[ ] <strong>Deliverable</strong>: Render a multi-page report with page numbers and repeated headers</li>
+</ul>
+<h3 id="m4-media-links-week-9">M4: Media &amp; Links (Week 9)</h3>
+<ul>
+<li>[ ] Image embedding (JPEG, PNG)</li>
+<li>[ ] Image sizing (width/height constraints, aspect ratio)</li>
+<li>[ ] Hyperlinks (PDF link annotations)</li>
+<li>[ ] Horizontal rules</li>
+<li>[ ] <strong>Deliverable</strong>: Render a branded document with logo, images, and clickable links</li>
+</ul>
+<h3 id="m5-lists-polish-week-10">M5: Lists &amp; Polish (Week 10)</h3>
+<ul>
+<li>[ ] Ordered/unordered lists with proper indentation</li>
+<li>[ ] Nested lists</li>
+<li>[ ] CLI tool with watch mode</li>
+<li>[ ] Error messages with line/column numbers</li>
+<li>[ ] <strong>Deliverable</strong>: Feature-complete v0.1</li>
+</ul>
+<h3 id="m6-templates-data-binding-week-11-12">M6: Templates &amp; Data Binding (Week 11-12)</h3>
+<ul>
+<li>[ ] Variable interpolation <code>{{var}}</code></li>
+<li>[ ] <code>&lt;for-each&gt;</code> loops</li>
+<li>[ ] <code>&lt;if&gt;</code> conditionals</li>
+<li>[ ] <code>&lt;include&gt;</code> partials</li>
+<li>[ ] JSON data input</li>
+<li>[ ] <strong>Deliverable</strong>: Generate invoices from JSON data + XML template</li>
+</ul>
+<h2 id="non-goals-v01">Non-Goals (v0.1)</h2>
+<ul>
+<li>Full CSS compliance</li>
+<li>JavaScript execution</li>
+<li>SVG rendering</li>
+<li>PDF forms</li>
+<li>PDF encryption</li>
+<li>Accessibility (tagged PDF)</li>
+<li>Right-to-left text</li>
+<li>CJK text shaping</li>
+<li>Flexbox or Grid layout</li>
+</ul>
+<h2 id="dependencies-go-modules">Dependencies (Go modules)</h2>
+<ul>
+<li><code>github.com/signintech/gopdf</code> — PDF generation backend (or <code>github.com/jung-kurt/gofpdf</code>)</li>
+<li><code>golang.org/x/image</code> — image decoding</li>
+<li>Standard library: <code>encoding/xml</code>, <code>image</code>, <code>strings</code>, <code>strconv</code>, <code>fmt</code>, <code>os</code>, <code>io</code>, <code>path/filepath</code></li>
+</ul>
+<p>No CGO. No external binaries. Pure Go.</p>
+<h2 id="example-document">Example Document</h2>
+<p>Documents can be written using either the canonical vocabulary or HTML-familiar tags.
+Both of the following root forms are valid:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="cm">&lt;!-- HTML-style (recommended for developer familiarity) --&gt;</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">&lt;html&gt;</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nt">&lt;head&gt;</span>...<span class="nt">&lt;/head&gt;</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">&lt;body&gt;</span>...<span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">&lt;/html&gt;</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="cm">&lt;!-- Canonical form (also valid) --&gt;</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="nt">&lt;document&gt;</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="nt">&lt;head&gt;</span>...<span class="nt">&lt;/head&gt;</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="nt">&lt;body&gt;</span>...<span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nt">&lt;/document&gt;</span>
+</code></pre></div>
+<h3 id="full-example-html-style">Full example (HTML-style)</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">&lt;html&gt;</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">&lt;head&gt;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="nt">&lt;meta</span><span class="w"> </span><span class="na">title=</span><span class="s">&quot;Invoice #1042&quot;</span><span class="w"> </span><span class="na">author=</span><span class="s">&quot;Acme Corp&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="nt">&lt;style&gt;</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">      </span>page<span class="w"> </span>{
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span>size:<span class="w"> </span>A4;
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span>margin:<span class="w"> </span>15mm<span class="w"> </span>20mm;
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span>}
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span>body<span class="w"> </span>{
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span>font-family:<span class="w"> </span>&quot;Liberation<span class="w"> </span>Sans&quot;;
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span>font-size:<span class="w"> </span>10pt;
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span>color:<span class="w"> </span>#333333;
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">      </span>}
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span>h1<span class="w"> </span>{
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">        </span>font-size:<span class="w"> </span>22pt;
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">        </span>color:<span class="w"> </span>#e60000;
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">        </span>margin-bottom:<span class="w"> </span>8pt;
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">      </span>}
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">      </span>.invoice-meta<span class="w"> </span>{
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">        </span>margin-bottom:<span class="w"> </span>12pt;
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">      </span>}
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">      </span>.invoice-meta<span class="w"> </span>p<span class="w"> </span>{
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">        </span>margin:<span class="w"> </span>2pt<span class="w"> </span>0;
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">        </span>font-size:<span class="w"> </span>9pt;
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">        </span>color:<span class="w"> </span>#666666;
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">      </span>}
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">      </span>table<span class="w"> </span>{
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">        </span>width:<span class="w"> </span>100%;
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="w">        </span>border-collapse:<span class="w"> </span>collapse;
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="w">        </span>margin-top:<span class="w"> </span>16pt;
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a><span class="w">      </span>}
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a><span class="w">      </span>th<span class="w"> </span>{
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a><span class="w">        </span>background-color:<span class="w"> </span>#e60000;
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a><span class="w">        </span>color:<span class="w"> </span>#ffffff;
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="w">        </span>padding:<span class="w"> </span>6pt<span class="w"> </span>8pt;
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a><span class="w">        </span>text-align:<span class="w"> </span>left;
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a><span class="w">        </span>font-size:<span class="w"> </span>9pt;
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="w">      </span>}
+<a id="__codelineno-3-40" name="__codelineno-3-40" href="#__codelineno-3-40"></a><span class="w">      </span>td<span class="w"> </span>{
+<a id="__codelineno-3-41" name="__codelineno-3-41" href="#__codelineno-3-41"></a><span class="w">        </span>padding:<span class="w"> </span>6pt<span class="w"> </span>8pt;
+<a id="__codelineno-3-42" name="__codelineno-3-42" href="#__codelineno-3-42"></a><span class="w">        </span>border-bottom:<span class="w"> </span>0.5pt<span class="w"> </span>solid<span class="w"> </span>#cccccc;
+<a id="__codelineno-3-43" name="__codelineno-3-43" href="#__codelineno-3-43"></a><span class="w">        </span>font-size:<span class="w"> </span>9pt;
+<a id="__codelineno-3-44" name="__codelineno-3-44" href="#__codelineno-3-44"></a><span class="w">      </span>}
+<a id="__codelineno-3-45" name="__codelineno-3-45" href="#__codelineno-3-45"></a><span class="w">      </span>.total-row<span class="w"> </span>td<span class="w"> </span>{
+<a id="__codelineno-3-46" name="__codelineno-3-46" href="#__codelineno-3-46"></a><span class="w">        </span>font-weight:<span class="w"> </span>bold;
+<a id="__codelineno-3-47" name="__codelineno-3-47" href="#__codelineno-3-47"></a><span class="w">        </span>border-top:<span class="w"> </span>2pt<span class="w"> </span>solid<span class="w"> </span>#333333;
+<a id="__codelineno-3-48" name="__codelineno-3-48" href="#__codelineno-3-48"></a><span class="w">        </span>border-bottom:<span class="w"> </span>none;
+<a id="__codelineno-3-49" name="__codelineno-3-49" href="#__codelineno-3-49"></a><span class="w">      </span>}
+<a id="__codelineno-3-50" name="__codelineno-3-50" href="#__codelineno-3-50"></a><span class="w">      </span>.right<span class="w"> </span>{
+<a id="__codelineno-3-51" name="__codelineno-3-51" href="#__codelineno-3-51"></a><span class="w">        </span>text-align:<span class="w"> </span>right;
+<a id="__codelineno-3-52" name="__codelineno-3-52" href="#__codelineno-3-52"></a><span class="w">      </span>}
+<a id="__codelineno-3-53" name="__codelineno-3-53" href="#__codelineno-3-53"></a><span class="w">      </span>footer<span class="w"> </span>{
+<a id="__codelineno-3-54" name="__codelineno-3-54" href="#__codelineno-3-54"></a><span class="w">        </span>font-size:<span class="w"> </span>8pt;
+<a id="__codelineno-3-55" name="__codelineno-3-55" href="#__codelineno-3-55"></a><span class="w">        </span>color:<span class="w"> </span>#999999;
+<a id="__codelineno-3-56" name="__codelineno-3-56" href="#__codelineno-3-56"></a><span class="w">        </span>text-align:<span class="w"> </span>center;
+<a id="__codelineno-3-57" name="__codelineno-3-57" href="#__codelineno-3-57"></a><span class="w">      </span>}
+<a id="__codelineno-3-58" name="__codelineno-3-58" href="#__codelineno-3-58"></a><span class="w">    </span><span class="nt">&lt;/style&gt;</span>
+<a id="__codelineno-3-59" name="__codelineno-3-59" href="#__codelineno-3-59"></a><span class="w">  </span><span class="nt">&lt;/head&gt;</span>
+<a id="__codelineno-3-60" name="__codelineno-3-60" href="#__codelineno-3-60"></a><span class="w">  </span><span class="nt">&lt;body&gt;</span>
+<a id="__codelineno-3-61" name="__codelineno-3-61" href="#__codelineno-3-61"></a><span class="w">    </span><span class="cm">&lt;!-- &lt;header&gt; is the HTML alias for &lt;page-header&gt; --&gt;</span>
+<a id="__codelineno-3-62" name="__codelineno-3-62" href="#__codelineno-3-62"></a><span class="w">    </span><span class="nt">&lt;header&gt;</span>
+<a id="__codelineno-3-63" name="__codelineno-3-63" href="#__codelineno-3-63"></a><span class="w">      </span><span class="nt">&lt;div</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;header-bar&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-64" name="__codelineno-3-64" href="#__codelineno-3-64"></a><span class="w">        </span><span class="nt">&lt;img</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;logo.png&quot;</span><span class="w"> </span><span class="na">width=</span><span class="s">&quot;120pt&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<a id="__codelineno-3-65" name="__codelineno-3-65" href="#__codelineno-3-65"></a><span class="w">        </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>Invoice<span class="nt">&lt;/span&gt;</span>
+<a id="__codelineno-3-66" name="__codelineno-3-66" href="#__codelineno-3-66"></a><span class="w">      </span><span class="nt">&lt;/div&gt;</span>
+<a id="__codelineno-3-67" name="__codelineno-3-67" href="#__codelineno-3-67"></a><span class="w">    </span><span class="nt">&lt;/header&gt;</span>
+<a id="__codelineno-3-68" name="__codelineno-3-68" href="#__codelineno-3-68"></a>
+<a id="__codelineno-3-69" name="__codelineno-3-69" href="#__codelineno-3-69"></a><span class="w">    </span><span class="nt">&lt;main&gt;</span>
+<a id="__codelineno-3-70" name="__codelineno-3-70" href="#__codelineno-3-70"></a><span class="w">      </span><span class="nt">&lt;h1&gt;</span>Invoice<span class="w"> </span>#1042<span class="nt">&lt;/h1&gt;</span>
+<a id="__codelineno-3-71" name="__codelineno-3-71" href="#__codelineno-3-71"></a><span class="w">      </span><span class="nt">&lt;div</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;invoice-meta&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-72" name="__codelineno-3-72" href="#__codelineno-3-72"></a><span class="w">        </span><span class="nt">&lt;p&gt;&lt;strong&gt;</span>Date:<span class="nt">&lt;/strong&gt;</span><span class="w"> </span>2026-03-21<span class="nt">&lt;/p&gt;</span>
+<a id="__codelineno-3-73" name="__codelineno-3-73" href="#__codelineno-3-73"></a><span class="w">        </span><span class="nt">&lt;p&gt;&lt;strong&gt;</span>Customer:<span class="nt">&lt;/strong&gt;</span><span class="w"> </span>Empresa<span class="w"> </span>XYZ,<span class="w"> </span>Lda.<span class="nt">&lt;/p&gt;</span>
+<a id="__codelineno-3-74" name="__codelineno-3-74" href="#__codelineno-3-74"></a><span class="w">        </span><span class="nt">&lt;p&gt;&lt;strong&gt;</span>NIF:<span class="nt">&lt;/strong&gt;</span><span class="w"> </span>400123456<span class="nt">&lt;/p&gt;</span>
+<a id="__codelineno-3-75" name="__codelineno-3-75" href="#__codelineno-3-75"></a><span class="w">      </span><span class="nt">&lt;/div&gt;</span>
+<a id="__codelineno-3-76" name="__codelineno-3-76" href="#__codelineno-3-76"></a>
+<a id="__codelineno-3-77" name="__codelineno-3-77" href="#__codelineno-3-77"></a><span class="w">      </span><span class="nt">&lt;table&gt;</span>
+<a id="__codelineno-3-78" name="__codelineno-3-78" href="#__codelineno-3-78"></a><span class="w">        </span><span class="nt">&lt;thead&gt;</span>
+<a id="__codelineno-3-79" name="__codelineno-3-79" href="#__codelineno-3-79"></a><span class="w">          </span><span class="nt">&lt;tr&gt;</span>
+<a id="__codelineno-3-80" name="__codelineno-3-80" href="#__codelineno-3-80"></a><span class="w">            </span><span class="nt">&lt;th&gt;</span>Description<span class="nt">&lt;/th&gt;</span>
+<a id="__codelineno-3-81" name="__codelineno-3-81" href="#__codelineno-3-81"></a><span class="w">            </span><span class="nt">&lt;th</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>Qty<span class="nt">&lt;/th&gt;</span>
+<a id="__codelineno-3-82" name="__codelineno-3-82" href="#__codelineno-3-82"></a><span class="w">            </span><span class="nt">&lt;th</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>Unit<span class="w"> </span>Price<span class="nt">&lt;/th&gt;</span>
+<a id="__codelineno-3-83" name="__codelineno-3-83" href="#__codelineno-3-83"></a><span class="w">            </span><span class="nt">&lt;th</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>Total<span class="nt">&lt;/th&gt;</span>
+<a id="__codelineno-3-84" name="__codelineno-3-84" href="#__codelineno-3-84"></a><span class="w">          </span><span class="nt">&lt;/tr&gt;</span>
+<a id="__codelineno-3-85" name="__codelineno-3-85" href="#__codelineno-3-85"></a><span class="w">        </span><span class="nt">&lt;/thead&gt;</span>
+<a id="__codelineno-3-86" name="__codelineno-3-86" href="#__codelineno-3-86"></a><span class="w">        </span><span class="nt">&lt;tbody&gt;</span>
+<a id="__codelineno-3-87" name="__codelineno-3-87" href="#__codelineno-3-87"></a><span class="w">          </span><span class="nt">&lt;tr&gt;</span>
+<a id="__codelineno-3-88" name="__codelineno-3-88" href="#__codelineno-3-88"></a><span class="w">            </span><span class="nt">&lt;td&gt;</span>API<span class="w"> </span>Calls<span class="w"> </span>(March<span class="w"> </span>2026)<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-89" name="__codelineno-3-89" href="#__codelineno-3-89"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>15,000<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-90" name="__codelineno-3-90" href="#__codelineno-3-90"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>2.50<span class="w"> </span>MZN<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-91" name="__codelineno-3-91" href="#__codelineno-3-91"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>37,500.00<span class="w"> </span>MZN<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-92" name="__codelineno-3-92" href="#__codelineno-3-92"></a><span class="w">          </span><span class="nt">&lt;/tr&gt;</span>
+<a id="__codelineno-3-93" name="__codelineno-3-93" href="#__codelineno-3-93"></a><span class="w">          </span><span class="nt">&lt;tr&gt;</span>
+<a id="__codelineno-3-94" name="__codelineno-3-94" href="#__codelineno-3-94"></a><span class="w">            </span><span class="nt">&lt;td&gt;</span>SMS<span class="w"> </span>Notifications<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-95" name="__codelineno-3-95" href="#__codelineno-3-95"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>3,200<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-96" name="__codelineno-3-96" href="#__codelineno-3-96"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>1.00<span class="w"> </span>MZN<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-97" name="__codelineno-3-97" href="#__codelineno-3-97"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>3,200.00<span class="w"> </span>MZN<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-98" name="__codelineno-3-98" href="#__codelineno-3-98"></a><span class="w">          </span><span class="nt">&lt;/tr&gt;</span>
+<a id="__codelineno-3-99" name="__codelineno-3-99" href="#__codelineno-3-99"></a><span class="w">          </span><span class="nt">&lt;tr&gt;</span>
+<a id="__codelineno-3-100" name="__codelineno-3-100" href="#__codelineno-3-100"></a><span class="w">            </span><span class="nt">&lt;td&gt;</span>Storage<span class="w"> </span>(50GB)<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-101" name="__codelineno-3-101" href="#__codelineno-3-101"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-102" name="__codelineno-3-102" href="#__codelineno-3-102"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>5,000.00<span class="w"> </span>MZN<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-103" name="__codelineno-3-103" href="#__codelineno-3-103"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>5,000.00<span class="w"> </span>MZN<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-104" name="__codelineno-3-104" href="#__codelineno-3-104"></a><span class="w">          </span><span class="nt">&lt;/tr&gt;</span>
+<a id="__codelineno-3-105" name="__codelineno-3-105" href="#__codelineno-3-105"></a><span class="w">          </span><span class="nt">&lt;tr</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;total-row&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-3-106" name="__codelineno-3-106" href="#__codelineno-3-106"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">colspan=</span><span class="s">&quot;3&quot;</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>Total<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-107" name="__codelineno-3-107" href="#__codelineno-3-107"></a><span class="w">            </span><span class="nt">&lt;td</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;right&quot;</span><span class="nt">&gt;</span>45,700.00<span class="w"> </span>MZN<span class="nt">&lt;/td&gt;</span>
+<a id="__codelineno-3-108" name="__codelineno-3-108" href="#__codelineno-3-108"></a><span class="w">          </span><span class="nt">&lt;/tr&gt;</span>
+<a id="__codelineno-3-109" name="__codelineno-3-109" href="#__codelineno-3-109"></a><span class="w">        </span><span class="nt">&lt;/tbody&gt;</span>
+<a id="__codelineno-3-110" name="__codelineno-3-110" href="#__codelineno-3-110"></a><span class="w">      </span><span class="nt">&lt;/table&gt;</span>
+<a id="__codelineno-3-111" name="__codelineno-3-111" href="#__codelineno-3-111"></a><span class="w">    </span><span class="nt">&lt;/main&gt;</span>
+<a id="__codelineno-3-112" name="__codelineno-3-112" href="#__codelineno-3-112"></a>
+<a id="__codelineno-3-113" name="__codelineno-3-113" href="#__codelineno-3-113"></a><span class="w">    </span><span class="cm">&lt;!-- &lt;footer&gt; is the HTML alias for &lt;page-footer&gt; --&gt;</span>
+<a id="__codelineno-3-114" name="__codelineno-3-114" href="#__codelineno-3-114"></a><span class="w">    </span><span class="nt">&lt;footer&gt;</span>
+<a id="__codelineno-3-115" name="__codelineno-3-115" href="#__codelineno-3-115"></a><span class="w">      </span><span class="nt">&lt;p&gt;</span>Page<span class="w"> </span><span class="nt">&lt;page-number/&gt;</span><span class="w"> </span>of<span class="w"> </span><span class="nt">&lt;page-count/&gt;&lt;/p&gt;</span>
+<a id="__codelineno-3-116" name="__codelineno-3-116" href="#__codelineno-3-116"></a><span class="w">      </span><span class="nt">&lt;p&gt;</span>Acme<span class="w"> </span>Corp<span class="w"> </span>—<span class="w"> </span>NIF<span class="w"> </span>400000001<span class="nt">&lt;/p&gt;</span>
+<a id="__codelineno-3-117" name="__codelineno-3-117" href="#__codelineno-3-117"></a><span class="w">    </span><span class="nt">&lt;/footer&gt;</span>
+<a id="__codelineno-3-118" name="__codelineno-3-118" href="#__codelineno-3-118"></a><span class="w">  </span><span class="nt">&lt;/body&gt;</span>
+<a id="__codelineno-3-119" name="__codelineno-3-119" href="#__codelineno-3-119"></a><span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.indexes", "navigation.top", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
