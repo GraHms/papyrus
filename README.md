@@ -102,6 +102,38 @@ Define documents using a web-familiar vocabulary. `papyrus` natively accepts HTM
 
 ---
 
+## Architecture
+
+Papyrus is structured as a library pipeline, not a browser automation shim:
+
+```text
+XML / template data
+  -> parser
+  -> style resolver
+  -> layout engine
+  -> PDF renderer
+```
+
+That separation is deliberate.
+
+- `pkg/parser` turns XML and CSS into validated internal structures.
+- `pkg/style` resolves selectors, cascade, inheritance, and computed values.
+- `pkg/layout` converts styled nodes into a page-aware box tree and runs pagination.
+- `pkg/render` emits final PDF primitives, fonts, images, and drawing operations.
+- `pkg/document` is the façade that composes the pipeline into a stable public API.
+
+This design gives Papyrus four properties that matter in production:
+
+1. Determinism. The layout engine is page-first and finite; it does not inherit browser behavior built for scrolling, scripting, and dynamic DOM mutation.
+2. Testability. Each stage can be tested in isolation, while layout snapshots validate the end-to-end geometry contract.
+3. Reuse. Parsing, style resolution, and templating can be reused independently of the final render call, which matters for high-throughput services.
+4. Operational simplicity. The library stays pure Go, with no Chromium process management, no CGO, and no system-level rendering dependencies.
+
+The longer design rationale and package-level architecture are documented in
+[docs/architecture.md](docs/architecture.md).
+
+---
+
 ## Installation
 
 ```bash
@@ -202,6 +234,34 @@ papyrus -data invoice_data.json invoice.xml invoice.pdf
 
 - [SPEC.md](SPEC.md) — Full language specification (supported tags, supported CSS, box models, etc)
 - [examples/](examples/) — Example `.xml` layout documents showcasing tables, typography, and certificates
+- [docs/architecture.md](docs/architecture.md) — Library architecture, package boundaries, and design rationale
+- [docs/publishing.md](docs/publishing.md) — Documentation publishing architecture, tradeoffs, and operational notes
+
+## Documentation Publishing
+
+Papyrus documentation is a static site built with MkDocs and published through
+GitHub Pages. That sounds straightforward, but there are two materially
+different GitHub Pages deployment models:
+
+1. Branch-based publishing: CI builds the site and commits the generated output
+   to `gh-pages`.
+2. Actions-based publishing: CI builds the site, uploads a deployment artifact,
+   and a dedicated GitHub Pages deployment job publishes it.
+
+The current repository uses the first model via `mkdocs gh-deploy`. The reason
+is pragmatic: it is the most direct path from MkDocs to a browsable site, keeps
+the generated output inspectable in a normal Git branch, and minimizes setup
+work while the project is still evolving quickly.
+
+The important operational nuance is that branch publication and site serving are
+separate concerns. A green workflow only proves that CI produced output and
+updated `gh-pages`. It does not prove that GitHub Pages is enabled or pointed
+at that branch. That separation is exactly why a deployment workflow can pass
+while `https://grahms.github.io/papyrus/` still returns `404`.
+
+A more detailed distinguished-engineer-level explanation of both architectures,
+their failure modes, and their tradeoffs lives in
+[docs/publishing.md](docs/publishing.md).
 
 ## Open Source
 

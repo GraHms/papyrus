@@ -43,5 +43,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Library Architecture: architecture.md
+  - Publishing Architecture: publishing.md
   - Specification: spec.md
   - Roadmap & Milestones: roadmap.md

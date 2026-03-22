@@ -202,6 +202,8 @@ papyrus -data invoice_data.json invoice.xml invoice.pdf
 
 - [SPEC.md](SPEC.md) — Full language specification (supported tags, supported CSS, box models, etc)
 - [examples/](examples/) — Example `.xml` layout documents showcasing tables, typography, and certificates
+- [architecture.md](architecture.md) — Library architecture, package boundaries, and engine design rationale
+- [publishing.md](publishing.md) — Why the docs deployment works the way it does, and what tradeoffs it makes
 
 ## License
 MIT
