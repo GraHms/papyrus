@@ -44,37 +44,37 @@ Expand the element set to match HTML authoring habits and improve text rendering
 
 | Item | Status | Notes |
 |---|---|---|
-| `<html>` root alias for `<document>` | ⬜ | Normalised to `document` at parse time |
-| `<header>` alias for `<page-header>` (body-level) | ⬜ | Normalised to `page-header` at parse time |
-| `<footer>` alias for `<page-footer>` (body-level) | ⬜ | Normalised to `page-footer` at parse time |
-| `<main>`, `<article>`, `<aside>`, `<nav>` semantic blocks | ⬜ | Render as generic block containers |
-| `<pre>` preformatted block | ⬜ | Preserves whitespace; monospace font default |
-| `<figure>` + `<figcaption>` | ⬜ | Block image container with optional caption |
-| `<s>` strikethrough inline | ⬜ | UA stylesheet default: `text-decoration: line-through` |
-| `<mark>` highlight inline | ⬜ | UA stylesheet default: `background-color: #ffff00` |
-| `<small>` inline | ⬜ | UA stylesheet default: `font-size: 0.85em` |
-| `<sub>` / `<sup>` inline | ⬜ | Render at reduced size, shifted baseline |
-| `<cite>` / `<q>` inline | ⬜ | UA stylesheet defaults: `font-style: italic` / quotes |
-| `<caption>` in tables | ⬜ | Rendered above the table |
-| `<dl>`, `<dt>`, `<dd>` definition lists | ⬜ | `dt` bold, `dd` indented by default |
-| CSS `header` / `footer` selectors map to canonical names | ⬜ | Warn developer if they write `header {}` — normalisation means they should use `page-header {}` |
+| `<html>` root alias for `<document>` | ✅ | Normalised to `document` at parse time in `xml.go` |
+| `<header>` alias for `<page-header>` (body-level) | ✅ | Normalised to `page-header` when direct child of `<body>` |
+| `<footer>` alias for `<page-footer>` (body-level) | ✅ | Normalised to `page-footer` when direct child of `<body>` |
+| `<main>`, `<article>`, `<aside>`, `<nav>` semantic blocks | ✅ | Render as generic block containers |
+| `<pre>` preformatted block | ✅ | Preserves whitespace; monospace font default |
+| `<figure>` + `<figcaption>` | ✅ | Block container with centered caption |
+| `<s>` strikethrough inline | ✅ | UA default: `text-decoration: line-through` |
+| `<mark>` highlight inline | ✅ | UA default: `background-color: #ffff00` |
+| `<small>` inline | ✅ | UA default: `font-size: 0.85em` |
+| `<sub>` / `<sup>` inline | ✅ | 0.75em font size + `BaselineShift` in `ComputedStyle` |
+| `<cite>` / `<q>` inline | ✅ | `cite` italic; `q` wraps content with `"` / `"` |
+| `<caption>` in tables | ✅ | Centered text, rendered as block before table rows |
+| `<dl>`, `<dt>`, `<dd>` definition lists | ✅ | `dt` bold, `dd` indented 28pt |
+| CSS `header` / `footer` selectors map to canonical names | ⬜ | Warn developer if they write `header {}` — use `page-header {}` |
 
 ### Typography polish
 
 | Item | Status | Notes |
 |---|---|---|
-| `text-align: justify` | ⬜ | Currently falls through to left-align |
-| `text-decoration: underline` | ⬜ | Render underline lines below text runs |
-| `text-decoration: line-through` | ⬜ | Render strikethrough lines |
-| `text-transform` (uppercase / lowercase / capitalize) | ⬜ | Applied at render time |
-| `letter-spacing` | ⬜ | Inter-character spacing |
-| `white-space: pre` / `nowrap` | ⬜ | Preserve whitespace / disable wrapping |
-| `line-height` ratio inheritance fix | ⬜ | Inherited value should be the ratio, not the resolved pt value |
+| `text-align: justify` | ✅ | Inter-word space expansion; last line left-aligned |
+| `text-decoration: underline` | ✅ | Underline drawn below text runs in `render/text.go` |
+| `text-decoration: line-through` | ✅ | Strikethrough drawn at mid-line in `render/text.go` |
+| `text-transform` (uppercase / lowercase / capitalize) | ✅ | Applied at render time via `applyTextTransform` |
+| `letter-spacing` | ✅ | Char-by-char rendering with spacing; measurement updated |
+| `white-space: pre` / `nowrap` | ✅ | `pre` preserves whitespace; `nowrap` disables soft-wrap |
+| `line-height` ratio inheritance fix | ✅ | `LineHeightRatio` field; re-resolved against child font-size |
 | Knuth-Plass line breaking (optional) | ⬜ | Better paragraph quality than greedy; can be a build flag |
-| Baseline alignment for mixed inline styles | ⬜ | Align text baselines when font sizes differ within a line |
+| Baseline alignment for mixed inline styles | ✅ | `Line.MaxFontSize`; single shared reference baseline per line; sup line-height expanded |
 | `vertical-align` in table cells | ⬜ | top / middle / bottom cell content alignment |
-| `<a>` PDF link annotations | ⬜ | Emit `/Annot` with `/URI` for `href` attributes |
-| **Layout/render unit tests** | ⬜ | `pkg/layout` and `pkg/render` currently have no `*_test.go` |
+| `<a>` PDF link annotations | ✅ | `box.HREF` propagated to runs; `pdf.AddExternalLink` emitted after text draw; UA blue+underline |
+| **Layout/render unit tests** | ✅ | `inline_test.go` (8 tests) + `tree_test.go` (12 sub-tests) in `pkg/layout` |
 
 ---
 
