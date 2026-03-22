@@ -104,7 +104,17 @@ func splitClasses(value string) []string {
 	return classes
 }
 
+// HTMLAliases maps HTML tag names to their canonical goxml2pdf equivalents.
+// Alias normalisation happens at parse time in xml.go; all other packages
+// only ever see canonical tag names.
+var HTMLAliases = map[string]string{
+	"html":   "document",
+	"header": "page-header",
+	"footer": "page-footer",
+}
+
 // AllowedElements defines the valid element names in the goxml2pdf vocabulary.
+// This set uses canonical tag names only (after alias normalisation).
 var AllowedElements = map[string]bool{
 	// Document structure
 	"document": true, "head": true, "body": true,
@@ -116,15 +126,21 @@ var AllowedElements = map[string]bool{
 
 	// Block content
 	"section": true, "div": true,
+	"main": true, "article": true, "aside": true, "nav": true,
 	"h1": true, "h2": true, "h3": true, "h4": true, "h5": true, "h6": true,
 	"p": true, "blockquote": true, "hr": true,
+	"pre": true,
+	"figure": true, "figcaption": true,
 
 	// Inline content
 	"span": true, "strong": true, "b": true, "em": true, "i": true,
-	"u": true, "code": true, "br": true, "a": true,
+	"u": true, "s": true, "code": true, "br": true, "a": true,
+	"mark": true, "small": true, "sub": true, "sup": true,
+	"cite": true, "q": true,
 
 	// Tables
-	"table": true, "thead": true, "tbody": true, "tfoot": true,
+	"table": true, "caption": true,
+	"thead": true, "tbody": true, "tfoot": true,
 	"tr": true, "td": true, "th": true,
 
 	// Media
@@ -132,12 +148,15 @@ var AllowedElements = map[string]bool{
 
 	// Lists
 	"ul": true, "ol": true, "li": true,
+	"dl": true, "dt": true, "dd": true,
 }
 
 // InlineElements are elements that participate in inline formatting.
 var InlineElements = map[string]bool{
 	"span": true, "strong": true, "b": true, "em": true, "i": true,
-	"u": true, "code": true, "br": true, "a": true,
+	"u": true, "s": true, "code": true, "br": true, "a": true,
+	"mark": true, "small": true, "sub": true, "sup": true,
+	"cite": true, "q": true,
 	"page-number": true, "page-count": true,
 }
 

@@ -305,6 +305,71 @@ func applyElementDefaults(tag string, cs ComputedStyle) ComputedStyle {
 		cs.PaddingLeft = 20
 	case "li":
 		cs.MarginBottom = 4
+
+	// Semantic block containers — same as div but with small vertical margins
+	case "main", "article", "section":
+		cs.MarginTop = 0
+		cs.MarginBottom = 8
+	case "aside", "nav":
+		// no extra margins by default
+
+	// Preformatted block
+	case "pre":
+		cs.FontFamily = "Courier"
+		cs.WhiteSpace = "pre"
+		cs.MarginTop = 8
+		cs.MarginBottom = 8
+
+	// Figure / caption
+	case "figure":
+		cs.MarginTop = 8
+		cs.MarginBottom = 8
+		cs.MarginLeft = 28
+		cs.MarginRight = 28
+	case "figcaption", "caption":
+		cs.TextAlign = "center"
+		cs.FontSize = cs.FontSize * 0.9
+		cs.MarginTop = 4
+		cs.MarginBottom = 4
+
+	// New inline elements
+	case "s":
+		cs.TextDecoration = "line-through"
+		cs.Display = "inline"
+	case "mark":
+		cs.BackgroundColor = Color{R: 255, G: 255, B: 0, A: 255}
+		cs.Display = "inline"
+	case "small":
+		cs.FontSize = cs.FontSize * 0.85
+		cs.Display = "inline"
+	case "sub":
+		cs.FontSize = cs.FontSize * 0.75
+		cs.BaselineShift = -cs.FontSize * 0.35 // shift down
+		cs.Display = "inline"
+	case "sup":
+		cs.FontSize = cs.FontSize * 0.75
+		cs.BaselineShift = cs.FontSize * 0.5 // shift up
+		cs.Display = "inline"
+	case "cite":
+		cs.FontStyle = "italic"
+		cs.Display = "inline"
+	case "q":
+		cs.Display = "inline"
+
+	// Definition lists
+	case "dl":
+		cs.MarginTop = 8
+		cs.MarginBottom = 8
+	case "dt":
+		cs.FontWeight = "bold"
+		cs.MarginTop = 4
+	case "dd":
+		cs.MarginLeft = 28
+		cs.MarginBottom = 4
+
+	// Page number/count inline markers
+	case "page-number", "page-count":
+		cs.Display = "inline"
 	}
 	return cs
 }

@@ -17,6 +17,7 @@ type ComputedStyle struct {
 	TextTransform  string  // "none", "uppercase", "lowercase", "capitalize"
 	WhiteSpace     string  // "normal", "nowrap", "pre"
 	TextIndent     float64 // pt
+	BaselineShift  float64 // pt; positive shifts text up (superscript), negative shifts down (subscript)
 
 	// Box model (all in pt)
 	Width     Length

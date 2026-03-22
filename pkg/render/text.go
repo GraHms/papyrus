@@ -92,10 +92,11 @@ func drawTextRuns(pdf *gopdf.GoPdf, fm *FontManager, runs []layout.InlineRun, x,
 			// Render text
 			runText := applyTextTransform(run.Text, runCS.TextTransform)
 
-			// Draw text at current position
-			// Use a simple approximation: ascent ≈ 0.75 * fontSize
+			// Draw text at current position.
+			// ascent ≈ 0.75 * fontSize; BaselineShift moves sup/sub relative to baseline.
 			ascent := runCS.FontSize * 0.75
-			pdf.SetXY(curX, curY+lineH-ascent-runCS.FontSize*0.15)
+			textY := curY + lineH - ascent - runCS.FontSize*0.15 - runCS.BaselineShift
+			pdf.SetXY(curX, textY)
 			_ = pdf.Text(runText)
 
 			// Measure width for cursor advance

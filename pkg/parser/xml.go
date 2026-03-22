@@ -51,6 +51,22 @@ func ParseXML(r io.Reader) (*Document, error) {
 
 			tag := strings.ToLower(t.Name.Local)
 
+			// Apply HTML alias normalisation.
+			// <header> and <footer> are only aliases when they are direct children
+			// of <body>; inside other elements they remain as-is (which would fail
+			// validation, since they're not in AllowedElements — intentional).
+			// <html> is always an alias for <document> regardless of position.
+			if canonical, ok := HTMLAliases[tag]; ok {
+				if tag == "html" {
+					tag = canonical
+				} else if tag == "header" || tag == "footer" {
+					// Only normalise when the parent is <body>
+					if len(stack) > 0 && stack[len(stack)-1].Tag == "body" {
+						tag = canonical
+					}
+				}
+			}
+
 			// Validate element
 			if err := ValidateElement(tag, line, col); err != nil {
 				return nil, err
@@ -147,7 +163,7 @@ func ParseXML(r io.Reader) (*Document, error) {
 	}
 
 	if doc.Root == nil {
-		return nil, fmt.Errorf("parser: no <document> root element found")
+		return nil, fmt.Errorf("parser: no root element found (expected <html> or <document>)")
 	}
 
 	return doc, nil

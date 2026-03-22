@@ -56,7 +56,13 @@ func buildNode(node *parser.Node, parent *Box, styles map[*parser.Node]style.Com
 
 	switch node.Type {
 	case parser.TextNode:
-		text := collapseTextWhitespace(node.Text)
+		var text string
+		if parent.Style.WhiteSpace == "pre" {
+			// Preserve all whitespace inside <pre>
+			text = node.Text
+		} else {
+			text = collapseTextWhitespace(node.Text)
+		}
 		if text == "" {
 			return
 		}
@@ -121,6 +127,24 @@ func buildElementBox(node *parser.Node, cs style.ComputedStyle, styles map[*pars
 		return &Box{Type: InlineBox, Node: node, Style: cs, Text: "{{PAGE}}"}
 	case "page-count":
 		return &Box{Type: InlineBox, Node: node, Style: cs, Text: "{{PAGES}}"}
+
+	// <q> wraps its content with quotation marks
+	case "q":
+		box := &Box{Type: InlineBox, Node: node, Style: cs}
+		open := &Box{Type: TextBox, Node: node, Style: cs, Text: "\u201c"}
+		close := &Box{Type: TextBox, Node: node, Style: cs, Text: "\u201d"}
+		box.Children = append(box.Children, open)
+		for _, child := range node.Children {
+			buildNode(child, box, styles)
+		}
+		box.Children = append(box.Children, close)
+		return box
+
+	// <dl>/<dt>/<dd> are rendered as block elements with UA-stylesheet indentation
+	// applied via applyElementDefaults; no special box type needed.
+	// <figure>, <figcaption>, <caption>, <pre> and the semantic containers
+	// (<main>, <article>, <aside>, <nav>) are all plain block boxes handled
+	// by the default path below.
 	}
 
 	box := &Box{
