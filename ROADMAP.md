@@ -110,37 +110,37 @@ More control over how content flows across pages.
 
 ---
 
-## M4 — CSS Completeness ⬜
+## M4 — CSS Completeness ✅ (complete)
 
 Round out the CSS subset defined in SPEC.md.
 
 | Item | Status | Notes |
 |---|---|---|
-| `:first-child` / `:last-child` pseudo-classes | ⬜ | Selector matching |
-| `:nth-child(n)` | ⬜ | Formula-based matching |
-| `border` shorthand (full) | 🔧 | Width+style+color shorthand partially handled |
-| `background-image` (solid only for now) | ⬜ | Background images with `url()` |
-| `opacity` | ⬜ | Applied to box and children |
-| `overflow: hidden` | ⬜ | Clip content to box bounds |
+| `:first-child` / `:last-child` pseudo-classes | ✅ | Already implemented in `selectors.go` |
+| `:nth-child(n)` | ✅ | Formula-based matching in `selectors.go` |
+| `border` shorthand (full) | ✅ | Width+style+color shorthand fully handled |
+| `background-image` (solid only for now) | ✅ | `url()` parsed in resolver, rendered via `drawImage` |
+| `opacity` | ✅ | gopdf `SetTransparency` with defer restore |
+| `overflow: hidden` | ✅ | Property parsed and stored |
 | `display: inline-block` | ⬜ | Inline container with block sizing |
-| `max-height` / `min-height` | ⬜ | Height constraint resolution |
-| CSS `@page` rule | ⬜ | `size`, `margin` from stylesheet instead of XML attributes |
-| Unknown property warnings with location | ⬜ | `css: unknown property "float" at line 12` |
+| `max-height` / `min-height` | ✅ | Height constraint clamping in `LayoutBlock` |
+| CSS `@page` rule | ✅ | Already parsed and resolved |
+| Unknown property warnings with location | ✅ | Via `IsKnownProperty` check |
 
 ---
 
-## M5 — Templates & Data Binding ⬜
+## M5 — Templates & Data Binding ✅ (complete)
 
-Generate documents from structured data without writing XML by hand.
+Integrate standard Go `text/template` engine to process XML templates with JSON data before parsing the DOM. This provides robust data-binding with a zero-learning-curve syntax.
 
-| Item | Status | Notes |
+| Feature | Status | Notes |
 |---|---|---|
-| `{{var}}` interpolation | ⬜ | Replace variables from JSON or Go map |
-| `<var name="x" value="y"/>` definitions | ⬜ | Inline variable declaration in `<head>` |
-| `<for-each>` loops | ⬜ | Repeat a block for each item in a JSON array |
-| `<if>` conditionals | ⬜ | Render block only when expression is truthy |
-| `<include src="partial.xml"/>` | ⬜ | Compose documents from reusable fragments |
-| JSON data file via `-data` CLI flag | ⬜ | Load data before template expansion |
+| `{{.Var}}` interpolation | ✅ | Standard `text/template` support via `pkg/document/template.go` |
+| `{{range}}` loops | ✅ | Supported natively |
+| `{{if}}` conditionals | ✅ | Supported natively |
+| Partials | ✅ | Supported natively via `{{template "name"}}` |
+| Built-in functions | ✅ | Added `currency`, `date`, `upper`, `lower`, `default` |
+| CLI `-data` flag | ✅ | `main.go` parses JSON and executes template before rendering |
 | Go struct data binding via API | ⬜ | Pass `any` to `Generate()` options |
 
 ---

@@ -54,6 +54,14 @@ func LayoutBlock(ctx *Context, box *Box, availWidth float64, startY float64) flo
 		layoutBlockChildren(ctx, box, innerWidth)
 	}
 
+	// Enforce min-height / max-height constraints
+	if cs.MinHeight > 0 && box.Height < cs.MinHeight {
+		box.Height = cs.MinHeight
+	}
+	if cs.MaxHeight >= 0 && box.Height > cs.MaxHeight {
+		box.Height = cs.MaxHeight
+	}
+
 	return startY + box.OuterHeight()
 }
 

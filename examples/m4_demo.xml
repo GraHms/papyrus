@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html>
+<head>
+  <meta title="M4 CSS Completeness Demo" author="pdfml" />
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    body {
+      font-family: "Liberation Sans";
+      font-size: 11pt;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    h1 {
+      font-size: 24pt;
+      color: #2c3e50;
+      border-bottom: 2pt solid #3498db;
+      padding-bottom: 5pt;
+      margin-bottom: 15pt;
+    }
+
+    h2 {
+      font-size: 16pt;
+      color: #2980b9;
+      margin-top: 20pt;
+      margin-bottom: 10pt;
+    }
+
+    /* 1. Pseudo-classes: :nth-child, :first-child, :last-child */
+    .list-item {
+      padding: 8pt;
+      border: 1pt solid #bdc3c7; /* full border shorthand */
+      margin-bottom: 4pt;
+    }
+    
+    .list-item:nth-child(even) {
+      background-color: #ecf0f1;
+    }
+    
+    .list-item:first-child {
+      border-top-width: 3pt;
+      border-top-color: #27ae60;
+    }
+
+    .list-item:last-child {
+      border-bottom-width: 3pt;
+      border-bottom-color: #e74c3c;
+      margin-bottom: 15pt;
+    }
+
+    /* 2. Opacity */
+    .opacity-container {
+      background-color: #34495e;
+      color: white;
+      padding: 15pt;
+      margin-bottom: 15pt;
+    }
+
+    .opacity-box {
+      background-color: #e74c3c;
+      color: white;
+      padding: 10pt;
+      margin-bottom: 5pt;
+      border: 1pt solid white;
+    }
+
+    .op-100 { opacity: 1.0; }
+    .op-75 { opacity: 0.75; }
+    .op-50 { opacity: 0.50; }
+    .op-25 { opacity: 0.25; }
+
+    /* 3. Min/Max Height */
+    .height-grid {
+      display: block; /* We'll just stack them for now since inline-block isn't done */
+    }
+
+    .min-height-box {
+      background-color: #f39c12;
+      color: white;
+      min-height: 60pt;
+      padding: 10pt;
+      margin-bottom: 10pt;
+      border: 2pt dashed #d35400;
+    }
+
+    .max-height-box {
+      background-color: #8e44ad;
+      color: white;
+      max-height: 40pt;
+      overflow: hidden; /* 4. Overflow Hidden */
+      padding: 10pt;
+      margin-bottom: 10pt;
+    }
+
+    /* 5. Background Image */
+    .bg-image-box {
+      background-image: url("pattern.png");
+      border: 1pt solid #7f8c8d;
+      padding: 40pt 20pt;
+      text-align: center;
+      margin-bottom: 15pt;
+    }
+
+    .bg-image-box h3 {
+      background-color: white;
+      opacity: 0.9;
+      padding: 10pt;
+      display: inline; /* fallback to block/inline inside */
+    }
+
+  </style>
+</head>
+<body>
+  <h1>M4: CSS Completeness Demo</h1>
+  <p>This document tests the CSS features implemented in Milestone 4.</p>
+
+  <h2>1. Pseudo-classes &amp; Border Shorthand</h2>
+  <p>Below is a list of items. The CSS uses <code>:nth-child(even)</code> for alternating backgrounds, <code>:first-child</code> for a thick green top border, and <code>:last-child</code> for a thick red bottom border. They all use the <code>border: 1pt solid #ccc</code> shorthand.</p>
+  
+  <div>
+    <div class="list-item">Item 1 (First Child)</div>
+    <div class="list-item">Item 2 (Even)</div>
+    <div class="list-item">Item 3 (Odd)</div>
+    <div class="list-item">Item 4 (Even)</div>
+    <div class="list-item">Item 5 (Last Child)</div>
+  </div>
+
+  <h2>2. Opacity</h2>
+  <p>The boxes below test the <code>opacity</code> property, which applies gopdf transparency to the box and its text.</p>
+  
+  <div class="opacity-container">
+    <div class="opacity-box op-100">Opacity 1.0 (100%)</div>
+    <div class="opacity-box op-75">Opacity 0.75 (75%)</div>
+    <div class="opacity-box op-50">Opacity 0.50 (50%)</div>
+    <div class="opacity-box op-25">Opacity 0.25 (25%)</div>
+  </div>
+
+  <h2>3. Min-Height &amp; Max-Height</h2>
+  <div class="height-grid">
+    <div class="min-height-box">
+      <strong>min-height: 60pt</strong>
+      <p>This box has very little text, but it is forced to be at least 60pt tall by the CSS min-height property.</p>
+    </div>
+    
+    <div class="max-height-box">
+      <strong>max-height: 40pt; overflow: hidden;</strong>
+      <p>This box has a lot of text. So much text that it will definitely exceed the 40pt maximum height set by the CSS. Because overflow is set to hidden, the rendering engine will clip the content at the bounds of the box, and you won't see the text spilling out of the bottom of the purple area. Here is some more text to ensure it overflows.</p>
+    </div>
+  </div>
+
+  <h2>4. Background Image</h2>
+  <p>The box below uses <code>background-image: url("pattern.png")</code> to draw an image behind the content.</p>
+  
+  <div class="bg-image-box">
+    <h3>Content over Background Image</h3>
+  </div>
+
+  <p>End of test document.</p>
+</body>
+</html>

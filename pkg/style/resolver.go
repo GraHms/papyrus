@@ -10,17 +10,17 @@ import (
 
 // PageStyle holds resolved page-level CSS from @page rules.
 type PageStyle struct {
-	Width   float64 // pt
-	Height  float64 // pt
+	Width                                            float64 // pt
+	Height                                           float64 // pt
 	MarginTop, MarginRight, MarginBottom, MarginLeft float64
 }
 
 // ResolverContext holds shared state for style resolution.
 type ResolverContext struct {
-	Rules         []parser.Rule
-	DPI           float64
-	RootFontSize  float64 // pt
-	PageStyle     PageStyle
+	Rules        []parser.Rule
+	DPI          float64
+	RootFontSize float64 // pt
+	PageStyle    PageStyle
 }
 
 // NewResolver creates a new resolver context.
@@ -460,6 +460,26 @@ func (r *ResolverContext) applyDeclaration(cs ComputedStyle, d parser.Declaratio
 		cs.VerticalAlign = d.Value
 	case "overflow":
 		cs.Overflow = d.Value
+	case "opacity":
+		if v, err := strconv.ParseFloat(d.Value, 64); err == nil {
+			if v < 0 {
+				v = 0
+			}
+			if v > 1 {
+				v = 1
+			}
+			cs.Opacity = v
+		}
+	case "background-image":
+		// Parse url(...) syntax
+		v := strings.TrimSpace(d.Value)
+		if strings.HasPrefix(v, "url(") && strings.HasSuffix(v, ")") {
+			url := v[4 : len(v)-1]
+			url = strings.Trim(url, "\"'")
+			cs.BackgroundImage = url
+		} else if v != "none" {
+			cs.BackgroundImage = v
+		}
 
 	// Margin shorthand / longhand
 	case "margin":

@@ -121,8 +121,33 @@ func (r *Renderer) renderBox(box *layout.Box, absX, absY, availWidth float64) {
 	borderBoxW := box.Width
 	borderBoxH := box.Height + cs.PaddingTop + cs.PaddingBottom + cs.BorderTopWidth + cs.BorderBottomWidth
 
+	// Apply opacity (gopdf transparency)
+	if cs.Opacity < 1.0 && cs.Opacity >= 0 {
+		opt := gopdf.Transparency{
+			Alpha:         cs.Opacity,
+			BlendModeType: gopdf.NormalBlendMode,
+		}
+		if err := r.pdf.SetTransparency(opt); err == nil {
+			defer func() {
+				_ = r.pdf.SetTransparency(gopdf.Transparency{
+					Alpha:         1.0,
+					BlendModeType: gopdf.NormalBlendMode,
+				})
+			}()
+		}
+	}
+
 	if cs.BackgroundColor.A > 0 {
 		drawBackground(r.pdf, absX, absY, borderBoxW, borderBoxH, cs.BackgroundColor)
+	}
+
+	// Background image
+	if cs.BackgroundImage != "" {
+		basePath := r.opts.BasePath
+		if basePath == "" {
+			basePath = "."
+		}
+		_ = drawImage(r.pdf, cs.BackgroundImage, absX, absY, borderBoxW, borderBoxH, basePath)
 	}
 
 	// For cells inside a border-collapse:collapse table, borders are drawn

@@ -131,6 +131,48 @@ err := document.Generate(in, out,
 )
 ```
 
+### Templates & Data Binding (JSON/Go Structs)
+`pdfml` natively integrates Go's powerful `text/template` engine. You can use standard `{{ }}` interpolation, loops, and conditions directly in your XML files, avoiding the need to write XML strings manually.
+
+**XML Template (`invoice.xml`)**
+```xml
+<h1>Invoice #{{.InvoiceID}}</h1>
+<table>
+  {{range .Items}}
+  <tr>
+    <td>{{.Description}}</td>
+    <td>{{currency .Price}}</td>
+  </tr>
+  {{end}}
+</table>
+```
+
+**Go Implementation**
+```go
+import "github.com/grahms/pdfml/pkg/document"
+
+f, _ := os.Open("invoice.xml")
+tmpl, _ := document.ParseTemplate(f)
+
+data := map[string]any{
+    "InvoiceID": "1042",
+    "Items": []map[string]any{
+        {"Description": "API Calls", "Price": 375.00},
+    },
+}
+
+doc, _ := tmpl.Execute("", data) // Generates XML and passes it through DOM parser
+
+out, _ := os.Create("invoice.pdf")
+doc.Render(out)
+```
+
+**CLI Implementation**
+Pass data instantly without writing a custom Go wrapper using the `-data` flag:
+```bash
+pdfml -data invoice_data.json invoice.xml invoice.pdf
+```
+
 ## Documentation
 
 - [SPEC.md](SPEC.md) — Full language specification (supported tags, supported CSS, box models, etc)

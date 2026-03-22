@@ -5,21 +5,21 @@ package style
 // All color values have been parsed to Color structs.
 type ComputedStyle struct {
 	// Typography
-	FontFamily     string
-	FontSize       float64 // pt
-	FontWeight     string  // "normal", "bold", "100"-"900"
-	FontStyle      string  // "normal", "italic"
-	Color          Color
-	LineHeight      float64 // pt (absolute, resolved from ratio/length)
+	FontFamily string
+	FontSize   float64 // pt
+	FontWeight string  // "normal", "bold", "100"-"900"
+	FontStyle  string  // "normal", "italic"
+	Color      Color
+	LineHeight float64 // pt (absolute, resolved from ratio/length)
 	// LineHeightRatio is the unitless ratio; if > 0, LineHeight is re-resolved as FontSize*LineHeightRatio after inheritance
 	LineHeightRatio float64
-	TextAlign       string // "left", "right", "center", "justify"
-	TextDecoration string  // "none", "underline", "line-through"
-	LetterSpacing  float64 // pt
-	TextTransform  string  // "none", "uppercase", "lowercase", "capitalize"
-	WhiteSpace     string  // "normal", "nowrap", "pre"
-	TextIndent     float64 // pt
-	BaselineShift  float64 // pt; positive shifts text up (superscript), negative shifts down (subscript)
+	TextAlign       string  // "left", "right", "center", "justify"
+	TextDecoration  string  // "none", "underline", "line-through"
+	LetterSpacing   float64 // pt
+	TextTransform   string  // "none", "uppercase", "lowercase", "capitalize"
+	WhiteSpace      string  // "normal", "nowrap", "pre"
+	TextIndent      float64 // pt
+	BaselineShift   float64 // pt; positive shifts text up (superscript), negative shifts down (subscript)
 
 	// Box model (all in pt)
 	Width     Length
@@ -56,6 +56,8 @@ type ComputedStyle struct {
 
 	// Colors and backgrounds
 	BackgroundColor Color
+	BackgroundImage string  // url() path for background images
+	Opacity         float64 // 0.0 to 1.0
 
 	// Layout
 	Display       string // "block", "inline", "table", "table-row", "table-cell", "none"
@@ -112,6 +114,7 @@ func DefaultStyle(dpi float64) ComputedStyle {
 		BorderLeftStyle:   "none",
 
 		BackgroundColor: Color{A: 0}, // transparent
+		Opacity:         1.0,
 
 		Display:       "block",
 		VerticalAlign: "top",

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -87,9 +88,64 @@ func main() {
 	}
 
 	// Generate PDF
-	if err := document.GenerateFromFile(inputPath, outputPath, opts...); err != nil {
-		fmt.Fprintf(os.Stderr, "pdfml: error: %v\n", err)
-		os.Exit(1)
+	if *dataFile != "" {
+		// 1. Read JSON data
+		dataBytes, err := os.ReadFile(*dataFile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: error reading data file: %v\n", err)
+			os.Exit(1)
+		}
+		var data map[string]interface{}
+		if err := json.Unmarshal(dataBytes, &data); err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: error parsing JSON: %v\n", err)
+			os.Exit(1)
+		}
+
+		// 2. Open template
+		f, err := os.Open(inputPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: error opening template: %v\n", err)
+			os.Exit(1)
+		}
+		defer f.Close()
+
+		// 3. Compile template
+		tmpl, err := document.ParseTemplate(f)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: template error: %v\n", err)
+			os.Exit(1)
+		}
+
+		// 4. Render template to document
+		doc, err := tmpl.Execute("", data)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: template execute error: %v\n", err)
+			os.Exit(1)
+		}
+
+		// 5. Render document to PDF
+		out, err := os.Create(outputPath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: error creating output file: %v\n", err)
+			os.Exit(1)
+		}
+		defer out.Close()
+
+		// Important: supply BasePath explicitly since we're bypassing GenerateFromFile
+		opts = append(opts, func(o *document.Options) {
+			o.BasePath = filepath.Dir(inputPath)
+		})
+
+		if err := doc.Render(out, opts...); err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: error rendering PDF: %v\n", err)
+			os.Exit(1)
+		}
+	} else {
+		// Standard static XML to PDF path
+		if err := document.GenerateFromFile(inputPath, outputPath, opts...); err != nil {
+			fmt.Fprintf(os.Stderr, "pdfml: error: %v\n", err)
+			os.Exit(1)
+		}
 	}
 
 	fmt.Fprintf(os.Stderr, "pdfml: wrote %s\n", outputPath)

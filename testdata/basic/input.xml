@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
   <head>
-    <meta title="Basic Test" author="goxml2pdf" />
+    <meta title="Basic Test" author="pdfml" />
     <style>
       page {
         size: A4;
@@ -36,9 +36,9 @@
     </style>
   </head>
   <body>
-    <h1>GoXML2PDF Basic Test</h1>
+    <h1>PDFML Basic Test</h1>
 
-    <p>This is a basic test document for the goxml2pdf library. It contains headings, paragraphs, and basic styling.</p>
+    <p>This is a basic test document for the pdfml library. It contains headings, paragraphs, and basic styling.</p>
 
     <h2>Section One</h2>
     <p>This paragraph tests basic text rendering with <strong>bold text</strong>, <em>italic text</em>, and <u>underlined text</u>.</p>

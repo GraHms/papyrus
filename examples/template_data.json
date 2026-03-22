@@ -1,0 +1,38 @@
+{
+    "InvoiceNumber": "INV-2023-001",
+    "Date": "2023-10-27T10:00:00Z",
+    "DueDate": "2023-11-26T10:00:00Z",
+    "IsPaid": false,
+    "Company": {
+        "Name": "Acme Widgets Inc.",
+        "Address": "123 Innovation Drive, Tech City, CA 90210"
+    },
+    "Customer": {
+        "Name": "Globex Corporation",
+        "Contact": "Hank Scorpio",
+        "Email": "hank@globex.com"
+    },
+    "Items": [
+        {
+            "Description": "Doomsday Device Core",
+            "Quantity": 1,
+            "UnitPrice": 1500000.00,
+            "Total": 1500000.00
+        },
+        {
+            "Description": "Premium Hammocks (Various colors)",
+            "Quantity": 50,
+            "UnitPrice": 25.50,
+            "Total": 1275.00
+        },
+        {
+            "Description": "Sugar Packets (Bulk)",
+            "Quantity": 10000,
+            "UnitPrice": 0.05,
+            "Total": 500.00
+        }
+    ],
+    "Subtotal": 1501775.00,
+    "Tax": 120142.00,
+    "Total": 1621917.00
+}

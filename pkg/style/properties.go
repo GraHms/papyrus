@@ -67,6 +67,7 @@ var KnownProperties = map[string]PropertyDef{
 
 	// Colors and backgrounds (not inherited, except color above)
 	"background-color": {Inherited: false, Initial: "transparent"},
+	"background-image": {Inherited: false, Initial: "none"},
 	"opacity":          {Inherited: false, Initial: "1"},
 
 	// Layout (not inherited)
